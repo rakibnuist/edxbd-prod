@@ -19,6 +19,7 @@ const DEFAULT_CAMPAIGN_IDS = ['120251306120530245'];
 export type MetaLeadsSyncResult = {
   ok: boolean;
   importedCount: number;
+  updatedCount: number;
   skippedCount: number;
   formsChecked: number;
   syncedAt: string;
@@ -132,6 +133,24 @@ async function resolveTokensAndForms(seedTokens: string[], request: typeof fetch
   return { tokens, formIds: Array.from(formIds).slice(0, 6), formNames };
 }
 
+const META_LEAD_FIELDS = 'id,created_time,field_data,ad_id,ad_name,adset_id,adset_name,campaign_id,campaign_name,form_id,form_name,platform';
+
+function parseUtmObject(raw: string | null | undefined): Record<string, string> {
+  if (!raw || typeof raw !== 'string') return {};
+  try {
+    const parsed = JSON.parse(raw);
+    if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) return {};
+    const out: Record<string, string> = {};
+    for (const [k, v] of Object.entries(parsed)) {
+      if (typeof v === 'string' && v.trim()) out[k] = v.trim();
+      else if (typeof v === 'number' && Number.isFinite(v)) out[k] = String(v);
+    }
+    return out;
+  } catch {
+    return {};
+  }
+}
+
 async function fetchFormLeadsWithTokens(
   formId: string,
   tokens: string[],
@@ -144,7 +163,7 @@ async function fetchFormLeadsWithTokens(
     const res = await graphGet<LeadsResponse>(
       `${encodeURIComponent(formId)}/leads`,
       {
-        fields: 'id,created_time,field_data,ad_name,campaign_name,form_id,form_name',
+        fields: META_LEAD_FIELDS,
         limit: '100',
       },
       token,
@@ -165,7 +184,10 @@ async function fetchCampaignAdLeads(
 ): Promise<MetaGraphLeadInput[]> {
   type CampaignAdsResponse = {
     data?: Array<{
+      id?: string;
       name?: string;
+      adset?: { id?: string; name?: string };
+      campaign?: { id?: string; name?: string };
       leads?: { data?: MetaGraphLeadInput[] };
     }>;
   };
@@ -173,8 +195,8 @@ async function fetchCampaignAdLeads(
     const res = await graphGet<CampaignAdsResponse>(
       `${encodeURIComponent(campaignId)}/ads`,
       {
-        fields: 'id,name,leads.limit(100){id,created_time,field_data,ad_name,campaign_name,form_id,form_name}',
-        limit: '25',
+        fields: `id,name,adset{id,name},campaign{id,name},leads.limit(100){${META_LEAD_FIELDS}}`,
+        limit: '50',
       },
       token,
       request,
@@ -185,13 +207,100 @@ async function fetchCampaignAdLeads(
         const adLeads = ad?.leads?.data;
         if (!Array.isArray(adLeads)) continue;
         for (const lead of adLeads) {
-          collected.push({ ...lead, ad_name: lead.ad_name || ad.name });
+          collected.push({
+            ...lead,
+            ad_id: lead.ad_id || ad.id,
+            ad_name: lead.ad_name || ad.name,
+            adset_id: lead.adset_id || ad.adset?.id,
+            adset_name: lead.adset_name || ad.adset?.name,
+            campaign_id: lead.campaign_id || ad.campaign?.id || campaignId,
+            campaign_name: lead.campaign_name || ad.campaign?.name,
+          });
         }
       }
       return collected;
     }
   }
   return [];
+}
+
+async function enrichNumericMetaAdIds(
+  existingLeads: Array<{ id: string; utm: string | null }>,
+  tokens: string[],
+  request: typeof fetch,
+): Promise<number> {
+  if (tokens.length === 0) return 0;
+  const targetsByObjectId = new Map<string, Array<{ id: string; utmObj: Record<string, string> }>>();
+
+  for (const lead of existingLeads) {
+    const utmObj = parseUtmObject(lead.utm);
+    if (utmObj.ad_name) continue;
+    const candidateId = utmObj.ad_id || (utmObj.utm_term && /^\d{10,24}$/.test(utmObj.utm_term) ? utmObj.utm_term : '');
+    if (!candidateId) continue;
+    const bucket = targetsByObjectId.get(candidateId) || [];
+    bucket.push({ id: lead.id, utmObj });
+    targetsByObjectId.set(candidateId, bucket);
+  }
+
+  if (targetsByObjectId.size === 0) return 0;
+
+  type MetaObjectMeta = {
+    id?: string;
+    name?: string;
+    adset?: { id?: string; name?: string };
+    campaign?: { id?: string; name?: string };
+  };
+
+  let enrichedLeads = 0;
+  const uniqueIds = Array.from(targetsByObjectId.keys()).slice(0, 12);
+
+  for (const objectId of uniqueIds) {
+    let resolved: MetaObjectMeta | null = null;
+    for (const token of tokens.slice(0, 3)) {
+      const res = await graphGet<MetaObjectMeta>(
+        encodeURIComponent(objectId),
+        { fields: 'id,name,adset{id,name},campaign{id,name}' },
+        token,
+        request,
+      );
+      if (res.ok && res.data?.name) {
+        resolved = res.data;
+        break;
+      }
+      // Fallback for AdSet objects that don't expose nested `adset`
+      const fallbackRes = await graphGet<MetaObjectMeta>(
+        encodeURIComponent(objectId),
+        { fields: 'id,name,campaign{id,name}' },
+        token,
+        request,
+      );
+      if (fallbackRes.ok && fallbackRes.data?.name) {
+        resolved = fallbackRes.data;
+        break;
+      }
+    }
+    if (!resolved?.name) continue;
+
+    const bucket = targetsByObjectId.get(objectId) || [];
+    for (const entry of bucket) {
+      const nextUtm: Record<string, string> = {
+        ...entry.utmObj,
+        ad_id: entry.utmObj.ad_id || objectId,
+        ad_name: resolved.name,
+        ...(resolved.adset?.id ? { adset_id: resolved.adset.id } : {}),
+        ...(resolved.adset?.name ? { adset_name: resolved.adset.name } : {}),
+        ...(resolved.campaign?.id ? { campaign_id: resolved.campaign.id } : {}),
+        ...(resolved.campaign?.name ? { campaign_name: resolved.campaign.name } : {}),
+      };
+      await prisma.lead.update({
+        where: { id: entry.id },
+        data: { utm: JSON.stringify(nextUtm) },
+      });
+      enrichedLeads++;
+    }
+  }
+
+  return enrichedLeads;
 }
 
 async function collectCandidateSeedTokens(): Promise<string[]> {
@@ -216,7 +325,7 @@ async function runSync(options?: SyncOptions): Promise<MetaLeadsSyncResult> {
   try {
     const seedTokens = await collectCandidateSeedTokens();
     if (seedTokens.length === 0) {
-      return { ok: false, importedCount: 0, skippedCount: 0, formsChecked: 0, syncedAt, error: 'Meta access token not configured.' };
+      return { ok: false, importedCount: 0, updatedCount: 0, skippedCount: 0, formsChecked: 0, syncedAt, error: 'Meta access token not configured.' };
     }
 
     const { tokens, formIds, formNames } = await resolveTokensAndForms(seedTokens, request);
@@ -224,10 +333,10 @@ async function runSync(options?: SyncOptions): Promise<MetaLeadsSyncResult> {
 
     const [formResults, campaignResults] = await Promise.all([
       Promise.all(formIds.map((id) => fetchFormLeadsWithTokens(id, tokens, request).then((r) => ({ id, ...r })))),
-      Promise.all(campaignIds.slice(0, 2).map((cid) => fetchCampaignAdLeads(cid, tokens, request))),
+      Promise.all(campaignIds.slice(0, 4).map((cid) => fetchCampaignAdLeads(cid, tokens, request))),
     ]);
 
-    const rawLeads: Array<{ lead: MetaGraphLeadInput; formName?: string }> = [];
+    const rawLeads: Array<{ lead: MetaGraphLeadInput; formId?: string; formName?: string }> = [];
     let anySucceeded = false;
     let firstError: string | undefined;
 
@@ -235,7 +344,7 @@ async function runSync(options?: SyncOptions): Promise<MetaLeadsSyncResult> {
       if (!res.error) anySucceeded = true;
       else if (!firstError) firstError = res.error;
       for (const lead of res.leads) {
-        rawLeads.push({ lead, formName: formNames.get(res.id) });
+        rawLeads.push({ lead, formId: res.id, formName: formNames.get(res.id) });
       }
     }
     for (const batch of campaignResults) {
@@ -245,24 +354,37 @@ async function runSync(options?: SyncOptions): Promise<MetaLeadsSyncResult> {
       }
     }
 
+    const existingLeads = await prisma.lead.findMany({
+      select: { id: true, phone: true, utm: true, message: true },
+    });
+
+    let updatedCount = 0;
+    if (options?.force) {
+      updatedCount += await enrichNumericMetaAdIds(existingLeads, tokens, request);
+    }
+
     if (rawLeads.length === 0) {
       return {
-        ok: anySucceeded,
+        ok: anySucceeded || updatedCount > 0,
         importedCount: 0,
+        updatedCount,
         skippedCount: 0,
         formsChecked: formIds.length,
         syncedAt,
-        ...(anySucceeded ? {} : { error: firstError || 'No accessible leads returned by Meta Graph API.' }),
+        ...(anySucceeded || updatedCount > 0 ? {} : { error: firstError || 'No accessible leads returned by Meta Graph API.' }),
       };
     }
 
-    const existingLeads = await prisma.lead.findMany({ select: { phone: true } });
-    const existingPhones = new Set(
-      existingLeads.map((l) => String(l.phone || '').replace(/\D/g, '').slice(-10)).filter(Boolean),
-    );
+    const existingByPhone = new Map<string, { id: string; phone: string; utm: string | null; message: string | null }>();
+    for (const l of existingLeads) {
+      const k = String(l.phone || '').replace(/\D/g, '').slice(-10);
+      if (k && !existingByPhone.has(k)) {
+        existingByPhone.set(k, l);
+      }
+    }
 
     const prepared = rawLeads
-      .map(({ lead, formName }) => mapMetaGraphLeadToImportPayload(lead, { formName }))
+      .map(({ lead, formId, formName }) => mapMetaGraphLeadToImportPayload(lead, { formId, formName }))
       .filter((item): item is NonNullable<typeof item> => item !== null)
       .sort((a, b) => Date.parse(a.consentTimestamp) - Date.parse(b.consentTimestamp));
 
@@ -272,8 +394,49 @@ async function runSync(options?: SyncOptions): Promise<MetaLeadsSyncResult> {
     for (const item of prepared) {
       const digits = item.phone.replace(/\D/g, '');
       const key10 = digits.slice(-10);
-      if (key10 && existingPhones.has(key10)) {
-        skippedCount++;
+      const existing = key10 ? existingByPhone.get(key10) : undefined;
+      if (existing) {
+        // Backfill missing individual Meta Ad attribution onto existing leads
+        const incomingUtm = parseUtmObject(item.utm);
+        const currentUtm = parseUtmObject(existing.utm);
+        const hasNewAttribution =
+          (incomingUtm.ad_id && !currentUtm.ad_id) ||
+          (incomingUtm.ad_name && !currentUtm.ad_name) ||
+          (incomingUtm.adset_name && !currentUtm.adset_name) ||
+          (incomingUtm.campaign_id && !currentUtm.campaign_id) ||
+          (incomingUtm.meta_lead_id && !currentUtm.meta_lead_id) ||
+          (!existing.utm && Object.keys(incomingUtm).length > 0);
+
+        if (hasNewAttribution) {
+          const mergedUtm: Record<string, string> = { ...incomingUtm, ...currentUtm };
+          // Prefer specific Meta Graph ad fields whenever missing in currentUtm
+          for (const key of ['ad_id', 'ad_name', 'adset_id', 'adset_name', 'campaign_id', 'campaign_name', 'form_id', 'form_name', 'meta_lead_id', 'platform']) {
+            if (!mergedUtm[key] && incomingUtm[key]) {
+              mergedUtm[key] = incomingUtm[key];
+            }
+          }
+          if (!mergedUtm.utm_content && mergedUtm.ad_name) mergedUtm.utm_content = mergedUtm.ad_name;
+          if (!mergedUtm.utm_term && mergedUtm.ad_id) mergedUtm.utm_term = mergedUtm.ad_id;
+
+          const nextMessage =
+            mergedUtm.ad_name && existing.message && !/(?:^|\|)\s*Ad:/i.test(existing.message)
+              ? `${existing.message} | Ad: ${mergedUtm.ad_name}`
+              : existing.message;
+          const mergedUtmJson = JSON.stringify(mergedUtm);
+
+          await prisma.lead.update({
+            where: { id: existing.id },
+            data: {
+              utm: mergedUtmJson,
+              ...(nextMessage !== existing.message ? { message: nextMessage } : {}),
+            },
+          });
+          existing.utm = mergedUtmJson;
+          existing.message = nextMessage;
+          updatedCount++;
+        } else {
+          skippedCount++;
+        }
         continue;
       }
 
@@ -298,6 +461,7 @@ async function runSync(options?: SyncOptions): Promise<MetaLeadsSyncResult> {
           message: item.message,
           status: item.status,
           source: item.source,
+          utm: item.utm || null,
           leadType: item.leadType,
           assignedTeam: item.assignedTeam,
           assignedTo: autoAssigned.assignedTo,
@@ -336,12 +500,20 @@ async function runSync(options?: SyncOptions): Promise<MetaLeadsSyncResult> {
       }
 
       importedCount++;
-      if (key10) existingPhones.add(key10);
+      if (key10) {
+        existingByPhone.set(key10, {
+          id: createdLead.id,
+          phone: createdLead.phone,
+          utm: item.utm || null,
+          message: createdLead.message,
+        });
+      }
     }
 
     return {
       ok: true,
       importedCount,
+      updatedCount,
       skippedCount,
       formsChecked: formIds.length,
       syncedAt,
@@ -350,6 +522,7 @@ async function runSync(options?: SyncOptions): Promise<MetaLeadsSyncResult> {
     return {
       ok: false,
       importedCount: 0,
+      updatedCount: 0,
       skippedCount: 0,
       formsChecked: 0,
       syncedAt,

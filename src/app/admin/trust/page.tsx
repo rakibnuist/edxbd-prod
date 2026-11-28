@@ -23,12 +23,22 @@ export default function TrustAdminPage() {
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState('');
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState<{ tone: 'ok' | 'err'; text: string } | null>(null);
 
   const load = useCallback(async () => {
-    const response = await authenticatedFetch('/api/admin/trust');
-    if (response.ok) setData(await response.json());
-    setLoading(false);
+    try {
+      const response = await authenticatedFetch('/api/admin/trust');
+      const json = await response.json().catch(() => ({}));
+      if (response.ok) {
+        setData(json);
+      } else {
+        setMessage({ tone: 'err', text: json.error || json.message || 'Could not load company trust records.' });
+      }
+    } catch {
+      setMessage({ tone: 'err', text: 'Network error while loading company trust records.' });
+    } finally {
+      setLoading(false);
+    }
   }, [authenticatedFetch]);
 
   useEffect(() => {
@@ -42,20 +52,36 @@ export default function TrustAdminPage() {
 
   const save = async (kind: string, record: RecordRow) => {
     setSaving(record.id);
-    setMessage('');
-    const response = await authenticatedFetch('/api/admin/trust', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...record, kind }) });
-    setMessage(response.ok ? 'Saved to the central trust database.' : (await response.json().catch(() => ({}))).error || 'Could not save this record.');
-    setSaving('');
-    if (response.ok) await load();
+    setMessage(null);
+    try {
+      const response = await authenticatedFetch('/api/admin/trust', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...record, kind }) });
+      const json = await response.json().catch(() => ({}));
+      setMessage(response.ok
+        ? { tone: 'ok', text: 'Saved to the central trust database.' }
+        : { tone: 'err', text: json.error || json.message || 'Could not save this record.' });
+      if (response.ok) await load();
+    } catch {
+      setMessage({ tone: 'err', text: 'Network error while saving record.' });
+    } finally {
+      setSaving('');
+    }
   };
 
   const addOffice = async () => {
     setSaving('new-office');
-    setMessage('');
-    const response = await authenticatedFetch('/api/admin/trust', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ kind: 'office' }) });
-    setMessage(response.ok ? 'Canonical Dhanmondi office record created.' : (await response.json().catch(() => ({}))).error || 'Could not create the office record.');
-    setSaving('');
-    if (response.ok) await load();
+    setMessage(null);
+    try {
+      const response = await authenticatedFetch('/api/admin/trust', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ kind: 'office' }) });
+      const json = await response.json().catch(() => ({}));
+      setMessage(response.ok
+        ? { tone: 'ok', text: 'Canonical Dhanmondi office record created.' }
+        : { tone: 'err', text: json.error || json.message || 'Could not create the office record.' });
+      if (response.ok) await load();
+    } catch {
+      setMessage({ tone: 'err', text: 'Network error while creating office record.' });
+    } finally {
+      setSaving('');
+    }
   };
 
   if (loading) return <div className="grid min-h-60 place-items-center"><Loader2 className="animate-spin text-blue-600" /></div>;
@@ -75,7 +101,11 @@ export default function TrustAdminPage() {
       </div>
     </div>
 
-    {message && <p className="rounded-xl border border-blue-200 bg-blue-50 p-4 text-sm font-bold text-blue-900">{message}</p>}
+    {message && (
+      <p className={`rounded-xl border p-4 text-sm font-bold ${message.tone === 'ok' ? 'border-emerald-200 bg-emerald-50 text-emerald-900' : 'border-rose-200 bg-rose-50 text-rose-900'}`}>
+        {message.text}
+      </p>
+    )}
 
     <section className="rounded-2xl border border-slate-200 bg-white p-5 sm:p-7"><div className="flex items-center gap-3"><ShieldCheck className="text-blue-700" /><div><h2 className="font-heading text-2xl font-bold">Company proof metrics</h2><p className="text-sm text-slate-500">These values power the homepage and proof library.</p></div></div><div className="mt-6 grid gap-5 lg:grid-cols-2">{data.metrics.map(metric => <article key={metric.id} className="rounded-2xl bg-slate-50 p-5"><div className="grid gap-4 sm:grid-cols-[120px_1fr]"><Field label="Value"><input className={inputClass} value={metric.value} onChange={event => update('metrics', metric.id, 'value', event.target.value)} /></Field><Field label="Public label"><input className={inputClass} value={metric.label} onChange={event => update('metrics', metric.id, 'label', event.target.value)} /></Field></div><Field label="Exact definition" className="mt-4 block"><textarea className={`${inputClass} min-h-20`} value={metric.definition} onChange={event => update('metrics', metric.id, 'definition', event.target.value)} /></Field><Field label="Evidence note" className="mt-4 block"><textarea className={`${inputClass} min-h-16`} value={metric.evidenceNote || ''} onChange={event => update('metrics', metric.id, 'evidenceNote', event.target.value)} /></Field><div className="mt-4 flex items-center justify-between"><label className="flex items-center gap-2 text-sm font-bold"><input type="checkbox" checked={metric.isPublished} onChange={event => update('metrics', metric.id, 'isPublished', event.target.checked)} /> Show publicly</label><button onClick={() => save('metric', metric)} className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-bold text-white">{saving === metric.id ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />} Save</button></div></article>)}</div></section>
 

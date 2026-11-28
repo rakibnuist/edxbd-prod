@@ -159,6 +159,7 @@ export function validateAdminLeadCreate(
     assignedTo?: string;
     destinationInterest?: string;
     landingPage?: string;
+    utm?: string;
     assessAcademicLevel?: string;
     assessAcademicResults?: string;
     assessLanguage?: string;
@@ -197,12 +198,13 @@ export function validateAdminLeadCreate(
   const assignedTo = readOptionalText(body, 'assignedTo', 120);
   const destinationInterest = readOptionalText(body, 'destinationInterest', 500);
   const landingPage = readOptionalText(body, 'landingPage', 2048);
+  const utm = readOptionalText(body, 'utm', 4000);
   const assessAcademicLevel = readOptionalText(body, 'assessAcademicLevel', 120);
   const assessAcademicResults = readOptionalText(body, 'assessAcademicResults', 120);
   const assessLanguage = readOptionalText(body, 'assessLanguage', 120);
   const consentPolicyVersion = readOptionalText(body, 'consentPolicyVersion', 100);
 
-  for (const check of [program, message, source, leadType, notes, assignedTeam, assignedTo, destinationInterest, landingPage, assessAcademicLevel, assessAcademicResults, assessLanguage, consentPolicyVersion]) {
+  for (const check of [program, message, source, leadType, notes, assignedTeam, assignedTo, destinationInterest, landingPage, utm, assessAcademicLevel, assessAcademicResults, assessLanguage, consentPolicyVersion]) {
     if (check.error) return { error: check.error };
   }
 
@@ -257,6 +259,7 @@ export function validateAdminLeadCreate(
       assignedTo: assignedTo.value,
       destinationInterest: destinationInterest.value,
       landingPage: landingPage.value,
+      ...(utm.value ? { utm: utm.value } : {}),
       ...(assessAcademicLevel.value ? { assessAcademicLevel: assessAcademicLevel.value } : {}),
       ...(assessAcademicResults.value ? { assessAcademicResults: assessAcademicResults.value } : {}),
       ...(assessLanguage.value ? { assessLanguage: assessLanguage.value } : {}),
@@ -288,11 +291,14 @@ export function validateAdminPartnershipCreate(raw: unknown): {
   if (!body) return { error: 'Partnership payload must be an object.' };
 
   const companyName = readOptionalText(body, 'companyName', 200);
+  const businessType = readOptionalText(body, 'businessType', 100);
   const contactPerson = readOptionalText(body, 'contactPerson', 120);
   const emailRes = readOptionalText(body, 'email', 254);
   const phone = readOptionalText(body, 'phone', 40);
 
-  if (companyName.error || !companyName.value) return { error: companyName.error || 'companyName is required.' };
+  const isIndividual = businessType.value?.toLowerCase() === 'individual';
+  if (companyName.error) return { error: companyName.error };
+  if (!isIndividual && !companyName.value) return { error: 'companyName is required for non-individual partners.' };
   if (contactPerson.error || !contactPerson.value) return { error: contactPerson.error || 'contactPerson is required.' };
   if (emailRes.error || !emailRes.value) return { error: emailRes.error || 'email is required.' };
   if (!EMAIL_REGEX.test(emailRes.value.toLowerCase())) return { error: 'Invalid email format.' };
@@ -312,7 +318,7 @@ export function validateAdminPartnershipCreate(raw: unknown): {
   }
 
   const data: Record<string, unknown> = {
-    companyName: companyName.value,
+    companyName: companyName.value || contactPerson.value,
     contactPerson: contactPerson.value,
     email: emailRes.value.toLowerCase(),
     phone: phone.value,

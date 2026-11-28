@@ -20,6 +20,7 @@ import { useAuth } from '@/contexts/AuthContext';
 type EvidenceRecord = {
   id: string;
   type: string;
+  _initialGroup?: EvidenceGroup;
   title: string;
   summary?: string | null;
   organization?: string | null;
@@ -41,6 +42,8 @@ type EvidenceGroup = 'authorization' | 'admission' | 'jw202';
 
 const fieldClass = 'mt-1.5 w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-950 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100';
 
+const dhakaToday = () => new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Dhaka' }).format(new Date());
+
 const blankEvidence = () => ({
   kind: 'evidence',
   type: 'authorization_current',
@@ -54,7 +57,7 @@ const blankEvidence = () => ({
   sourceUrl: '',
   issuedAt: '',
   validUntil: '',
-  lastVerifiedAt: new Date().toISOString().slice(0, 10),
+  lastVerifiedAt: dhakaToday(),
   privacyStatus: 'redacted',
   isPublished: true,
   displayOrder: 0,
@@ -101,25 +104,41 @@ export default function EvidenceAdminPage() {
   const [selectedGroup, setSelectedGroup] = useState<EvidenceGroup>('authorization');
 
   const load = useCallback(async () => {
-    const response = await authenticatedFetch('/api/admin/trust');
-    if (response.ok) {
-      const data = await response.json();
-      setRecords(data.evidence || []);
-      setUniversities(data.universities || []);
+    try {
+      const response = await authenticatedFetch('/api/admin/trust');
+      const data = await response.json().catch(() => ({}));
+      if (response.ok) {
+        const loaded: EvidenceRecord[] = (data.evidence || []).map((rec: EvidenceRecord) => ({
+          ...rec,
+          _initialGroup: evidenceGroup(rec.type),
+        }));
+        setRecords(loaded);
+        setUniversities(data.universities || []);
+      } else {
+        setMessage({ tone: 'error', text: data.error || data.message || 'Could not load evidence records.' });
+      }
+    } catch {
+      setMessage({ tone: 'error', text: 'Network error while loading evidence records.' });
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   }, [authenticatedFetch]);
 
-  // eslint-disable-next-line react-hooks/set-state-in-effect -- load() resolves state through async data fetch
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => {
+    const timer = window.setTimeout(() => void load(), 0);
+    return () => window.clearTimeout(timer);
+  }, [load]);
 
   const counts = useMemo(() => ({
     public: records.filter(record => record.isPublished).length,
-    authorizations: records.filter(record => evidenceGroup(record.type) === 'authorization').length,
-    admissions: records.filter(record => evidenceGroup(record.type) === 'admission').length,
-    jw202: records.filter(record => evidenceGroup(record.type) === 'jw202').length,
+    authorizations: records.filter(record => (record._initialGroup || evidenceGroup(record.type)) === 'authorization').length,
+    admissions: records.filter(record => (record._initialGroup || evidenceGroup(record.type)) === 'admission').length,
+    jw202: records.filter(record => (record._initialGroup || evidenceGroup(record.type)) === 'jw202').length,
   }), [records]);
-  const visibleRecords = useMemo(() => records.filter(record => evidenceGroup(record.type) === selectedGroup), [records, selectedGroup]);
+  const visibleRecords = useMemo(
+    () => records.filter(record => (record._initialGroup || evidenceGroup(record.type)) === selectedGroup),
+    [records, selectedGroup],
+  );
 
   const chooseGroup = (group: EvidenceGroup) => {
     setSelectedGroup(group);
@@ -129,25 +148,29 @@ export default function EvidenceAdminPage() {
   const uploadPreview = async (file: File, recordId: string | 'new') => {
     setBusy(`upload-${recordId}`);
     setMessage(null);
-    const body = new FormData();
-    body.append('image', file);
-    body.append('folder', 'evidence');
-    const response = await fetch('/api/upload', {
-      method: 'POST',
-      credentials: 'include',
-      body,
-    });
-    const result = await response.json().catch(() => ({}));
-    if (!response.ok) {
-      setMessage({ tone: 'error', text: result.error || 'The preview could not be uploaded.' });
-    } else if (recordId === 'new') {
-      setDraft(previous => ({ ...previous, thumbnailUrl: result.imageUrl }));
-      setMessage({ tone: 'success', text: 'Preview prepared. Confirm the privacy check before publishing.' });
-    } else {
-      setRecords(previous => previous.map(record => record.id === recordId ? { ...record, thumbnailUrl: result.imageUrl } : record));
-      setMessage({ tone: 'success', text: 'New preview uploaded. Save the record to publish the change.' });
+    try {
+      const body = new FormData();
+      body.append('image', file);
+      body.append('folder', 'evidence');
+      const response = await authenticatedFetch('/api/upload', {
+        method: 'POST',
+        body,
+      });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        setMessage({ tone: 'error', text: result.error || result.message || 'The preview could not be uploaded.' });
+      } else if (recordId === 'new') {
+        setDraft(previous => ({ ...previous, thumbnailUrl: result.imageUrl }));
+        setMessage({ tone: 'success', text: 'Preview prepared. Confirm the privacy check before publishing.' });
+      } else {
+        setRecords(previous => previous.map(record => record.id === recordId ? { ...record, thumbnailUrl: result.imageUrl } : record));
+        setMessage({ tone: 'success', text: 'New preview uploaded. Save the record to publish the change.' });
+      }
+    } catch {
+      setMessage({ tone: 'error', text: 'Network error while uploading preview.' });
+    } finally {
+      setBusy('');
     }
-    setBusy('');
   };
 
   const createRecord = async () => {
@@ -156,21 +179,26 @@ export default function EvidenceAdminPage() {
       return;
     }
     setBusy('create');
-    const response = await authenticatedFetch('/api/admin/trust', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(draft),
-    });
-    const result = await response.json().catch(() => ({}));
-    setMessage(response.ok
-      ? { tone: 'success', text: 'Evidence saved to the database and added to the public showcase.' }
-      : { tone: 'error', text: result.error || 'The evidence record could not be created.' });
-    if (response.ok) {
-      setDraft(blankEvidence());
-      setRedactionConfirmed(false);
-      await load();
+    try {
+      const response = await authenticatedFetch('/api/admin/trust', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(draft),
+      });
+      const result = await response.json().catch(() => ({}));
+      setMessage(response.ok
+        ? { tone: 'success', text: 'Evidence saved to the database and added to the public showcase.' }
+        : { tone: 'error', text: result.error || result.message || 'The evidence record could not be created.' });
+      if (response.ok) {
+        setDraft({ ...blankEvidence(), type: defaultTypeForGroup[selectedGroup] });
+        setRedactionConfirmed(false);
+        await load();
+      }
+    } catch {
+      setMessage({ tone: 'error', text: 'Network error while creating evidence record.' });
+    } finally {
+      setBusy('');
     }
-    setBusy('');
   };
 
   const updateRecord = (id: string, field: keyof EvidenceRecord, value: unknown) => {
@@ -179,28 +207,41 @@ export default function EvidenceAdminPage() {
 
   const saveRecord = async (record: EvidenceRecord) => {
     setBusy(`save-${record.id}`);
-    const response = await authenticatedFetch('/api/admin/trust', {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ...record, kind: 'evidence' }),
-    });
-    const result = await response.json().catch(() => ({}));
-    setMessage(response.ok
-      ? { tone: 'success', text: 'Evidence record updated.' }
-      : { tone: 'error', text: result.error || 'The evidence record could not be saved.' });
-    if (response.ok) await load();
-    setBusy('');
+    try {
+      const { _initialGroup: _ignore, ...payload } = record;
+      void _ignore;
+      const response = await authenticatedFetch('/api/admin/trust', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...payload, kind: 'evidence' }),
+      });
+      const result = await response.json().catch(() => ({}));
+      setMessage(response.ok
+        ? { tone: 'success', text: 'Evidence record updated.' }
+        : { tone: 'error', text: result.error || result.message || 'The evidence record could not be saved.' });
+      if (response.ok) await load();
+    } catch {
+      setMessage({ tone: 'error', text: 'Network error while saving evidence record.' });
+    } finally {
+      setBusy('');
+    }
   };
 
   const deleteRecord = async (record: EvidenceRecord) => {
     if (!window.confirm(`Delete “${record.title}” from the evidence database?`)) return;
     setBusy(`delete-${record.id}`);
-    const response = await authenticatedFetch(`/api/admin/trust?kind=evidence&id=${encodeURIComponent(record.id)}`, { method: 'DELETE' });
-    setMessage(response.ok
-      ? { tone: 'success', text: 'Evidence record deleted.' }
-      : { tone: 'error', text: 'The evidence record could not be deleted.' });
-    if (response.ok) await load();
-    setBusy('');
+    try {
+      const response = await authenticatedFetch(`/api/admin/trust?kind=evidence&id=${encodeURIComponent(record.id)}`, { method: 'DELETE' });
+      const result = await response.json().catch(() => ({}));
+      setMessage(response.ok
+        ? { tone: 'success', text: 'Evidence record deleted.' }
+        : { tone: 'error', text: result.error || result.message || 'The evidence record could not be deleted.' });
+      if (response.ok) await load();
+    } catch {
+      setMessage({ tone: 'error', text: 'Network error while deleting evidence record.' });
+    } finally {
+      setBusy('');
+    }
   };
 
   if (loading) return <div className="grid min-h-72 place-items-center"><Loader2 className="animate-spin text-blue-600" /></div>;
@@ -222,7 +263,7 @@ export default function EvidenceAdminPage() {
       <header className="overflow-hidden rounded-3xl bg-[#0f3a5c] p-7 text-white sm:p-9">
         <div className="grid gap-7 lg:grid-cols-[1fr_auto] lg:items-end">
           <div><p className="text-xs font-extrabold uppercase tracking-[0.16em] text-[#a9d6ee]">Public evidence portal</p><h1 className="mt-3 font-heading text-3xl font-bold sm:text-4xl">Admission outcomes and authorization letters</h1><p className="mt-3 max-w-3xl text-sm leading-6 text-white/70">Add one approved preview, connect it to the university or organization, then control whether it appears on the homepage and proof library.</p></div>
-          <div className="grid grid-cols-4 gap-px overflow-hidden rounded-2xl bg-white/15 text-center">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-px overflow-hidden rounded-2xl bg-white/15 text-center">
             {[['Public', counts.public], ['Letters', counts.authorizations], ['Admission', counts.admissions], ['JW202', counts.jw202]].map(([label, value]) => <div key={label} className="min-w-20 bg-[#0f3a5c] p-3"><strong className="block text-xl text-[#a9d6ee]">{value}</strong><span className="mt-1 block text-[10px] text-white/55">{label}</span></div>)}
           </div>
         </div>

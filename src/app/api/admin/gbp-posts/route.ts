@@ -13,7 +13,7 @@ import { jsonBodyErrorResponse, readLimitedJson } from '@/lib/request-body';
 
 export const dynamic = 'force-dynamic';
 
-const JSON_HEADERS = { 'Cache-Control': 'no-store' };
+const JSON_HEADERS = { 'Cache-Control': 'no-store, private' };
 
 export async function GET(request: NextRequest) {
   const decoded = await verifyLiveAdminUser(request);
@@ -305,6 +305,10 @@ export async function DELETE(request: NextRequest) {
     await prisma.gbpScheduledPost.delete({ where: { id } });
     return NextResponse.json({ ok: true, deletedId: id }, { headers: JSON_HEADERS });
   } catch (error) {
+    const code = (error as { code?: string })?.code;
+    if (code === 'P2025') {
+      return NextResponse.json({ error: 'GBP scheduled post not found.' }, { status: 404, headers: JSON_HEADERS });
+    }
     console.error('Admin GBP DELETE error:', error);
     return NextResponse.json(
       { error: 'Failed to delete GBP scheduled post.' },

@@ -47,6 +47,16 @@ export async function PUT(request: NextRequest, props: { params: Promise<{ id: s
         }
         const existing = await prisma.university.findFirst({ where: { OR: [{ id: params.id }, { slug: params.id }] } });
         if (!existing) return NextResponse.json({ error: 'University not found' }, { status: 404 });
+
+        const nextSlug = typeof body.slug === 'string' && body.slug.trim() ? body.slug.trim() : existing.slug;
+        body.slug = nextSlug;
+        if (nextSlug !== existing.slug) {
+            const slugConflict = await prisma.university.findUnique({ where: { slug: nextSlug }, select: { id: true } });
+            if (slugConflict && slugConflict.id !== existing.id) {
+                return NextResponse.json({ error: 'Another university already uses this slug.' }, { status: 409 });
+            }
+        }
+
         const university = await prisma.university.update({
             where: { id: existing.id },
             data: universityWriteData(body),
@@ -58,6 +68,9 @@ export async function PUT(request: NextRequest, props: { params: Promise<{ id: s
         }
 
         revalidateUniversityPages(university.slug);
+        if (existing.slug !== university.slug) {
+            revalidateUniversityPages(existing.slug);
+        }
 
         return NextResponse.json(serializeUniversity(university));
     } catch (error) {

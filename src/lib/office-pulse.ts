@@ -125,7 +125,7 @@ function isLeadOverdue(
   if (followDate && followDate < todayIso) return true;
 
   if (lead.status === 'new') {
-    const untouchedHours = (nowMs - lead.updatedAt.getTime()) / (1000 * 3600);
+    const untouchedHours = (nowMs - lead.createdAt.getTime()) / (1000 * 3600);
     return untouchedHours > maxSlaHours;
   }
   return false;
@@ -259,8 +259,13 @@ export async function buildOwnerOfficePulse(options?: { includeFinanceActivities
   });
 
   const checkedInCount = staffStatus.filter((s) => Boolean(s.checkIn)).length;
-  const onTimeCount = staffStatus.filter((s) => s.checkIn && s.status === 'Present').length;
-  const lateCount = staffStatus.filter((s) => s.checkIn && s.status === 'Late').length;
+  const onTimeCount = staffStatus.filter((s) => {
+    const st = s.status.trim().toLowerCase();
+    return Boolean(s.checkIn) && (st === 'present' || st === 'on_time' || st === 'on time' || st === 'half_day');
+  }).length;
+  const lateCount = staffStatus.filter(
+    (s) => Boolean(s.checkIn) && s.status.trim().toLowerCase() === 'late',
+  ).length;
   const officeLocationCount = staffStatus.filter((s) => s.checkIn && s.locationType === 'office_location').length;
   const remoteLocationCount = staffStatus.filter((s) => s.checkIn && s.locationType === 'remote_location').length;
   const locationMissingCount = staffStatus.filter(
@@ -342,7 +347,7 @@ export async function buildCounselorDeskSummary(
   }
 
   const dayStart = dhakaStartUtc(todayIso);
-  const [att, log, todayActions, tasks, leads, callsCount, touchedEvents] = await Promise.all([
+  const [att, log, todayActions, tasks, leads, callsCount, filesOpenedCount, touchedEvents] = await Promise.all([
     prisma.attendance.findUnique({
       where: { empId_date: { empId: employee.empId, date: todayIso } },
       select: { checkIn: true, checkOut: true, status: true, hoursWorked: true, source: true, notes: true },
@@ -365,6 +370,9 @@ export async function buildCounselorDeskSummary(
     prisma.activityEvent.count({
       where: { employeeId: employee.id, type: 'call_logged', createdAt: { gte: dayStart } },
     }),
+    prisma.activityEvent.count({
+      where: { employeeId: employee.id, type: 'application_opened', createdAt: { gte: dayStart } },
+    }),
     prisma.activityEvent.findMany({
       where: { employeeId: employee.id, createdAt: { gte: dayStart }, leadId: { not: null } },
       select: { leadId: true },
@@ -383,14 +391,17 @@ export async function buildCounselorDeskSummary(
   const activeLeads = leads.filter((l) => !CLOSED_LEAD_STATUSES.has(l.status));
   const overdueLeads = activeLeads.filter((l) => isLeadOverdue(l, todayIso, nowMs)).length;
   const todayTouchedLeads = new Set(touchedEvents.map((e) => e.leadId).filter(Boolean)).size;
-  const todayFilesOpened = leads.filter(
-    (l) =>
-      (l.isApplication ||
-        ['application_started', 'application_submitted', 'admission_received', 'visa_applied', 'visa_approved'].includes(
-          l.status,
-        )) &&
-      new Date(l.updatedAt).getTime() >= dayStart.getTime(),
-  ).length;
+  const todayFilesOpened =
+    filesOpenedCount > 0
+      ? filesOpenedCount
+      : leads.filter(
+          (l) =>
+            (l.isApplication ||
+              ['application_started', 'application_submitted', 'admission_received', 'visa_applied', 'visa_approved'].includes(
+                l.status,
+              )) &&
+            new Date(l.createdAt).getTime() >= dayStart.getTime(),
+        ).length;
 
   return {
     dhakaDate: todayIso,

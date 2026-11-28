@@ -1,5 +1,7 @@
 import { parseLeadFlowConfig, selectCounselorByFlowConfig } from './lead-flow';
 import { categorizeLeadSource } from './lead-sources';
+import { ALLOWED_APPLICATION_STAGES } from './student-portal';
+import { parseNumericGpa } from './wa-templates';
 
 export const LEAD_STATUSES = [
   ['new', 'New'], ['contacted', 'Contacted'], ['no_response', 'No Response'],
@@ -55,13 +57,7 @@ export function leadCounts(leads: LeadRecord[], includeApplications = false) {
   return counts;
 }
 function extractLeadGpaNumber(lead: Pick<LeadRecord, 'gpa' | 'assessAcademicResults'>): number | null {
-  if (typeof lead.gpa === 'number' && Number.isFinite(lead.gpa) && lead.gpa > 0) return lead.gpa;
-  const raw = (lead.assessAcademicResults || '').trim();
-  if (!raw) return null;
-  const m = raw.match(/([0-5](?:\.[0-9]{1,2})?)/);
-  if (!m) return null;
-  const parsed = Number.parseFloat(m[1]);
-  return Number.isFinite(parsed) && parsed > 0 && parsed <= 5.5 ? parsed : null;
+  return parseNumericGpa(lead.gpa, lead.assessAcademicResults);
 }
 
 export type LeadQuickPreset =
@@ -146,8 +142,7 @@ export function filterLeads(leads: LeadRecord[], filters: {
     } else if (quick === 'china_hot') {
       const isChina = (lead.country || '').toLowerCase().includes('china') || (lead.destinationInterest || '').toLowerCase().includes('china');
       const g = extractLeadGpaNumber(lead);
-      if (!isChina || (g !== null && g < 3.5)) return false;
-      if (g === null && !lead.assessAcademicResults) return false;
+      if (!isChina || g === null || g < 3.5) return false;
     } else if (quick === 'sla_risk') {
       const createdMs = Date.parse(lead.createdAt);
       if (lead.status !== 'new' || Number.isNaN(createdMs) || createdMs > twoHoursAgoMs) return false;
@@ -194,10 +189,6 @@ export type LeadUpdateData = {
   assessAcademicResults?: string | null;
   assessLanguage?: string | null;
 };
-
-const ALLOWED_APPLICATION_STAGES = new Set<string>([
-  'documents', 'submitted', 'review', 'interview', 'admitted', 'jw202', 'visa', 'enrolled', 'fly',
-]);
 
 function normalizeBoundedHttpUrl(raw: unknown, maxLen = 1000): string | null {
   if (typeof raw !== 'string') return null;
@@ -358,7 +349,11 @@ export function formatFollowupDisplay(followup: string | null | undefined, nowMs
 
   try {
     const d = new Date(`${datePart}T00:00:00Z`);
-    const dateFormatted = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short' }).format(d);
+    const dateFormatted = new Intl.DateTimeFormat('en-GB', {
+      day: 'numeric',
+      month: 'short',
+      timeZone: 'UTC',
+    }).format(d);
     return formattedTime ? `${dateFormatted}, ${formattedTime}` : dateFormatted;
   } catch {
     return formattedTime ? `${datePart} ${formattedTime}` : datePart;
@@ -468,6 +463,7 @@ export type MetaLeadImportPayload = {
   assignedTeam: string;
   destinationInterest: string;
   landingPage: string;
+  utm?: string;
   assessAcademicLevel?: string;
   assessAcademicResults?: string;
   assessLanguage?: string;
@@ -475,6 +471,68 @@ export type MetaLeadImportPayload = {
   consentTimestamp: string;
   consentPolicyVersion: string;
 };
+
+export function buildMetaAttributionUtmJson(meta: {
+  platform?: string;
+  medium?: string;
+  campaignId?: string;
+  campaignName?: string;
+  adsetId?: string;
+  adsetName?: string;
+  adId?: string;
+  adName?: string;
+  formId?: string;
+  formName?: string;
+  leadId?: string;
+}): string | undefined {
+  const clean = (v?: string) => (typeof v === 'string' ? v.trim() : '');
+  const platform = clean(meta.platform).toLowerCase();
+  const utmSource =
+    platform === 'ig' || platform === 'instagram'
+      ? 'instagram'
+      : platform === 'fb' || platform === 'facebook' || !platform
+        ? 'facebook'
+        : platform;
+  const campaignName = clean(meta.campaignName);
+  const campaignId = clean(meta.campaignId);
+  const adsetName = clean(meta.adsetName);
+  const adsetId = clean(meta.adsetId);
+  const adName = clean(meta.adName);
+  const adId = clean(meta.adId);
+  const formId = clean(meta.formId);
+  const formName = clean(meta.formName);
+  const leadId = clean(meta.leadId);
+
+  if (!campaignName && !campaignId && !adName && !adId && !adsetName && !formName && !formId) {
+    return undefined;
+  }
+
+  const record: Record<string, string> = {
+    utm_source: utmSource,
+    utm_medium: clean(meta.medium) || 'meta_instant_form',
+  };
+  if (campaignName) {
+    record.utm_campaign = campaignName;
+    record.campaign_name = campaignName;
+  }
+  if (campaignId) record.campaign_id = campaignId;
+  if (adsetId) record.adset_id = adsetId;
+  if (adsetName) record.adset_name = adsetName;
+  if (adId) {
+    record.ad_id = adId;
+    record.utm_term = adId;
+  }
+  if (adName) {
+    record.ad_name = adName;
+    record.utm_content = adName;
+  }
+  if (formId) record.form_id = formId;
+  if (formName) record.form_name = formName;
+  if (leadId) record.meta_lead_id = leadId;
+  if (platform) record.platform = platform;
+
+  return JSON.stringify(record);
+}
 
 export type ExtractedMetaFormFields = {
   name: string;
@@ -760,18 +818,30 @@ export function parseMetaLeadsCsv(csvText: string): MetaLeadImportPayload[] {
 
     const extracted = extractMetaFormFields(rowMap);
     const created = rowMap.created || rowMap.created_time || rowMap['created time'] || rowMap.date || '';
+    const formId = rowMap.form_id || rowMap['form id'] || '';
     const formName =
       rowMap.form || rowMap.form_name || rowMap['form name'] || 'WebLead&InstantForm_18_4_2026';
+    const campaignId = rowMap.campaign_id || rowMap['campaign id'] || '';
     const campaignName =
       rowMap.campaign_name || rowMap['campaign name'] || 'META_Leads_BD_China-Mar2027_2026Q1';
+    const adsetId = rowMap.adset_id || rowMap['adset id'] || '';
+    const adsetName = rowMap.adset_name || rowMap['adset name'] || rowMap['ad set name'] || '';
+    const adId = rowMap.ad_id || rowMap['ad id'] || '';
     const adName = rowMap.ad_name || rowMap['ad name'] || '';
+    const platform = rowMap.platform || '';
     const leadId = rowMap.lead_id || rowMap['lead id'] || rowMap.id || '';
 
     const payload = buildMetaLeadPayload(extracted, {
       created,
+      formId,
       formName,
+      campaignId,
       campaignName,
+      adsetId,
+      adsetName,
+      adId,
       adName,
+      platform,
       leadId,
       includeCreatedText: true,
     });
@@ -793,8 +863,13 @@ export type MetaGraphLeadInput = {
   created_time?: string | number;
   form_id?: string;
   form_name?: string;
+  ad_id?: string;
   ad_name?: string;
+  adset_id?: string;
+  adset_name?: string;
+  campaign_id?: string;
   campaign_name?: string;
+  platform?: string;
   field_data?: MetaGraphLeadField[];
 };
 
@@ -802,9 +877,15 @@ function buildMetaLeadPayload(
   extracted: ExtractedMetaFormFields,
   meta: {
     created?: string | number;
+    formId?: string;
     formName?: string;
+    campaignId?: string;
     campaignName?: string;
+    adsetId?: string;
+    adsetName?: string;
+    adId?: string;
     adName?: string;
+    platform?: string;
     leadId?: string;
     includeCreatedText?: boolean;
   },
@@ -819,6 +900,19 @@ function buildMetaLeadPayload(
       : `no-email+${digits}@leads.eduexpressint.com`;
 
   const createdStr = typeof meta.created === 'string' ? meta.created.trim() : '';
+  const utm = buildMetaAttributionUtmJson({
+    platform: meta.platform,
+    medium: 'meta_instant_form',
+    campaignId: meta.campaignId,
+    campaignName: meta.campaignName,
+    adsetId: meta.adsetId,
+    adsetName: meta.adsetName,
+    adId: meta.adId,
+    adName: meta.adName,
+    formId: meta.formId,
+    formName: meta.formName,
+    leadId: meta.leadId,
+  });
 
   return {
     name: (extracted.name || 'Student').slice(0, 120),
@@ -844,6 +938,7 @@ function buildMetaLeadPayload(
     assignedTeam: 'china',
     destinationInterest: 'china',
     landingPage: '/china-march-2027-intake',
+    ...(utm ? { utm } : {}),
     ...(extracted.lastDegree ? { assessAcademicLevel: extracted.lastDegree.slice(0, 120) } : {}),
     ...(extracted.gpa ? { assessAcademicResults: extracted.gpa.slice(0, 120) } : {}),
     ...(extracted.englishScore ? { assessLanguage: extracted.englishScore.slice(0, 120) } : {}),
@@ -856,7 +951,16 @@ function buildMetaLeadPayload(
 /** Converts a Meta Graph API `field_data` lead object into a normalized MetaLeadImportPayload, or null if phone is invalid. */
 export function mapMetaGraphLeadToImportPayload(
   lead: MetaGraphLeadInput,
-  defaults?: { formName?: string; campaignName?: string; adName?: string },
+  defaults?: {
+    formId?: string;
+    formName?: string;
+    campaignId?: string;
+    campaignName?: string;
+    adsetId?: string;
+    adsetName?: string;
+    adId?: string;
+    adName?: string;
+  },
 ): MetaLeadImportPayload | null {
   const fieldMap: Record<string, string> = {};
   if (Array.isArray(lead.field_data)) {
@@ -872,16 +976,23 @@ export function mapMetaGraphLeadToImportPayload(
   }
 
   const extracted = extractMetaFormFields(fieldMap);
+  const resolvedFormId = lead.form_id?.trim() || defaults?.formId?.trim() || '';
   const resolvedFormName =
     lead.form_name?.trim() ||
     defaults?.formName?.trim() ||
-    (lead.form_id ? `Form ${lead.form_id}` : 'WebLead&InstantForm_18_4_2026');
+    (resolvedFormId ? `Form ${resolvedFormId}` : 'WebLead&InstantForm_18_4_2026');
 
   return buildMetaLeadPayload(extracted, {
     created: lead.created_time,
+    formId: resolvedFormId,
     formName: resolvedFormName,
+    campaignId: lead.campaign_id?.trim() || defaults?.campaignId?.trim() || '',
     campaignName: lead.campaign_name?.trim() || defaults?.campaignName?.trim() || 'META_Leads_BD_China-Mar2027_2026Q1',
+    adsetId: lead.adset_id?.trim() || defaults?.adsetId?.trim() || '',
+    adsetName: lead.adset_name?.trim() || defaults?.adsetName?.trim() || '',
+    adId: lead.ad_id?.trim() || defaults?.adId?.trim() || '',
     adName: lead.ad_name?.trim() || defaults?.adName?.trim() || '',
+    platform: lead.platform?.trim() || '',
     leadId: lead.id?.trim() || '',
   });
 }

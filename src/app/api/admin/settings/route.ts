@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
 import { isAdminRole } from '@/lib/auth';
 import { verifyLiveAdminUser } from '@/lib/auth-user';
+import { jsonBodyErrorResponse, readLimitedJson } from '@/lib/request-body';
 import prisma from '@/lib/prisma';
 import { DEFAULT_META_PIXEL_ID, getAllSettings, saveSettings, validateSettings, SETTING_KEYS } from '@/lib/settings';
 
@@ -34,7 +35,9 @@ export async function GET(request: NextRequest) {
   }
   try {
     const settings = await getAllSettings();
-    return NextResponse.json(presentForClient(settings, await tokenSavedAt()));
+    return NextResponse.json(presentForClient(settings, await tokenSavedAt()), {
+      headers: { 'Cache-Control': 'no-store, private' },
+    });
   } catch (error) {
     console.error('Get settings error:', error);
     return NextResponse.json({ error: 'Failed to load settings' }, { status: 500 });
@@ -49,7 +52,7 @@ export async function PUT(request: NextRequest) {
     return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
   }
   try {
-    const body = await request.json();
+    const body = await readLimitedJson(request, 64 * 1024);
     // Never overwrite the token when the client sent back the mask (unchanged field).
     if (body.metaAccessToken === MASK || body.metaAccessToken === '') {
       delete body.metaAccessToken;
@@ -63,11 +66,16 @@ export async function PUT(request: NextRequest) {
     console.info(`Settings saved: ${Object.keys(validated.values).join(', ') || 'no changes'}${'metaAccessToken' in validated.values ? ' (new Meta token)' : ''}`);
     revalidatePath('/');
     const settings = await getAllSettings();
-    return NextResponse.json({
-      ok: true,
-      settings: presentForClient(settings, await tokenSavedAt()),
-    });
+    return NextResponse.json(
+      {
+        ok: true,
+        settings: presentForClient(settings, await tokenSavedAt()),
+      },
+      { headers: { 'Cache-Control': 'no-store, private' } },
+    );
   } catch (error) {
+    const bodyError = jsonBodyErrorResponse(error);
+    if (bodyError) return bodyError;
     console.error('Save settings error:', error);
     return NextResponse.json({ error: 'Failed to save settings' }, { status: 500 });
   }

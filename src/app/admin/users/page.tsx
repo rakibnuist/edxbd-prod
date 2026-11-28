@@ -210,11 +210,11 @@ function UsersPageContent() {
       });
 
       if (response.ok) {
-        setUsers(users.filter(user => user.id !== userId));
         setError('');
+        await fetchUsers();
       } else {
-        const data = await response.json();
-        setError(data.message || 'Failed to delete user');
+        const data = await response.json().catch(() => ({}));
+        setError(data.error || data.message || 'Failed to delete user');
       }
     } catch {
       setError('Failed to delete user');
@@ -350,7 +350,9 @@ function UsersPageContent() {
   };
 
   const linkedEmpIds = new Set(users.map((u) => u.employee?.id).filter(Boolean));
-  const unlinkedEmployees = employees.filter((emp) => !emp.userId && !linkedEmpIds.has(emp.id));
+  const unlinkedEmployees = employees.filter(
+    (emp) => emp.active !== false && !emp.userId && !linkedEmpIds.has(emp.id),
+  );
 
   const openQuickCreateForEmployee = (emp: LinkedEmployee) => {
     const looksAdmin = Boolean(emp.role && /\b(admin|director|investor|head|ceo)\b/i.test(emp.role));
@@ -389,6 +391,7 @@ function UsersPageContent() {
     e.preventDefault();
     if (!messagingUser) return;
     setMessageSending(true);
+    setError('');
     try {
       const response = await authenticatedFetch('/api/admin/messages', {
         method: 'POST',
@@ -405,8 +408,8 @@ function UsersPageContent() {
         setMessageSuccess('Message sent successfully!');
         setMessageForm({ subject: '', body: '' });
       } else {
-        const data = await response.json();
-        setError(data.message || 'Failed to send message');
+        const data = await response.json().catch(() => ({}));
+        setError(data.error || data.message || 'Failed to send message');
       }
     } catch {
       setError('Failed to send message');
@@ -783,7 +786,10 @@ function UsersPageContent() {
                           >
                             Save
                           </button>
-                          {!isSelfEmp && (
+                          {!isSelfEmp &&
+                            (currentUser?.role === 'super_admin' ||
+                              !linkedUser ||
+                              !['admin', 'super_admin', 'operations_admin'].includes(linkedUser.role)) && (
                             <button
                               type="button"
                               disabled={staffBusy}
@@ -950,9 +956,14 @@ function UsersPageContent() {
 
       {/* Add Staff / Counselor Modal */}
       {showAddStaffModal && (
-        <div className="fixed inset-0 z-50 h-full w-full overflow-y-auto bg-slate-900/50">
-          <div className="relative top-20 mx-auto w-96 rounded-xl border bg-white p-5 shadow-lg">
+        <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-slate-900/50 p-3 sm:p-4">
+          <div className="relative w-full max-w-md max-h-[90dvh] overflow-y-auto rounded-xl border bg-white p-5 shadow-lg">
             <h3 className="mb-4 text-lg font-bold text-slate-900">Add Staff / Counselor</h3>
+            {error && (
+              <div className="mb-3 rounded-lg border border-rose-300 bg-rose-50 px-3 py-2 text-xs font-semibold text-rose-800">
+                {error}
+              </div>
+            )}
             <form onSubmit={handleCreateStaffMember} className="space-y-3">
               <div>
                 <label className="mb-1 block text-xs font-semibold text-slate-700">Full Name *</label>
@@ -1044,10 +1055,15 @@ function UsersPageContent() {
 
       {/* Create User Modal */}
       {showCreateModal && (
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-          <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+        <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-slate-900/50 p-3 sm:p-4">
+          <div className="relative w-full max-w-md max-h-[90dvh] overflow-y-auto rounded-xl border bg-white p-5 shadow-lg">
             <div className="mt-3">
               <h3 className="text-lg font-medium text-gray-900 mb-4">Create New User</h3>
+              {error && (
+                <div className="mb-3 rounded-md border border-red-300 bg-red-50 px-3 py-2 text-xs font-semibold text-red-700">
+                  {error}
+                </div>
+              )}
               <form onSubmit={handleCreateUser}>
                 <div className="mb-4">
                   <label className="block text-sm font-medium text-gray-700 mb-2">Name</label>
@@ -1141,8 +1157,8 @@ function UsersPageContent() {
 
       {/* Send Message Modal - Admin & Super Admin */}
       {showMessageModal && messagingUser && (
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-          <div className="relative top-20 mx-auto p-5 border w-[480px] max-w-[calc(100vw-2rem)] shadow-lg rounded-md bg-white">
+        <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-slate-900/50 p-3 sm:p-4">
+          <div className="relative w-full max-w-lg max-h-[90dvh] overflow-y-auto rounded-xl border bg-white p-5 shadow-lg">
             <div className="mt-3">
               <div className="flex items-center mb-4">
                 <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mr-3">
@@ -1237,10 +1253,15 @@ function UsersPageContent() {
 
       {/* Edit User Modal */}
       {showEditModal && editingUser && (
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-          <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+        <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-slate-900/50 p-3 sm:p-4">
+          <div className="relative w-full max-w-md max-h-[90dvh] overflow-y-auto rounded-xl border bg-white p-5 shadow-lg">
             <div className="mt-3">
               <h3 className="text-lg font-medium text-gray-900 mb-4">Edit User</h3>
+              {error && (
+                <div className="mb-3 rounded-md border border-red-300 bg-red-50 px-3 py-2 text-xs font-semibold text-red-700">
+                  {error}
+                </div>
+              )}
               <form onSubmit={handleEditUser}>
                 <div className="mb-4">
                   <label className="block text-sm font-medium text-gray-700 mb-2">Name</label>
@@ -1334,8 +1355,8 @@ function UsersPageContent() {
 
       {/* Sent Messages History Modal */}
       {showSentMessagesModal && (
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-          <div className="relative top-20 mx-auto p-5 border w-[600px] max-w-[calc(100vw-2rem)] shadow-lg rounded-md bg-white">
+        <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-slate-900/50 p-3 sm:p-4">
+          <div className="relative w-full max-w-2xl max-h-[90dvh] overflow-y-auto rounded-xl border bg-white p-5 shadow-lg">
             <div className="mt-3">
               <div className="flex justify-between items-center mb-4 pb-2 border-b">
                 <h3 className="text-xl font-bold text-gray-900 flex items-center">
@@ -1370,7 +1391,7 @@ function UsersPageContent() {
                       <div className="flex justify-between items-start mb-2">
                         <div>
                           <p className="text-sm font-semibold text-gray-800">To: {msg.toName} ({msg.toEmail})</p>
-                          <p className="text-xs text-gray-500">Sent on: {new Date(msg.createdAt).toLocaleString()}</p>
+                          <p className="text-xs text-gray-500">Sent on: {new Date(msg.createdAt).toLocaleString('en-GB', { timeZone: 'Asia/Dhaka' })} BST</p>
                         </div>
                       </div>
                       <div className="border-t border-gray-100 pt-2 mt-2">

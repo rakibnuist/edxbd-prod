@@ -324,7 +324,7 @@ export default function ApplicationDetailDrawer({
 
   if (!applicationId) return null;
 
-  const loading = !detail || detail.application.id !== applicationId;
+  const loading = !error && (!detail || detail.application.id !== applicationId);
 
   const flashToast = (msg: string) => {
     setToast(msg);
@@ -356,9 +356,9 @@ export default function ApplicationDetailDrawer({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ applicationStage: stageKey }),
       });
-      const json = await res.json();
+      const json = await res.json().catch(() => ({}));
       if (!res.ok) {
-        setError(json.error || 'Could not update stage.');
+        setError(json.error || json.message || 'Could not update stage.');
         return;
       }
       flashToast(`Stage updated to ${getStageDef(stageKey).label}`);
@@ -427,9 +427,9 @@ export default function ApplicationDetailDrawer({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       });
-      const json = await res.json();
+      const json = await res.json().catch(() => ({}));
       if (!res.ok) {
-        setError(json.error || 'Could not save changes.');
+        setError(json.error || json.message || 'Could not save changes.');
         return;
       }
       flashToast('Application dossier saved.');
@@ -443,29 +443,42 @@ export default function ApplicationDetailDrawer({
 
   const handleEnsurePortalToken = async (regenerate = false) => {
     if (!app) return;
-    const res = await authenticatedFetch(`/api/admin/leads/${app.id}/portal`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: regenerate ? 'regenerate_token' : 'ensure_token' }),
-    });
-    if (res.ok) {
-      flashToast(regenerate ? 'Student tracking link regenerated.' : 'Student live portal enabled.');
-      refreshDetail();
+    setError(null);
+    try {
+      const res = await authenticatedFetch(`/api/admin/leads/${app.id}/portal`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: regenerate ? 'regenerate_token' : 'ensure_token' }),
+      });
+      const json = await res.json().catch(() => ({}));
+      if (res.ok) {
+        flashToast(regenerate ? 'Student tracking link regenerated.' : 'Student live portal enabled.');
+        refreshDetail();
+      } else {
+        setError(json.error || json.message || 'Could not update student portal link.');
+      }
+    } catch {
+      setError('Network error updating student portal link.');
     }
   };
 
-  const handleCopyPortalLink = () => {
+  const handleCopyPortalLink = async () => {
     if (!app?.publicToken) return;
     const url = `${window.location.origin}/track/${app.publicToken}`;
-    void navigator.clipboard.writeText(url);
-    setCopiedPortal(true);
-    setTimeout(() => setCopiedPortal(false), 2000);
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopiedPortal(true);
+      setTimeout(() => setCopiedPortal(false), 2000);
+    } catch {
+      setError('Clipboard access blocked. Please copy the portal URL manually.');
+    }
   };
 
   const handleAddUniversity = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!app || !newUniName.trim()) return;
     setAddingUni(true);
+    setError(null);
     try {
       const res = await authenticatedFetch(`/api/admin/leads/${app.id}/portal`, {
         method: 'POST',
@@ -478,13 +491,18 @@ export default function ApplicationDetailDrawer({
           applicationId: newUniAppId.trim() || null,
         }),
       });
+      const json = await res.json().catch(() => ({}));
       if (res.ok) {
         setNewUniName('');
         setNewUniProgram('');
         setNewUniAppId('');
         flashToast('University application added.');
         refreshDetail();
+      } else {
+        setError(json.error || json.message || 'Could not add university application.');
       }
+    } catch {
+      setError('Network error adding university application.');
     } finally {
       setAddingUni(false);
     }
@@ -492,42 +510,64 @@ export default function ApplicationDetailDrawer({
 
   const handleUpdateUniStatus = async (itemId: string, status: string) => {
     if (!app) return;
-    const res = await authenticatedFetch(`/api/admin/leads/${app.id}/portal`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ kind: 'university', itemId, status }),
-    });
-    if (res.ok) {
-      flashToast('University status updated.');
-      refreshDetail();
+    setError(null);
+    try {
+      const res = await authenticatedFetch(`/api/admin/leads/${app.id}/portal`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ kind: 'university', itemId, status }),
+      });
+      const json = await res.json().catch(() => ({}));
+      if (res.ok) {
+        flashToast('University status updated.');
+        refreshDetail();
+      } else {
+        setError(json.error || json.message || 'Could not update university status.');
+      }
+    } catch {
+      setError('Network error updating university status.');
     }
   };
 
   const handleDeletePortalItem = async (kind: 'university' | 'document', itemId: string) => {
     if (!app) return;
-    const res = await authenticatedFetch(
-      `/api/admin/leads/${app.id}/portal?kind=${kind}&itemId=${encodeURIComponent(itemId)}`,
-      { method: 'DELETE' },
-    );
-    if (res.ok) {
-      flashToast(kind === 'university' ? 'University removed.' : 'Document removed.');
-      refreshDetail();
+    setError(null);
+    try {
+      const res = await authenticatedFetch(
+        `/api/admin/leads/${app.id}/portal?kind=${kind}&itemId=${encodeURIComponent(itemId)}`,
+        { method: 'DELETE' },
+      );
+      const json = await res.json().catch(() => ({}));
+      if (res.ok) {
+        flashToast(kind === 'university' ? 'University removed.' : 'Document removed.');
+        refreshDetail();
+      } else {
+        setError(json.error || json.message || 'Could not remove item.');
+      }
+    } catch {
+      setError('Network error removing item.');
     }
   };
 
   const handleSeedDocs = async () => {
     if (!app) return;
     setSeedingDocs(true);
+    setError(null);
     try {
       const res = await authenticatedFetch(`/api/admin/leads/${app.id}/portal`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action: 'seed_documents' }),
       });
+      const json = await res.json().catch(() => ({}));
       if (res.ok) {
         flashToast('Destination document checklist synced.');
         refreshDetail();
+      } else {
+        setError(json.error || json.message || 'Could not sync document checklist.');
       }
+    } catch {
+      setError('Network error syncing document checklist.');
     } finally {
       setSeedingDocs(false);
     }
@@ -537,6 +577,7 @@ export default function ApplicationDetailDrawer({
     e.preventDefault();
     if (!app || !newDocName.trim()) return;
     setAddingDoc(true);
+    setError(null);
     try {
       const res = await authenticatedFetch(`/api/admin/leads/${app.id}/portal`, {
         method: 'POST',
@@ -547,11 +588,16 @@ export default function ApplicationDetailDrawer({
           status: 'pending',
         }),
       });
+      const json = await res.json().catch(() => ({}));
       if (res.ok) {
         setNewDocName('');
         flashToast('Document item added.');
         refreshDetail();
+      } else {
+        setError(json.error || json.message || 'Could not add document item.');
       }
+    } catch {
+      setError('Network error adding document item.');
     } finally {
       setAddingDoc(false);
     }
@@ -559,13 +605,21 @@ export default function ApplicationDetailDrawer({
 
   const handleUpdateDocStatus = async (itemId: string, status: string) => {
     if (!app) return;
-    const res = await authenticatedFetch(`/api/admin/leads/${app.id}/portal`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ kind: 'document', itemId, status }),
-    });
-    if (res.ok) {
-      refreshDetail();
+    setError(null);
+    try {
+      const res = await authenticatedFetch(`/api/admin/leads/${app.id}/portal`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ kind: 'document', itemId, status }),
+      });
+      const json = await res.json().catch(() => ({}));
+      if (res.ok) {
+        refreshDetail();
+      } else {
+        setError(json.error || json.message || 'Could not update document status.');
+      }
+    } catch {
+      setError('Network error updating document status.');
     }
   };
 
@@ -573,17 +627,23 @@ export default function ApplicationDetailDrawer({
     e.preventDefault();
     if (!app || !noteText.trim()) return;
     setSendingNote(true);
+    setError(null);
     try {
       const res = await authenticatedFetch(`/api/admin/leads/${app.id}/portal`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action: noteMode, message: noteText.trim() }),
       });
+      const json = await res.json().catch(() => ({}));
       if (res.ok) {
         setNoteText('');
         flashToast(noteMode === 'reply_student' ? 'Message posted to student portal.' : 'Internal note logged.');
         refreshDetail();
+      } else {
+        setError(json.error || json.message || 'Could not post update.');
       }
+    } catch {
+      setError('Network error posting update.');
     } finally {
       setSendingNote(false);
     }
@@ -777,7 +837,7 @@ export default function ApplicationDetailDrawer({
 
         {/* Main Scrollable Content */}
         <div className="flex-1 overflow-y-auto p-5">
-          {loading && !detail ? (
+          {loading ? (
             <div className="flex h-56 items-center justify-center gap-2 text-xs font-semibold text-slate-500">
               <Loader2 size={18} className="animate-spin text-[#0f3a5c]" />
               Loading application dossier...
@@ -1159,7 +1219,7 @@ export default function ApplicationDetailDrawer({
                         <label className="mb-1 block text-[11px] font-semibold text-slate-600">Next Follow-Up</label>
                         <input
                           type="date"
-                          value={form.nextFollowup || ''}
+                          value={(form.nextFollowup || '').slice(0, 10)}
                           onChange={(e) => setForm({ ...form, nextFollowup: e.target.value })}
                           className="w-full rounded-lg border border-slate-200 px-3 py-1.5 text-xs text-slate-900 focus:border-[#0f3a5c] focus:outline-none"
                         />
@@ -1544,7 +1604,7 @@ export default function ApplicationDetailDrawer({
               {/* TAB 4: Finance-Admin-Only Linked Finance Ledger */}
               {tab === 'finance' && canSeeFinance && detail?.finance && (
                 <div className="space-y-4">
-                  <div className="grid grid-cols-3 gap-3">
+                  <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
                     <div className="rounded-xl border border-emerald-200 bg-emerald-50/60 p-3.5">
                       <p className="text-[10px] font-extrabold uppercase tracking-wider text-emerald-800">Cash Received</p>
                       <p className="mt-1 font-heading text-lg font-bold tabular-nums text-emerald-950">
@@ -1582,8 +1642,8 @@ export default function ApplicationDetailDrawer({
                       No cash transactions linked to {app.leadRef || app.name} yet.
                     </div>
                   ) : (
-                    <div className="overflow-hidden rounded-xl border border-slate-200">
-                      <table className="w-full text-left text-xs">
+                    <div className="overflow-x-auto rounded-xl border border-slate-200">
+                      <table className="w-full min-w-[420px] text-left text-xs">
                         <thead className="border-b border-slate-200 bg-slate-50 text-[10px] font-bold uppercase text-slate-500">
                           <tr>
                             <th className="px-3 py-2">Date</th>
@@ -1648,8 +1708,9 @@ export default function ApplicationDetailDrawer({
                       phone={app.phone}
                       currentStatus={app.status}
                       currentFollowup={app.nextFollowup}
+                      isApplication
                       onLeadUpdated={() => {
-                        onMutated();
+                        refreshDetail();
                       }}
                     />
                   )}

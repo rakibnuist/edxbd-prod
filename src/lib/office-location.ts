@@ -116,7 +116,8 @@ export function calculateDistanceMeters(
   const a =
     Math.sin(dLat / 2) ** 2 +
     Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng / 2) ** 2;
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  const clampedA = Math.min(1, Math.max(0, a));
+  const c = 2 * Math.atan2(Math.sqrt(clampedA), Math.sqrt(1 - clampedA));
   return Math.round(EARTH_RADIUS_METERS * c);
 }
 
@@ -231,9 +232,10 @@ export function appendCheckInLocationNote(
     .replace(LOC_TAG_RE, '')
     .replace(LEGACY_IP_TAG_RE, '')
     .replace(
-      /\s*·\s*(Office Zone \([^)]+\)|Remote \([^)]+\)|GPS Permission Denied|GPS Unavailable|Dhaka Office Wi-Fi|Remote \/ Mobile Network|Workspace Check-In)\s*/gi,
+      /(?:\s*·\s*)?(Office Zone \([^)]+\)|Remote \([^)]+\)|GPS Permission Denied|GPS Unavailable|Dhaka Office Wi-Fi|Remote \/ Mobile Network|Workspace Check-In)\s*/gi,
       '',
     )
+    .replace(/^\s*·\s*|\s*·\s*$/g, '')
     .trim();
 
   let auditTag: string = classification.locationLabel;
@@ -243,7 +245,10 @@ export function appendCheckInLocationNote(
     auditTag = `[LOC: ${classification.latitude.toFixed(5)},${classification.longitude.toFixed(5)}${accPart}${distPart}] · ${classification.locationLabel}`;
   }
 
-  const combined = cleanedBase ? `${cleanedBase} · ${auditTag}` : auditTag;
+  // Always preserve the [LOC: ...] audit tag within the 300-character limit.
+  const maxBaseLen = Math.max(0, 300 - auditTag.length - 3);
+  const cappedBase = cleanedBase && maxBaseLen > 0 ? cleanedBase.slice(0, maxBaseLen).trim() : '';
+  const combined = cappedBase ? `${cappedBase} · ${auditTag}` : auditTag;
   return combined.slice(0, 300);
 }
 

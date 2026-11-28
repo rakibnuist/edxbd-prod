@@ -32,7 +32,7 @@ export async function GET(request: NextRequest) {
     const filter: Prisma.PartnershipWhereInput = {};
     if (status) filter.status = status;
     if (partnershipType) filter.partnershipType = partnershipType;
-    if (country) filter.country = country;
+    if (country) filter.country = { contains: country };
     if (priority) filter.priority = priority;
 
     // Search functionality
@@ -123,7 +123,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         message: 'Partnership created successfully',
-        partnership
+        partnership: serializePartnership(partnership as Record<string, unknown>)
       },
       { status: 201 }
     );

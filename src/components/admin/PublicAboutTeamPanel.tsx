@@ -57,6 +57,7 @@ const slugify = (value: string) =>
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-|-$/g, '');
 const dateValue = (value?: string | null) => (value ? value.slice(0, 10) : '');
+const dhakaToday = () => new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Dhaka' }).format(new Date());
 
 function Field({
   label,
@@ -84,15 +85,28 @@ export default function PublicAboutTeamPanel() {
   const [showAddForm, setShowAddForm] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | 'published' | 'draft'>('all');
+  const [slugTouched, setSlugTouched] = useState(false);
+  const [specialtiesDrafts, setSpecialtiesDrafts] = useState<Record<string, string>>({});
   const [message, setMessage] = useState<{ tone: 'success' | 'error'; text: string } | null>(null);
 
   const load = useCallback(async () => {
-    const response = await authenticatedFetch('/api/admin/trust');
-    if (response.ok) {
-      const data = await response.json();
-      setMembers(data.team || []);
+    try {
+      const response = await authenticatedFetch('/api/admin/trust', { cache: 'no-store' });
+      const data = await response.json().catch(() => ({}));
+      if (response.ok) {
+        const list: TeamMember[] = Array.isArray(data.team) ? data.team : [];
+        setMembers(list);
+        setSpecialtiesDrafts(
+          Object.fromEntries(list.map((m) => [m.id, (m.specialties || []).join('\n')])),
+        );
+      } else {
+        setMessage({ tone: 'error', text: data.error || data.message || 'Could not load public team profiles.' });
+      }
+    } catch {
+      setMessage({ tone: 'error', text: 'Network error loading public team profiles.' });
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   }, [authenticatedFetch]);
 
   useEffect(() => {
@@ -102,45 +116,52 @@ export default function PublicAboutTeamPanel() {
 
   const uploadPhoto = async (file: File, id: string | 'new') => {
     setBusy(`upload-${id}`);
-    const body = new FormData();
-    body.append('image', file);
-    body.append('folder', 'team');
-    const response = await fetch('/api/upload', {
-      method: 'POST',
-      credentials: 'include',
-      body,
-    });
-    const result = await response.json().catch(() => ({}));
-    if (response.ok) {
-      const today = new Date().toISOString().slice(0, 10);
-      if (id === 'new') {
-        setDraft((previous) => ({
-          ...previous,
-          photoUrl: result.imageUrl,
-          consentConfirmedAt: previous.consentConfirmedAt || today,
-        }));
-      } else {
-        setMembers((previous) =>
-          previous.map((member) =>
-            member.id === id
-              ? {
-                  ...member,
-                  photoUrl: result.imageUrl,
-                  consentConfirmedAt: member.consentConfirmedAt || today,
-                }
-              : member,
-          ),
-        );
-      }
-      setMessage({
-        tone: 'success',
-        text:
-          id === 'new'
-            ? 'Photo uploaded. Save the profile when ready.'
-            : 'Photo uploaded. Click Save Profile to publish the change.',
+    try {
+      const body = new FormData();
+      body.append('image', file);
+      body.append('folder', 'team');
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        credentials: 'include',
+        body,
       });
-    } else setMessage({ tone: 'error', text: result.error || 'Photo upload failed.' });
-    setBusy('');
+      const result = await response.json().catch(() => ({}));
+      if (response.ok) {
+        const today = dhakaToday();
+        if (id === 'new') {
+          setDraft((previous) => ({
+            ...previous,
+            photoUrl: result.imageUrl,
+            consentConfirmedAt: previous.consentConfirmedAt || today,
+          }));
+        } else {
+          setMembers((previous) =>
+            previous.map((member) =>
+              member.id === id
+                ? {
+                    ...member,
+                    photoUrl: result.imageUrl,
+                    consentConfirmedAt: member.consentConfirmedAt || today,
+                  }
+                : member,
+            ),
+          );
+        }
+        setMessage({
+          tone: 'success',
+          text:
+            id === 'new'
+              ? 'Photo uploaded. Save the profile when ready.'
+              : 'Photo uploaded. Click Save Profile to publish the change.',
+        });
+      } else {
+        setMessage({ tone: 'error', text: result.error || result.message || 'Photo upload failed.' });
+      }
+    } catch {
+      setMessage({ tone: 'error', text: 'Network error uploading photo.' });
+    } finally {
+      setBusy('');
+    }
   };
 
   const uploadControl = (id: string | 'new') => (
@@ -161,23 +182,29 @@ export default function PublicAboutTeamPanel() {
 
   const createMember = async () => {
     setBusy('create');
-    const response = await authenticatedFetch('/api/admin/trust', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(draft),
-    });
-    const result = await response.json().catch(() => ({}));
-    setMessage(
-      response.ok
-        ? { tone: 'success', text: 'Public team profile created.' }
-        : { tone: 'error', text: result.error || 'Team member could not be added.' },
-    );
-    if (response.ok) {
-      setDraft(blankMember());
-      setShowAddForm(false);
-      await load();
+    try {
+      const response = await authenticatedFetch('/api/admin/trust', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(draft),
+      });
+      const result = await response.json().catch(() => ({}));
+      setMessage(
+        response.ok
+          ? { tone: 'success', text: 'Public team profile created.' }
+          : { tone: 'error', text: result.error || result.message || 'Team member could not be added.' },
+      );
+      if (response.ok) {
+        setDraft(blankMember());
+        setSlugTouched(false);
+        setShowAddForm(false);
+        await load();
+      }
+    } catch {
+      setMessage({ tone: 'error', text: 'Network error while creating public team profile.' });
+    } finally {
+      setBusy('');
     }
-    setBusy('');
   };
 
   const updateMember = (id: string, field: keyof TeamMember, value: unknown) =>
@@ -187,35 +214,54 @@ export default function PublicAboutTeamPanel() {
 
   const saveMember = async (member: TeamMember) => {
     setBusy(`save-${member.id}`);
-    const response = await authenticatedFetch('/api/admin/trust', {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ...member, kind: 'team' }),
-    });
-    const result = await response.json().catch(() => ({}));
-    setMessage(
-      response.ok
-        ? { tone: 'success', text: `${member.name} public profile saved.` }
-        : { tone: 'error', text: result.error || 'Profile could not be saved.' },
-    );
-    if (response.ok) await load();
-    setBusy('');
+    try {
+      const rawSpecialties = specialtiesDrafts[member.id];
+      const specialties =
+        rawSpecialties !== undefined
+          ? rawSpecialties
+              .split('\n')
+              .map((item) => item.trim())
+              .filter(Boolean)
+          : member.specialties;
+      const response = await authenticatedFetch('/api/admin/trust', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...member, specialties, kind: 'team' }),
+      });
+      const result = await response.json().catch(() => ({}));
+      setMessage(
+        response.ok
+          ? { tone: 'success', text: `${member.name} public profile saved.` }
+          : { tone: 'error', text: result.error || result.message || 'Profile could not be saved.' },
+      );
+      if (response.ok) await load();
+    } catch {
+      setMessage({ tone: 'error', text: 'Network error while saving profile.' });
+    } finally {
+      setBusy('');
+    }
   };
 
   const deleteMember = async (member: TeamMember) => {
     if (!window.confirm(`Delete ${member.name} from the public /about team directory?`)) return;
     setBusy(`delete-${member.id}`);
-    const response = await authenticatedFetch(
-      `/api/admin/trust?kind=team&id=${encodeURIComponent(member.id)}`,
-      { method: 'DELETE' },
-    );
-    setMessage(
-      response.ok
-        ? { tone: 'success', text: 'Public team profile deleted.' }
-        : { tone: 'error', text: 'Profile could not be deleted.' },
-    );
-    if (response.ok) await load();
-    setBusy('');
+    try {
+      const response = await authenticatedFetch(
+        `/api/admin/trust?kind=team&id=${encodeURIComponent(member.id)}`,
+        { method: 'DELETE' },
+      );
+      const result = await response.json().catch(() => ({}));
+      setMessage(
+        response.ok
+          ? { tone: 'success', text: 'Public team profile deleted.' }
+          : { tone: 'error', text: result.error || result.message || 'Profile could not be deleted.' },
+      );
+      if (response.ok) await load();
+    } catch {
+      setMessage({ tone: 'error', text: 'Network error while deleting profile.' });
+    } finally {
+      setBusy('');
+    }
   };
 
   const publishedCount = useMemo(() => members.filter((m) => m.isPublished).length, [members]);
@@ -329,13 +375,14 @@ export default function PublicAboutTeamPanel() {
                   className={inputClass}
                   value={draft.name}
                   placeholder="e.g. Mukta Rahaman"
-                  onChange={(event) =>
+                  onChange={(event) => {
+                    const nextName = event.target.value;
                     setDraft({
                       ...draft,
-                      name: event.target.value,
-                      slug: draft.slug || slugify(event.target.value),
-                    })
-                  }
+                      name: nextName,
+                      slug: slugTouched ? draft.slug : slugify(nextName),
+                    });
+                  }}
                 />
               </Field>
               <Field label="Profile slug">
@@ -343,7 +390,10 @@ export default function PublicAboutTeamPanel() {
                   className={inputClass}
                   value={draft.slug}
                   placeholder="e.g. mukta-rahaman"
-                  onChange={(event) => setDraft({ ...draft, slug: slugify(event.target.value) })}
+                  onChange={(event) => {
+                    setSlugTouched(Boolean(event.target.value.trim()));
+                    setDraft({ ...draft, slug: slugify(event.target.value) });
+                  }}
                 />
               </Field>
               <Field label="Role">
@@ -405,7 +455,7 @@ export default function PublicAboutTeamPanel() {
                         isPublished: event.target.checked,
                         consentConfirmedAt:
                           event.target.checked && !draft.consentConfirmedAt
-                            ? new Date().toISOString().slice(0, 10)
+                            ? dhakaToday()
                             : draft.consentConfirmedAt,
                       })
                     }
@@ -558,16 +608,12 @@ export default function PublicAboutTeamPanel() {
               <Field label="Specialties, one per line">
                 <textarea
                   className={`${inputClass} min-h-20`}
-                  value={member.specialties.join('\n')}
+                  value={specialtiesDrafts[member.id] ?? member.specialties.join('\n')}
                   onChange={(event) =>
-                    updateMember(
-                      member.id,
-                      'specialties',
-                      event.target.value
-                        .split('\n')
-                        .map((item) => item.trim())
-                        .filter(Boolean),
-                    )
+                    setSpecialtiesDrafts((prev) => ({
+                      ...prev,
+                      [member.id]: event.target.value,
+                    }))
                   }
                 />
               </Field>
@@ -588,7 +634,7 @@ export default function PublicAboutTeamPanel() {
                       const checked = event.target.checked;
                       updateMember(member.id, 'isPublished', checked);
                       if (checked && !member.consentConfirmedAt) {
-                        updateMember(member.id, 'consentConfirmedAt', new Date().toISOString().slice(0, 10));
+                        updateMember(member.id, 'consentConfirmedAt', dhakaToday());
                       }
                     }}
                   />

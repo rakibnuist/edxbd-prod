@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   AlertCircle,
   Calendar,
@@ -77,10 +77,34 @@ export default function FollowupScheduler({
     : '';
 
   const [datetime, setDatetime] = useState(initialVal);
+  const [prevInitialVal, setPrevInitialVal] = useState(initialVal);
+  if (initialVal !== prevInitialVal) {
+    setPrevInitialVal(initialVal);
+    setDatetime(initialVal);
+  }
   const [reason, setReason] = useState('');
   const [appendNote, setAppendNote] = useState(true);
   const [feedback, setFeedback] = useState<string | null>(null);
   const [localSaving, setLocalSaving] = useState(false);
+  const closeTimerRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (closeTimerRef.current !== null) {
+        window.clearTimeout(closeTimerRef.current);
+      }
+    };
+  }, []);
+
+  const scheduleClose = (delayMs: number) => {
+    if (closeTimerRef.current !== null) {
+      window.clearTimeout(closeTimerRef.current);
+    }
+    closeTimerRef.current = window.setTimeout(() => {
+      setFeedback(null);
+      if (onClose) onClose();
+    }, delayMs);
+  };
 
   const isScheduled = Boolean(lead.nextFollowup);
 
@@ -114,10 +138,7 @@ export default function FollowupScheduler({
     setLocalSaving(false);
     if (success) {
       setFeedback('Follow-up scheduled successfully!');
-      setTimeout(() => {
-        setFeedback(null);
-        if (onClose) onClose();
-      }, 1200);
+      scheduleClose(1200);
     } else {
       setFeedback('Failed to schedule follow-up. Please retry.');
     }
@@ -147,10 +168,7 @@ export default function FollowupScheduler({
     setLocalSaving(false);
     if (success) {
       setFeedback('Re-contact marked as completed!');
-      setTimeout(() => {
-        setFeedback(null);
-        if (onClose) onClose();
-      }, 1000);
+      scheduleClose(1000);
     } else {
       setFeedback('Failed to update follow-up. Please retry.');
     }
@@ -164,10 +182,7 @@ export default function FollowupScheduler({
     if (success) {
       setDatetime('');
       setFeedback('Scheduled follow-up cleared.');
-      setTimeout(() => {
-        setFeedback(null);
-        if (onClose) onClose();
-      }, 1000);
+      scheduleClose(1000);
     } else {
       setFeedback('Failed to clear follow-up.');
     }

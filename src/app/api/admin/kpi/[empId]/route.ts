@@ -56,16 +56,23 @@ export async function GET(
       prisma.taskDirective.findMany({
         where: {
           status: { not: 'cancelled' },
-          OR: [{ employeeId: employee.id }, { assignedTo: employee.name }],
+          OR: [{ employeeId: employee.id }, { employeeId: null, assignedTo: employee.name }],
         },
-        orderBy: [{ status: 'asc' }, { dueDate: 'asc' }],
+        orderBy: [{ status: 'asc' }, { createdAt: 'desc' }],
       }),
       prisma.lead.findMany({
         where: {
           OR: [
             { assignedEmployeeId: employee.id },
-            { assignedTo: employee.name },
-            { AND: [{ isApplication: true }, { referrer: { contains: employee.name } }] },
+            { assignedEmployeeId: null, assignedTo: employee.name },
+            {
+              AND: [
+                { isApplication: true },
+                { assignedEmployeeId: null },
+                { assignedTo: null },
+                { referrer: { contains: employee.name } },
+              ],
+            },
           ],
         },
         orderBy: { updatedAt: 'desc' },
@@ -93,12 +100,11 @@ export async function GET(
           ...(canAccessFinanceRole(actor.role) ? {} : { type: { notIn: [...FINANCE_ACTIVITY_TYPES] } }),
           OR: [
             { employeeId: employee.id },
-            { actorName: employee.name },
-            ...(employee.userId ? [{ actorUserId: employee.userId }] : []),
+            { employeeId: null, actorName: employee.name },
+            ...(employee.userId ? [{ employeeId: null, actorUserId: employee.userId }] : []),
           ],
         },
         orderBy: { createdAt: 'desc' },
-        take: 150,
       }),
     ]);
 

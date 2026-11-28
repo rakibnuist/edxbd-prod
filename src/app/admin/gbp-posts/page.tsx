@@ -110,7 +110,7 @@ interface PostFormState {
   topicType: 'STANDARD' | 'OFFER' | 'EVENT';
   title: string;
   summary: string;
-  callToAction: 'LEARN_MORE' | 'BOOK' | 'SIGN_UP';
+  callToAction: 'LEARN_MORE' | 'BOOK' | 'SIGN_UP' | 'ORDER' | 'SHOP';
   ctaUrl: string;
   mediaUrl: string;
   offerRedeemUrl: string;
@@ -120,7 +120,7 @@ interface PostFormState {
   targetChannels: PostTargetChannels;
   linkedinCopy: string;
   sortOrder: number;
-  status: 'queued' | 'paused';
+  status: 'queued' | 'paused' | 'published' | 'failed';
   isRecurring: boolean;
 }
 
@@ -277,9 +277,9 @@ export default function AdminGbpPostsPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action: 'save_config', config: payload }),
       });
-      const data = await res.json();
+      const data = await res.json().catch(() => ({}));
       if (!res.ok) {
-        setFeedback({ type: 'error', text: data.error || 'Could not save automation settings.' });
+        setFeedback({ type: 'error', text: data.error || data.message || 'Could not save automation settings.' });
         return;
       }
       setConfig(data.config);
@@ -310,9 +310,9 @@ export default function AdminGbpPostsPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action: 'preview_next', postId }),
       });
-      const data = await res.json();
+      const data = await res.json().catch(() => ({}));
       if (!res.ok) {
-        setFeedback({ type: 'error', text: data.error || 'Preview failed.' });
+        setFeedback({ type: 'error', text: data.error || data.message || 'Preview failed.' });
         return;
       }
       setPreviewJson(JSON.stringify(data, null, 2));
@@ -338,9 +338,14 @@ export default function AdminGbpPostsPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action: 'run_now', postId, channel }),
       });
-      const data = await res.json();
+      const data = await res.json().catch(() => ({}));
       if (data.config) setConfig(data.config);
       if (Array.isArray(data.posts)) setPosts(data.posts);
+
+      if (!res.ok) {
+        setFeedback({ type: 'error', text: data.error || data.message || 'Publish trigger failed.' });
+        return;
+      }
 
       const result = data.result || {};
       if (result.executed) {
@@ -378,9 +383,16 @@ export default function AdminGbpPostsPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action: 'ack_manual', postId: post.id, channel }),
       });
-      const data = await res.json();
+      const data = await res.json().catch(() => ({}));
       if (data.config) setConfig(data.config);
       if (Array.isArray(data.posts)) setPosts(data.posts);
+      if (!res.ok || data.result?.executed === false) {
+        setFeedback({
+          type: 'error',
+          text: data.error || data.result?.error || data.message || 'Could not mark post as synced.',
+        });
+        return;
+      }
       setFeedback({
         type: 'success',
         text: `Marked "${post.title || post.slug}" synced (${channel.toUpperCase()}) and reset the ${config?.cadenceDays ?? 7}-day countdown.`,
@@ -415,9 +427,11 @@ export default function AdminGbpPostsPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id: post.id, quickToggle: true, status: nextStatus }),
       });
+      const data = await res.json().catch(() => ({}));
       if (res.ok) {
-        const data = await res.json();
         setPosts((prev) => prev.map((item) => (item.id === post.id ? data.post : item)));
+      } else {
+        setFeedback({ type: 'error', text: data.error || data.message || 'Failed to toggle post status.' });
       }
     } catch {
       setFeedback({ type: 'error', text: 'Failed to toggle post status.' });
@@ -430,9 +444,12 @@ export default function AdminGbpPostsPage() {
       const res = await authenticatedFetch(`/api/admin/gbp-posts?id=${encodeURIComponent(id)}`, {
         method: 'DELETE',
       });
+      const data = await res.json().catch(() => ({}));
       if (res.ok) {
         setPosts((prev) => prev.filter((item) => item.id !== id));
         setFeedback({ type: 'success', text: 'Post removed from rotation queue.' });
+      } else {
+        setFeedback({ type: 'error', text: data.error || data.message || 'Could not delete post.' });
       }
     } catch {
       setFeedback({ type: 'error', text: 'Could not delete post.' });
@@ -440,13 +457,23 @@ export default function AdminGbpPostsPage() {
   };
 
   const openEditForm = (post: GbpPostRecord) => {
+    const validCta = (['LEARN_MORE', 'BOOK', 'SIGN_UP', 'ORDER', 'SHOP'] as const).includes(
+      post.callToAction as PostFormState['callToAction'],
+    )
+      ? (post.callToAction as PostFormState['callToAction'])
+      : 'LEARN_MORE';
+    const validStatus = (['queued', 'paused', 'published', 'failed'] as const).includes(
+      post.status as PostFormState['status'],
+    )
+      ? (post.status as PostFormState['status'])
+      : 'queued';
     setPostForm({
       id: post.id,
       slug: post.slug,
       topicType: post.topicType === 'OFFER' || post.topicType === 'EVENT' ? post.topicType : 'STANDARD',
       title: post.title || '',
       summary: post.summary,
-      callToAction: post.callToAction === 'BOOK' || post.callToAction === 'SIGN_UP' ? post.callToAction : 'LEARN_MORE',
+      callToAction: validCta,
       ctaUrl: post.ctaUrl,
       mediaUrl: post.mediaUrl || '',
       offerRedeemUrl: post.offerRedeemUrl || '',
@@ -456,7 +483,7 @@ export default function AdminGbpPostsPage() {
       targetChannels: post.targetChannels || 'both',
       linkedinCopy: post.linkedinCopy || '',
       sortOrder: post.sortOrder,
-      status: post.status === 'paused' ? 'paused' : 'queued',
+      status: validStatus,
       isRecurring: post.isRecurring,
     });
     setShowPostForm(true);
@@ -474,9 +501,9 @@ export default function AdminGbpPostsPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(postForm),
       });
-      const data = await res.json();
+      const data = await res.json().catch(() => ({}));
       if (!res.ok) {
-        setFeedback({ type: 'error', text: data.error || 'Could not save scheduled post.' });
+        setFeedback({ type: 'error', text: data.error || data.message || 'Could not save scheduled post.' });
         return;
       }
       setShowPostForm(false);
@@ -1044,7 +1071,7 @@ export default function AdminGbpPostsPage() {
                   onChange={(e) =>
                     setPostForm((p) => ({
                       ...p,
-                      callToAction: e.target.value as 'LEARN_MORE' | 'BOOK' | 'SIGN_UP',
+                      callToAction: e.target.value as PostFormState['callToAction'],
                     }))
                   }
                   className="mt-1 w-full rounded-lg border border-slate-300 px-2.5 py-2 bg-white text-sm"
@@ -1052,6 +1079,8 @@ export default function AdminGbpPostsPage() {
                   <option value="LEARN_MORE">Learn more</option>
                   <option value="BOOK">Book</option>
                   <option value="SIGN_UP">Sign up</option>
+                  <option value="ORDER">Order</option>
+                  <option value="SHOP">Shop</option>
                 </select>
               </label>
 
@@ -1248,7 +1277,9 @@ export default function AdminGbpPostsPage() {
                     <span>
                       CTA: {post.callToAction} -&gt; {post.ctaUrl}
                     </span>
-                    {post.lastPublishedAt && <span>GBP sent: {formatDhakaTime(post.lastPublishedAt)}</span>}
+                    {post.lastPublishedAt && (
+                      <span>{channels === 'linkedin' ? 'Last rotated' : 'GBP sent'}: {formatDhakaTime(post.lastPublishedAt)}</span>
+                    )}
                     {post.lastLinkedinPublishedAt && (
                       <span className="text-[#0A66C2]">
                         LinkedIn sent: {formatDhakaTime(post.lastLinkedinPublishedAt)}

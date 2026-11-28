@@ -46,12 +46,32 @@ export async function GET(request: NextRequest) {
       ];
     }
 
-    const [items, counts, entityCounts, totalMatched] = await Promise.all([
-      prisma.internalSourceWatch.findMany({
-        where,
-        orderBy: [{ status: 'asc' }, { lastChangedAt: 'desc' }, { updatedAt: 'desc' }],
+    const fetchItems = async () => {
+      if (status && VALID_STATUSES.has(status)) {
+        return prisma.internalSourceWatch.findMany({
+          where,
+          orderBy: [{ lastChangedAt: 'desc' }, { updatedAt: 'desc' }],
+          take: limit,
+        });
+      }
+      // Prioritize actionable alerts (changed_needs_review, broken_link) ahead of active/paused rows
+      const alertRows = await prisma.internalSourceWatch.findMany({
+        where: { ...where, status: { in: ['changed_needs_review', 'broken_link'] } },
+        orderBy: [{ status: 'desc' }, { lastChangedAt: 'desc' }, { updatedAt: 'desc' }],
         take: limit,
-      }),
+      });
+      const remaining = limit - alertRows.length;
+      if (remaining <= 0) return alertRows;
+      const otherRows = await prisma.internalSourceWatch.findMany({
+        where: { ...where, status: { notIn: ['changed_needs_review', 'broken_link'] } },
+        orderBy: [{ status: 'asc' }, { updatedAt: 'desc' }],
+        take: remaining,
+      });
+      return [...alertRows, ...otherRows];
+    };
+
+    const [items, counts, entityCounts, totalMatched] = await Promise.all([
+      fetchItems(),
       prisma.internalSourceWatch.groupBy({
         by: ['status'],
         _count: { _all: true },

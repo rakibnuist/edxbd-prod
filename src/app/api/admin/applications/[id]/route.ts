@@ -1,11 +1,12 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { FINANCE_ACTIVITY_TYPES, canAccessFinanceRole } from '@/lib/auth';
+import { NextRequest, NextResponse, after } from 'next/server';
+import { FINANCE_ACTIVITY_TYPES, canAccessFinanceRole, isAdminRole } from '@/lib/auth';
 import {
   canAccessLeadScope,
   verifyLiveAdminUser,
   verifyLiveStaffUser,
 } from '@/lib/auth-user';
 import { logActivityEvent } from '@/lib/crm-operations';
+import { sendCrmStage } from '@/lib/meta-crm-events';
 import { jsonBodyErrorResponse, readLimitedJson } from '@/lib/request-body';
 import {
   deriveLeadStatusFromStage,
@@ -22,9 +23,7 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> },
 ) {
   try {
-    const admin = await verifyLiveAdminUser(request);
-    const staff = admin ? null : await verifyLiveStaffUser(request);
-    const actor = admin || staff;
+    const actor = await verifyLiveStaffUser(request);
     if (!actor) {
       return NextResponse.json(
         { message: 'Unauthorized - Staff access required' },
@@ -32,7 +31,7 @@ export async function GET(
       );
     }
 
-    const isAdmin = Boolean(admin);
+    const isAdmin = isAdminRole(actor.role);
     const canSeeFinance = canAccessFinanceRole(actor.role);
     const { id } = await params;
 
@@ -59,7 +58,7 @@ export async function GET(
         { status: 403, headers: NO_STORE_HEADERS },
       );
     }
-    if (!canAccessLeadScope({ role: actor.role, employee: staff?.employee }, lead)) {
+    if (!canAccessLeadScope({ role: actor.role, employee: actor.employee }, lead)) {
       return NextResponse.json(
         { message: 'Unauthorized - Application assigned to another counselor' },
         { status: 403, headers: NO_STORE_HEADERS },
@@ -227,9 +226,7 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> },
 ) {
   try {
-    const admin = await verifyLiveAdminUser(request);
-    const staff = admin ? null : await verifyLiveStaffUser(request);
-    const actor = admin || staff;
+    const actor = await verifyLiveStaffUser(request);
     if (!actor) {
       return NextResponse.json(
         { message: 'Unauthorized - Staff access required' },
@@ -237,7 +234,7 @@ export async function PATCH(
       );
     }
 
-    const isAdmin = Boolean(admin);
+    const isAdmin = isAdminRole(actor.role);
     const canSeeFinance = canAccessFinanceRole(actor.role);
     const { id } = await params;
 
@@ -251,7 +248,7 @@ export async function PATCH(
         { status: 403, headers: NO_STORE_HEADERS },
       );
     }
-    if (!canAccessLeadScope({ role: actor.role, employee: staff?.employee }, existing)) {
+    if (!canAccessLeadScope({ role: actor.role, employee: actor.employee }, existing)) {
       return NextResponse.json(
         { message: 'Unauthorized - Application assigned to another counselor' },
         { status: 403, headers: NO_STORE_HEADERS },
@@ -282,8 +279,8 @@ export async function PATCH(
         );
       }
       if ('assignedEmployeeId' in data || 'assignedTo' in data) {
-        const myEmpId = staff?.employee?.id ?? null;
-        const myEmpName = staff?.employee?.name?.trim().toLowerCase() ?? null;
+        const myEmpId = actor.employee?.id ?? null;
+        const myEmpName = actor.employee?.name?.trim().toLowerCase() ?? null;
         const targetEmpId = data.assignedEmployeeId as string | null | undefined;
         const targetName = typeof data.assignedTo === 'string' ? data.assignedTo.trim().toLowerCase() : null;
         const changingToOtherEmp = targetEmpId !== undefined && targetEmpId !== myEmpId && targetEmpId !== existing.assignedEmployeeId;
@@ -298,12 +295,36 @@ export async function PATCH(
       delete data.isApplication;
     }
 
-    // Sync assignedTo when assignedEmployeeId is provided
+    // Normalize & enforce unique leadRef if changed
+    if (typeof data.leadRef === 'string') {
+      const normalizedRef = data.leadRef.trim().toUpperCase();
+      data.leadRef = normalizedRef || null;
+      if (normalizedRef && normalizedRef !== (existing.leadRef || '').toUpperCase()) {
+        const refConflict = await prisma.lead.findFirst({
+          where: { leadRef: normalizedRef, id: { not: id } },
+          select: { id: true, name: true },
+        });
+        if (refConflict) {
+          return NextResponse.json(
+            { error: `File reference "${normalizedRef}" is already assigned to ${refConflict.name}.` },
+            { status: 409, headers: NO_STORE_HEADERS },
+          );
+        }
+      }
+    }
+
+    // Sync assignedTo when assignedEmployeeId is provided (and validate FK)
     if ('assignedEmployeeId' in data) {
       const empId = data.assignedEmployeeId as string | null;
       if (empId) {
-        const emp = await prisma.employee.findUnique({ where: { id: empId }, select: { name: true } });
-        if (emp) data.assignedTo = emp.name;
+        const emp = await prisma.employee.findUnique({ where: { id: empId }, select: { id: true, name: true } });
+        if (!emp) {
+          return NextResponse.json(
+            { error: 'Selected counselor does not exist.' },
+            { status: 400, headers: NO_STORE_HEADERS },
+          );
+        }
+        data.assignedTo = emp.name;
       } else {
         data.assignedTo = null;
       }
@@ -321,27 +342,52 @@ export async function PATCH(
       data,
     });
 
+    const actorEmployeeId = actor.employee?.id || null;
+
     if (nextStage !== prevStage) {
       void logActivityEvent({
         type: 'application_stage_changed',
         actorName: actor.email,
         actorUserId: actor.userId,
-        employeeId: updated.assignedEmployeeId,
+        employeeId: actorEmployeeId,
         leadId: updated.id,
         leadName: updated.name,
         fromValue: prevStage,
         toValue: nextStage,
       });
-    } else if ('embassyStatus' in data && data.embassyStatus !== existing.embassyStatus) {
+    }
+    if ('embassyStatus' in data && data.embassyStatus !== existing.embassyStatus) {
       void logActivityEvent({
         type: 'embassy_status_changed',
         actorName: actor.email,
         actorUserId: actor.userId,
-        employeeId: updated.assignedEmployeeId,
+        employeeId: actorEmployeeId,
         leadId: updated.id,
         leadName: updated.name,
         fromValue: existing.embassyStatus || 'Pending',
         toValue: String(data.embassyStatus || 'Pending'),
+      });
+    }
+    if (updated.assignedEmployeeId !== existing.assignedEmployeeId || updated.assignedTo !== existing.assignedTo) {
+      void logActivityEvent({
+        type: 'lead_assigned',
+        actorName: actor.email,
+        actorUserId: actor.userId,
+        employeeId: updated.assignedEmployeeId || actorEmployeeId,
+        leadId: updated.id,
+        leadName: updated.name,
+        fromValue: existing.assignedTo || 'Unassigned',
+        toValue: updated.assignedTo || 'Unassigned',
+      });
+    }
+
+    if (updated.status !== existing.status) {
+      after(async () => {
+        try {
+          await sendCrmStage(updated, updated.status);
+        } catch (err) {
+          console.error('[applications/[id] PATCH] sendCrmStage failed:', err);
+        }
       });
     }
 
@@ -352,6 +398,16 @@ export async function PATCH(
   } catch (error) {
     const bodyError = jsonBodyErrorResponse(error);
     if (bodyError) return bodyError;
+    const code = (error as { code?: string })?.code;
+    if (code === 'P2025') {
+      return NextResponse.json({ error: 'Application not found.' }, { status: 404, headers: NO_STORE_HEADERS });
+    }
+    if (code === 'P2002') {
+      return NextResponse.json({ error: 'Duplicate unique value (e.g. file reference or portal token).' }, { status: 409, headers: NO_STORE_HEADERS });
+    }
+    if (code === 'P2003') {
+      return NextResponse.json({ error: 'Referenced staff or related record does not exist.' }, { status: 400, headers: NO_STORE_HEADERS });
+    }
     console.error('[applications/[id] PATCH]', error);
     return NextResponse.json(
       { error: 'Failed to update application.' },

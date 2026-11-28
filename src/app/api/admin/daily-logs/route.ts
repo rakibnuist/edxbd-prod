@@ -38,6 +38,13 @@ export async function GET(request: NextRequest) {
   }
 }
 
+function isValidIsoCalendarDate(value: string): boolean {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+  const [y, m, d] = value.split('-').map(Number);
+  const dt = new Date(Date.UTC(y, m - 1, d));
+  return dt.getUTCFullYear() === y && dt.getUTCMonth() === m - 1 && dt.getUTCDate() === d;
+}
+
 export async function POST(request: NextRequest) {
   try {
     const admin = await verifyLiveAdminUser(request);
@@ -73,8 +80,10 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Accomplishments summary is required.' }, { status: 400 });
     }
 
-    const date = typeof body.date === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(body.date)
-      ? body.date
+    // Only admins can backfill or specify a custom date; counselors always log for today (Dhaka)
+    const rawDate = typeof body.date === 'string' ? body.date.trim() : '';
+    const date = isAdmin && rawDate && isValidIsoCalendarDate(rawDate)
+      ? rawDate
       : dhakaTodayIso();
     const existing = await prisma.dailyLog.findUnique({
       where: { empId_date: { empId: employee.empId, date } },
@@ -103,7 +112,7 @@ export async function POST(request: NextRequest) {
     void logActivityEvent({
       type: existing ? 'daily_log_updated' : 'daily_log_submitted',
       actorName: employee.name,
-      actorUserId: decoded.userId,
+      actorUserId: employee.userId || (isAdmin ? null : decoded.userId),
       employeeId: employee.id,
       toValue: date,
       details: accomplishments.slice(0, 240),

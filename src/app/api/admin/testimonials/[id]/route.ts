@@ -2,8 +2,11 @@ import { NextRequest, NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
 import prisma from '@/lib/prisma';
 import { verifyLiveAdminUser } from '@/lib/auth-user';
+import { jsonBodyErrorResponse, readLimitedJson } from '@/lib/request-body';
+import { toSafeSitePathOrUrl } from '@/lib/safe-url';
 
-const forbidden = () => NextResponse.json({ error: 'Admin access required' }, { status: 403 });
+const NO_STORE = { 'Cache-Control': 'no-store, private' };
+const forbidden = () => NextResponse.json({ error: 'Admin access required' }, { status: 403, headers: NO_STORE });
 
 const optional = (value: unknown) => String(value || '').trim() || null;
 const dateOrNull = (value: unknown) => {
@@ -19,17 +22,28 @@ const refreshTestimonials = () => {
 };
 
 async function updateTestimonial(request: NextRequest, id: string) {
-  const body = await request.json() as Record<string, unknown>;
+  const body = await readLimitedJson(request, 64 * 1024);
   const existing = await prisma.testimonial.findUnique({ where: { id } });
-  if (!existing) return NextResponse.json({ error: 'Testimonial not found' }, { status: 404 });
+  if (!existing) return NextResponse.json({ error: 'Testimonial not found' }, { status: 404, headers: NO_STORE });
   const studentName = body.name || body.studentName || body.displayName;
   const content = body.quote || body.content;
 
   const updateData: Record<string, unknown> = {};
   if (studentName) updateData.studentName = String(studentName).trim();
   if (content) updateData.content = String(content).trim();
-  for (const field of ['displayName', 'location', 'university', 'program', 'country', 'image', 'academicProfile', 'decisionFactors', 'applicationTimeline', 'serviceProvided', 'studentPaid', 'currentUpdate', 'consentEvidenceId'] as const) {
+  for (const field of ['displayName', 'location', 'university', 'program', 'country', 'academicProfile', 'decisionFactors', 'applicationTimeline', 'serviceProvided', 'studentPaid', 'currentUpdate', 'consentEvidenceId'] as const) {
     if (body[field] !== undefined) updateData[field] = optional(body[field]);
+  }
+  if (body.image !== undefined) {
+    const rawImage = optional(body.image);
+    const safeImage = rawImage ? toSafeSitePathOrUrl(rawImage) : null;
+    if (rawImage && !safeImage) {
+      return NextResponse.json(
+        { error: 'Photo must be a safe site path (/...) or an http(s) URL.' },
+        { status: 400, headers: NO_STORE },
+      );
+    }
+    updateData.image = safeImage;
   }
   for (const field of ['consentRecordedAt', 'consentExpiresAt', 'consentRevokedAt'] as const) {
     if (body[field] !== undefined) updateData[field] = dateOrNull(body[field]);
@@ -44,18 +58,26 @@ async function updateTestimonial(request: NextRequest, id: string) {
   const consentCurrent = !merged.consentExpiresAt || new Date(merged.consentExpiresAt) >= new Date();
   // A story can go live once it has a photo, a name and the story text.
   const ready = Boolean(merged.image && merged.studentName && merged.content && !merged.consentRevokedAt && consentCurrent);
-  if (requestedPublish && !ready) return NextResponse.json({ error: 'Add the student photo, name and story before publishing.' }, { status: 400 });
+  if (requestedPublish && !ready) {
+    return NextResponse.json(
+      { error: 'Add a real student photo, name, and story (without revoked or expired consent) before publishing.' },
+      { status: 400, headers: NO_STORE },
+    );
+  }
   updateData.isPublished = requestedPublish && ready;
 
   const testimonial = await prisma.testimonial.update({ where: { id }, data: updateData });
   refreshTestimonials();
-  return NextResponse.json({
-    ...testimonial,
-    name: testimonial.studentName,
-    displayName: testimonial.displayName || testimonial.studentName,
-    quote: testimonial.content,
-    isActive: testimonial.isPublished,
-  });
+  return NextResponse.json(
+    {
+      ...testimonial,
+      name: testimonial.studentName,
+      displayName: testimonial.displayName || testimonial.studentName,
+      quote: testimonial.content,
+      isActive: testimonial.isPublished,
+    },
+    { headers: NO_STORE },
+  );
 }
 
 export async function GET(
@@ -98,11 +120,13 @@ export async function PUT(
   try {
     if (!(await verifyLiveAdminUser(request))) return forbidden();
     const { id } = await params;
-    return updateTestimonial(request, id);
-  } catch (_error) {
+    return await updateTestimonial(request, id);
+  } catch (error) {
+    const bodyErr = jsonBodyErrorResponse(error);
+    if (bodyErr) return bodyErr;
     return NextResponse.json(
       { error: 'Failed to update testimonial' },
-      { status: 500 }
+      { status: 500, headers: NO_STORE }
     );
   }
 }
@@ -114,9 +138,11 @@ export async function PATCH(
   try {
     if (!(await verifyLiveAdminUser(request))) return forbidden();
     const { id } = await params;
-    return updateTestimonial(request, id);
-  } catch {
-    return NextResponse.json({ error: 'Failed to update testimonial status' }, { status: 500 });
+    return await updateTestimonial(request, id);
+  } catch (error) {
+    const bodyErr = jsonBodyErrorResponse(error);
+    if (bodyErr) return bodyErr;
+    return NextResponse.json({ error: 'Failed to update testimonial status' }, { status: 500, headers: NO_STORE });
   }
 }
 
@@ -127,14 +153,18 @@ export async function DELETE(
   try {
     if (!(await verifyLiveAdminUser(request))) return forbidden();
     const { id } = await params;
-    await prisma.testimonial.delete({ where: { id } }).catch(() => null);
+    await prisma.testimonial.delete({ where: { id } });
     refreshTestimonials();
 
-    return NextResponse.json({ message: 'Testimonial deleted successfully' });
-  } catch (_error) {
+    return NextResponse.json({ message: 'Testimonial deleted successfully' }, { headers: NO_STORE });
+  } catch (error) {
+    const code = (error as { code?: string })?.code;
+    if (code === 'P2025') {
+      return NextResponse.json({ error: 'Testimonial not found' }, { status: 404, headers: NO_STORE });
+    }
     return NextResponse.json(
       { error: 'Failed to delete testimonial' },
-      { status: 500 }
+      { status: 500, headers: NO_STORE }
     );
   }
 }

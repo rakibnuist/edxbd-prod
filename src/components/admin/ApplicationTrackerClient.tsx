@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import {
   ArrowRight,
   BarChart3,
@@ -77,6 +78,7 @@ interface ApplicationsApiResponse {
 }
 
 type BucketFilter = 'all' | 'docs' | 'submitted' | 'admitted' | 'visa' | 'flight' | 'withdrawn';
+type ChannelFilter = 'all' | 'b2c' | 'b2b' | 'paid' | 'organic' | 'whatsapp' | 'in_house';
 
 const STAGE_BADGE_CLASSES: Record<ApplicationStageDef['tone'], string> = {
   slate: 'border-slate-200 bg-slate-50 text-slate-700',
@@ -105,6 +107,11 @@ function isB2BRow(row: ApplicationRowDto): boolean {
 
 export default function ApplicationTrackerClient() {
   const { user, isAuthenticated, loading: authLoading, authenticatedFetch } = useAuth();
+  const searchParams = useSearchParams();
+  const urlSearch = searchParams.get('search') || '';
+  const urlStage = searchParams.get('stage') || '';
+  const urlKey = `${urlSearch}|${urlStage}`;
+
   const [data, setData] = useState<ApplicationsApiResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -116,25 +123,40 @@ export default function ApplicationTrackerClient() {
   const [showAnalytics, setShowAnalytics] = useState(false);
 
   // Primary Multi-Dimensional Filters: Year, Intake Session, Channel (B2C/B2B), Counselor, Destination
-  const [yearFilter, setYearFilter] = useState<string>('2027');
+  const [yearFilter, setYearFilter] = useState<string>(() => (urlSearch || urlStage ? 'all' : '2027'));
   const [sessionFilter, setSessionFilter] = useState<'all' | IntakeSessionKey>('all');
   const [exactIntakeFilter, setExactIntakeFilter] = useState<string>('all');
-  const [channelFilter, setChannelFilter] = useState<'all' | 'b2c' | 'b2b' | 'paid' | 'organic' | 'whatsapp' | 'in_house'>('all');
+  const [channelFilter, setChannelFilter] = useState<ChannelFilter>('all');
   const [counselorFilter, setCounselorFilter] = useState<string>('all');
   const [referrerFilter, setReferrerFilter] = useState<string>('all');
   const [destinationFilter, setDestinationFilter] = useState<string>('all');
 
   // Pipeline & Secondary Filters
   const [bucketFilter, setBucketFilter] = useState<BucketFilter>('all');
-  const [stageFilter, setStageFilter] = useState<string>('all');
+  const [stageFilter, setStageFilter] = useState<string>(() => urlStage || 'all');
   const [embassyFilter, setEmbassyFilter] = useState<string>('all');
   const [degreeFilter, setDegreeFilter] = useState<string>('all');
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState(() => urlSearch);
   const [hideWithdrawn, setHideWithdrawn] = useState(false);
 
   // Pagination
   const [pageSize, setPageSize] = useState<number>(25);
   const [page, setPage] = useState<number>(1);
+
+  const [prevUrlKey, setPrevUrlKey] = useState(urlKey);
+  if (prevUrlKey !== urlKey) {
+    setPrevUrlKey(urlKey);
+    if (urlSearch) {
+      setSearchQuery(urlSearch);
+      setYearFilter('all');
+      setPage(1);
+    }
+    if (urlStage) {
+      setStageFilter(urlStage);
+      setYearFilter('all');
+      setPage(1);
+    }
+  }
 
   // Selection & bulk actions (admin)
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
@@ -337,7 +359,22 @@ export default function ApplicationTrackerClient() {
       const isOfferOrSub = bucket === 'submitted' || bucket === 'admitted' || bucket === 'visa';
       const isFlown = bucket === 'flight';
 
-      const entry = r.assignedEmployeeId ? byId.get(r.assignedEmployeeId) : null;
+      let entry = r.assignedEmployeeId ? byId.get(r.assignedEmployeeId) : null;
+      if (!entry && (r.assignedEmployeeId || r.employeeName)) {
+        const fallbackKey = r.assignedEmployeeId || r.employeeName!;
+        entry = byId.get(fallbackKey);
+        if (!entry) {
+          entry = {
+            id: fallbackKey,
+            name: r.employeeName || fallbackKey,
+            total: 0,
+            active: 0,
+            submittedOrAdmitted: 0,
+            flown: 0,
+          };
+          byId.set(fallbackKey, entry);
+        }
+      }
       if (entry) {
         entry.total += 1;
         if (!isWithdrawn) entry.active += 1;
@@ -372,7 +409,10 @@ export default function ApplicationTrackerClient() {
           return false;
         }
       }
-      if (referrerFilter !== 'all' && (row.referrer || '') !== referrerFilter) return false;
+      if (referrerFilter !== 'all') {
+        const effectiveReferrer = (isB2BRow(row) ? row.referrer || 'Partner Agent' : row.referrer || '').trim();
+        if (effectiveReferrer !== referrerFilter) return false;
+      }
       if (destinationFilter !== 'all' && row.country !== destinationFilter) return false;
       return true;
     });
@@ -384,6 +424,10 @@ export default function ApplicationTrackerClient() {
     for (const row of timeScopedRows) {
       if (channelFilter === 'b2c' && isB2BRow(row)) continue;
       if (channelFilter === 'b2b' && !isB2BRow(row)) continue;
+      if (['paid', 'organic', 'whatsapp', 'in_house'].includes(channelFilter)) {
+        const cat = categorizeLeadSource(row.source, null, row.channelType);
+        if (cat !== channelFilter) continue;
+      }
       if (counselorFilter !== 'all') {
         if (counselorFilter === '__unassigned__') {
           if (row.assignedEmployeeId || row.employeeName) continue;
@@ -894,6 +938,11 @@ export default function ApplicationTrackerClient() {
                       {yr} Admissions ({count})
                     </option>
                   ))}
+                {yearBreakdown.some(([y]) => y === 'Unscheduled') && (
+                  <option value="Unscheduled">
+                    Unscheduled Intake ({yearBreakdown.find(([y]) => y === 'Unscheduled')?.[1] || 0})
+                  </option>
+                )}
               </select>
             </div>
 
@@ -928,7 +977,7 @@ export default function ApplicationTrackerClient() {
               <select
                 value={channelFilter}
                 onChange={(e) => {
-                  const nextChannel = e.target.value as any;
+                  const nextChannel = e.target.value as ChannelFilter;
                   setChannelFilter(nextChannel);
                   if (nextChannel !== 'b2b') setReferrerFilter('all');
                   setPage(1);
@@ -1627,7 +1676,7 @@ export default function ApplicationTrackerClient() {
                           })()}
                         </div>
                         <h4 className="mt-1 text-sm font-bold text-slate-900">{row.name}</h4>
-                        {row.phone && (
+                        {row.phone && row.phone !== '—' && (
                           <a href={`tel:${row.phone}`} className="text-xs text-slate-600 hover:text-[#0f3a5c]">
                             {row.phone}
                           </a>
@@ -2191,6 +2240,7 @@ export default function ApplicationTrackerClient() {
 
       {/* New / Promote Application Modal */}
       <NewApplicationModal
+        key={newModalOpen ? 'new-app-open' : 'new-app-closed'}
         open={newModalOpen}
         isAdmin={isAdmin}
         canAccessFinance={canAccessFinance}
@@ -2212,6 +2262,7 @@ export default function ApplicationTrackerClient() {
 
       {/* Slide-Over Student Dossier Drawer */}
       <ApplicationDetailDrawer
+        key={activeDrawerId || 'drawer-closed'}
         applicationId={activeDrawerId}
         isAdmin={isAdmin}
         canAccessFinance={canAccessFinance}

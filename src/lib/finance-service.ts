@@ -253,10 +253,12 @@ export async function getStudentFinancialHistory(rawQuery: string) {
           { name: { contains: q } },
           { phone: { contains: q } },
           { email: { contains: q } },
+          { leadRef: { contains: q } },
         ],
       },
       select: {
         id: true,
+        leadRef: true,
         name: true,
         phone: true,
         email: true,
@@ -309,6 +311,7 @@ export async function getFinanceStudentsPickerList() {
       take: 400,
       select: {
         id: true,
+        leadRef: true,
         name: true,
         phone: true,
         country: true,
@@ -350,7 +353,7 @@ export async function getFinanceStudentsPickerList() {
     university: l.university,
     status: l.status,
     applicationStage: l.applicationStage,
-    leadRef: refByLeadId.get(l.id) || refByNameLower.get(l.name.trim().toLowerCase()) || null,
+    leadRef: l.leadRef || refByLeadId.get(l.id) || refByNameLower.get(l.name.trim().toLowerCase()) || null,
   }));
 }
 
@@ -393,7 +396,7 @@ export async function getFinanceDashboardSnapshot(monthInput?: string): Promise<
     prisma.financeIncome.findFirst({ orderBy: { date: 'desc' }, select: { date: true } }),
     prisma.financeExpense.findFirst({ orderBy: { date: 'desc' }, select: { date: true } }),
     prisma.payrollRecord.aggregate({
-      where: { status: 'pending', netPay: { gt: 0 } },
+      where: { status: 'pending', netPay: { gt: 0 }, month: { lte: dhakaCurrentMonth() } },
       _sum: { netPay: true },
       _count: { id: true },
     }),
@@ -438,9 +441,18 @@ export async function syncPayrollExpense(
   actor?: { email: string; userId: string },
 ) {
   const reference = `Salary - ${record.month}`;
+  const matchWhere = {
+    category: 'Salary',
+    reference,
+    OR: [
+      ...(record.employeeId ? [{ employeeId: record.employeeId }] : []),
+      { paidTo: record.name },
+    ],
+  };
+
   if (record.status !== 'paid') {
     await prisma.financeExpense.deleteMany({
-      where: { category: 'Salary', paidTo: record.name, reference },
+      where: matchWhere,
     });
     return;
   }
@@ -448,7 +460,7 @@ export async function syncPayrollExpense(
   const date = record.paidOn || dhakaCurrentDate();
   const expenseMonth = date.slice(0, 7);
   const existing = await prisma.financeExpense.findFirst({
-    where: { category: 'Salary', paidTo: record.name, reference },
+    where: matchWhere,
     select: { id: true },
   });
 
@@ -458,7 +470,8 @@ export async function syncPayrollExpense(
       data: {
         date,
         month: expenseMonth,
-        amount: record.netPay || 0,
+        paidTo: record.name,
+        amount: Math.max(0, record.netPay || 0),
         notes: record.notes || `Salary payment for ${record.month}`,
         employeeId: record.employeeId,
       },
@@ -471,7 +484,7 @@ export async function syncPayrollExpense(
         category: 'Salary',
         paidTo: record.name,
         reference,
-        amount: record.netPay || 0,
+        amount: Math.max(0, record.netPay || 0),
         notes: record.notes || `Salary payment for ${record.month}`,
         employeeId: record.employeeId,
       },
@@ -489,20 +502,22 @@ export async function syncPayrollExpense(
 }
 
 export async function getOrGenerateMonthlyPayroll(monthInput?: string | null) {
-  const month = monthInput && isValidMonth(monthInput) ? monthInput : dhakaCurrentMonth();
+  const currentMonth = dhakaCurrentMonth();
+  const month = monthInput && isValidMonth(monthInput) ? monthInput : currentMonth;
+  const isFutureMonth = month > currentMonth;
   const workingDays = workingDaysInMonth(month);
 
   const activeEmployees = await prisma.employee.findMany({
     where: { active: true },
     orderBy: [{ empId: 'asc' }, { name: 'asc' }],
-    select: { id: true, empId: true, name: true, role: true, salary: true },
+    select: { id: true, empId: true, name: true, role: true, salary: true, joinDate: true },
   });
 
   // Sync attendance days for the month
   const monthAttendances = await prisma.attendance.findMany({
     where: {
       date: { startsWith: `${month}-` },
-      status: { in: ['Present', 'Late'] },
+      status: { in: ['Present', 'Late', 'present', 'late', 'On Time', 'on time'] },
     },
     select: { empId: true },
   });
@@ -531,6 +546,11 @@ export async function getOrGenerateMonthlyPayroll(monthInput?: string | null) {
     );
 
     if (matches.length === 0) {
+      // Never auto-generate future-month liabilities or pre-hire historical payroll rows
+      const joinMonth = emp.joinDate && /^\d{4}-\d{2}/.test(emp.joinDate) ? emp.joinDate.slice(0, 7) : null;
+      if (isFutureMonth || (joinMonth && month < joinMonth)) {
+        continue;
+      }
       await prisma.payrollRecord.create({
         data: {
           month,
@@ -542,7 +562,7 @@ export async function getOrGenerateMonthlyPayroll(monthInput?: string | null) {
           workingDays,
           bonus: 0,
           deductions: 0,
-          netPay: emp.salary || 0,
+          netPay: Math.max(0, emp.salary || 0),
           status: 'pending',
         },
       });
@@ -564,6 +584,17 @@ export async function getOrGenerateMonthlyPayroll(monthInput?: string | null) {
         }
       }
 
+      // Preserve paid historical payroll rows as immutable snapshots (only backfill missing FK)
+      if (primary.status === 'paid') {
+        if (!primary.employeeId) {
+          await prisma.payrollRecord.update({
+            where: { id: primary.id },
+            data: { employeeId: emp.id },
+          }).catch(() => {});
+        }
+        continue;
+      }
+
       const updateData: Record<string, unknown> = {
         daysWorked,
         workingDays,
@@ -572,9 +603,9 @@ export async function getOrGenerateMonthlyPayroll(monthInput?: string | null) {
         name: emp.name,
       };
 
-      if (primary.status === 'pending' && primary.baseSalary === 0 && (emp.salary || 0) > 0) {
+      if (primary.baseSalary === 0 && (emp.salary || 0) > 0) {
         updateData.baseSalary = emp.salary;
-        updateData.netPay = (emp.salary || 0) + primary.bonus - primary.deductions;
+        updateData.netPay = Math.max(0, (emp.salary || 0) + primary.bonus - primary.deductions);
       }
 
       await prisma.payrollRecord.update({
@@ -584,13 +615,13 @@ export async function getOrGenerateMonthlyPayroll(monthInput?: string | null) {
     }
   }
 
-  // Remove stale pending records whose employee is no longer active or was deleted
+  // Remove stale pending records whose employee is no longer active or was deleted (NULL-safe)
   await prisma.payrollRecord.deleteMany({
     where: {
       month,
       status: 'pending',
       AND: [
-        { employeeId: { notIn: Array.from(activeEmpIds) } },
+        { OR: [{ employeeId: null }, { employeeId: { notIn: Array.from(activeEmpIds) } }] },
         { empId: { notIn: Array.from(activeEmpCodes) } },
       ],
     },

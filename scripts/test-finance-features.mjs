@@ -23,7 +23,7 @@ test('Finance formatting and month helpers behave consistently', () => {
   assert.equal(formatBdt(-15000), '-৳15,000');
   assert.equal(shiftMonth('2026-01', -1), '2025-12');
   assert.equal(shiftMonth('2026-12', 1), '2027-01');
-  assert.equal(workingDaysInMonth('2026-10'), 21);
+  assert.equal(workingDaysInMonth('2026-10'), 26);
 });
 
 test('Income, expense, and payroll validators enforce dates, bounds, and defaults', () => {

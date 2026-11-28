@@ -26,9 +26,11 @@ const AdminPartnershipsPage = () => {
   const [partnerships, setPartnerships] = useState<Partnership[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [debouncedSearch, setDebouncedSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
   const [typeFilter, setTypeFilter] = useState('');
   const [countryFilter, setCountryFilter] = useState('');
+  const [debouncedCountry, setDebouncedCountry] = useState('');
   const [priorityFilter, setPriorityFilter] = useState('');
   const [selectedPartnership, setSelectedPartnership] = useState<Partnership | null>(null);
   const [showModal, setShowModal] = useState(false);
@@ -112,8 +114,17 @@ const AdminPartnershipsPage = () => {
   const priorityColors = {
     low: 'bg-gray-100 text-gray-800',
     medium: 'bg-yellow-100 text-yellow-800',
-    high: 'bg-red-100 text-red-800'
+    high: 'bg-red-100 text-red-800',
+    urgent: 'bg-purple-100 text-purple-800',
   };
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      setDebouncedSearch(searchTerm.trim());
+      setDebouncedCountry(countryFilter.trim());
+    }, 300);
+    return () => window.clearTimeout(timer);
+  }, [searchTerm, countryFilter]);
 
   const fetchPartnerships = useCallback(async () => {
     try {
@@ -125,31 +136,28 @@ const AdminPartnershipsPage = () => {
 
       if (statusFilter) params.append('status', statusFilter);
       if (typeFilter) params.append('partnershipType', typeFilter);
-      if (countryFilter) params.append('country', countryFilter);
+      if (debouncedCountry) params.append('country', debouncedCountry);
       if (priorityFilter) params.append('priority', priorityFilter);
-      if (searchTerm) params.append('search', searchTerm);
+      if (debouncedSearch) params.append('search', debouncedSearch);
 
       // Use authenticated fetch with automatic token refresh
       const response = await authenticatedFetch(`/api/admin/partnerships?${params}`);
-      const data = await response.json();
+      const data = await response.json().catch(() => ({}));
 
       if (response.ok) {
-        setPartnerships(data.partnerships);
-        setTotalPages(data.pagination.totalPages);
-        setStats(data.stats);
+        setPartnerships(Array.isArray(data.partnerships) ? data.partnerships : []);
+        setTotalPages(Math.max(1, data.pagination?.totalPages || 1));
+        setStats(data.stats || { statusCounts: [], typeCounts: [] });
       } else {
-        console.error('Error fetching partnerships:', {
-          status: response.status,
-          statusText: response.statusText,
-          data: data
-        });
+        showMessage('error', data.error || data.message || `Failed to load partnerships (${response.status})`);
       }
     } catch (error) {
       console.error('Error fetching partnerships:', error);
+      showMessage('error', 'Failed to load partnerships. Please retry.');
     } finally {
       setLoading(false);
     }
-  }, [authenticatedFetch, currentPage, statusFilter, typeFilter, countryFilter, priorityFilter, searchTerm]);
+  }, [authenticatedFetch, currentPage, statusFilter, typeFilter, debouncedCountry, priorityFilter, debouncedSearch]);
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect -- initial async data load
@@ -181,9 +189,8 @@ const AdminPartnershipsPage = () => {
       if (response.ok) {
         fetchPartnerships();
       } else {
-        const errorData = await response.json();
-        console.error('Failed to update status:', errorData.error || 'Unknown error');
-        showMessage('error', `Failed to update status: ${errorData.error || 'Unknown error'}`);
+        const errorData = await response.json().catch(() => ({}));
+        showMessage('error', `Failed to update status: ${errorData.error || errorData.message || 'Unknown error'}`);
       }
     } catch (error) {
       console.error('Error updating status:', error);
@@ -207,8 +214,8 @@ const AdminPartnershipsPage = () => {
         showMessage('success', 'Partnership deleted successfully!');
         fetchPartnerships();
       } else {
-        const errorData = await response.json();
-        showMessage('error', `Failed to delete partnership: ${errorData.error || 'Unknown error'}`);
+        const errorData = await response.json().catch(() => ({}));
+        showMessage('error', `Failed to delete partnership: ${errorData.error || errorData.message || 'Unknown error'}`);
       }
     } catch (error) {
       console.error('Error deleting partnership:', error);
@@ -266,8 +273,8 @@ const AdminPartnershipsPage = () => {
         });
         fetchPartnerships();
       } else {
-        const errorData = await response.json();
-        showMessage('error', `Failed to create partnership: ${errorData.error || 'Unknown error'}`);
+        const errorData = await response.json().catch(() => ({}));
+        showMessage('error', `Failed to create partnership: ${errorData.error || errorData.message || 'Unknown error'}`);
       }
     } catch (error) {
       console.error('Error creating partnership:', error);
@@ -295,8 +302,8 @@ const AdminPartnershipsPage = () => {
         setEditingPartnership(null);
         fetchPartnerships();
       } else {
-        const errorData = await response.json();
-        showMessage('error', `Failed to update partnership: ${errorData.error || 'Unknown error'}`);
+        const errorData = await response.json().catch(() => ({}));
+        showMessage('error', `Failed to update partnership: ${errorData.error || errorData.message || 'Unknown error'}`);
       }
     } catch (error) {
       console.error('Error updating partnership:', error);
@@ -416,14 +423,20 @@ const AdminPartnershipsPage = () => {
               type="text"
               placeholder="Search partnerships..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                setCurrentPage(1);
+              }}
               className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
 
           <select
             value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
+            onChange={(e) => {
+              setStatusFilter(e.target.value);
+              setCurrentPage(1);
+            }}
             className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           >
             <option value="">All Status</option>
@@ -438,7 +451,10 @@ const AdminPartnershipsPage = () => {
 
           <select
             value={typeFilter}
-            onChange={(e) => setTypeFilter(e.target.value)}
+            onChange={(e) => {
+              setTypeFilter(e.target.value);
+              setCurrentPage(1);
+            }}
             className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           >
             <option value="">All Types</option>
@@ -452,20 +468,27 @@ const AdminPartnershipsPage = () => {
 
           <select
             value={priorityFilter}
-            onChange={(e) => setPriorityFilter(e.target.value)}
+            onChange={(e) => {
+              setPriorityFilter(e.target.value);
+              setCurrentPage(1);
+            }}
             className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           >
             <option value="">All Priority</option>
             <option value="low">Low</option>
             <option value="medium">Medium</option>
             <option value="high">High</option>
+            <option value="urgent">Urgent</option>
           </select>
 
           <input
             type="text"
             placeholder="Country"
             value={countryFilter}
-            onChange={(e) => setCountryFilter(e.target.value)}
+            onChange={(e) => {
+              setCountryFilter(e.target.value);
+              setCurrentPage(1);
+            }}
             className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
 
@@ -573,7 +596,7 @@ const AdminPartnershipsPage = () => {
                       </select>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${priorityColors[partnership.priority as keyof typeof priorityColors]}`}>
+                      <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${priorityColors[partnership.priority as keyof typeof priorityColors] || 'bg-gray-100 text-gray-800'}`}>
                         {partnership.priority}
                       </span>
                     </td>
@@ -848,12 +871,13 @@ const AdminPartnershipsPage = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Company Name
+                      Company Name {createForm.businessType !== 'individual' ? '*' : '(optional for individuals)'}
                     </label>
                     <input
                       type="text"
                       value={createForm.companyName}
                       onChange={(e) => setCreateForm({ ...createForm, companyName: e.target.value })}
+                      required={createForm.businessType !== 'individual'}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     />
                   </div>
@@ -936,7 +960,7 @@ const AdminPartnershipsPage = () => {
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Years in Business *
+                      Years in Business
                     </label>
                     <input
                       type="number"
@@ -944,78 +968,72 @@ const AdminPartnershipsPage = () => {
                       value={createForm.yearsInBusiness}
                       onChange={(e) => setCreateForm({ ...createForm, yearsInBusiness: parseInt(e.target.value) || 0 })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      required
                     />
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Address *
+                      Address
                     </label>
                     <input
                       type="text"
                       value={createForm.address}
                       onChange={(e) => setCreateForm({ ...createForm, address: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      required
                     />
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      City *
+                      City
                     </label>
                     <input
                       type="text"
                       value={createForm.city}
                       onChange={(e) => setCreateForm({ ...createForm, city: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      required
                     />
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      State *
+                      State
                     </label>
                     <input
                       type="text"
                       value={createForm.state}
                       onChange={(e) => setCreateForm({ ...createForm, state: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      required
                     />
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Country *
+                      Country
                     </label>
                     <input
                       type="text"
                       value={createForm.country}
                       onChange={(e) => setCreateForm({ ...createForm, country: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      required
                     />
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Postal Code *
+                      Postal Code
                     </label>
                     <input
                       type="text"
                       value={createForm.postalCode}
                       onChange={(e) => setCreateForm({ ...createForm, postalCode: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      required
                     />
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Current Clients *
+                      Current Clients
                     </label>
                     <input
                       type="number"
@@ -1023,13 +1041,12 @@ const AdminPartnershipsPage = () => {
                       value={createForm.currentClients}
                       onChange={(e) => setCreateForm({ ...createForm, currentClients: parseInt(e.target.value) || 0 })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      required
                     />
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Monthly Target *
+                      Monthly Target
                     </label>
                     <input
                       type="number"
@@ -1037,46 +1054,42 @@ const AdminPartnershipsPage = () => {
                       value={createForm.monthlyTarget}
                       onChange={(e) => setCreateForm({ ...createForm, monthlyTarget: parseInt(e.target.value) || 0 })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      required
                     />
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Investment Capacity *
+                      Investment Capacity
                     </label>
                     <input
                       type="text"
                       value={createForm.investmentCapacity}
                       onChange={(e) => setCreateForm({ ...createForm, investmentCapacity: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      required
                     />
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Expected Commission *
+                      Expected Commission
                     </label>
                     <input
                       type="text"
                       value={createForm.expectedCommission}
                       onChange={(e) => setCreateForm({ ...createForm, expectedCommission: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      required
                     />
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Local Network *
+                      Local Network
                     </label>
                     <input
                       type="text"
                       value={createForm.localNetwork}
                       onChange={(e) => setCreateForm({ ...createForm, localNetwork: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      required
                     />
                   </div>
 
@@ -1111,6 +1124,7 @@ const AdminPartnershipsPage = () => {
                       <option value="low">Low</option>
                       <option value="medium">Medium</option>
                       <option value="high">High</option>
+                      <option value="urgent">Urgent</option>
                     </select>
                   </div>
                 </div>
@@ -1118,40 +1132,37 @@ const AdminPartnershipsPage = () => {
                 <div className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Experience *
+                      Experience
                     </label>
                     <textarea
                       value={createForm.experience}
                       onChange={(e) => setCreateForm({ ...createForm, experience: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       rows={3}
-                      required
                     />
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Motivation *
+                      Motivation
                     </label>
                     <textarea
                       value={createForm.motivation}
                       onChange={(e) => setCreateForm({ ...createForm, motivation: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       rows={3}
-                      required
                     />
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Expectations *
+                      Expectations
                     </label>
                     <textarea
                       value={createForm.expectations}
                       onChange={(e) => setCreateForm({ ...createForm, expectations: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       rows={3}
-                      required
                     />
                   </div>
                 </div>
@@ -1290,7 +1301,7 @@ const AdminPartnershipsPage = () => {
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Years in Business *
+                      Years in Business
                     </label>
                     <input
                       type="number"
@@ -1298,78 +1309,72 @@ const AdminPartnershipsPage = () => {
                       value={editForm.yearsInBusiness}
                       onChange={(e) => setEditForm({ ...editForm, yearsInBusiness: parseInt(e.target.value) || 0 })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      required
                     />
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Address *
+                      Address
                     </label>
                     <input
                       type="text"
                       value={editForm.address}
                       onChange={(e) => setEditForm({ ...editForm, address: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      required
                     />
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      City *
+                      City
                     </label>
                     <input
                       type="text"
                       value={editForm.city}
                       onChange={(e) => setEditForm({ ...editForm, city: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      required
                     />
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      State *
+                      State
                     </label>
                     <input
                       type="text"
                       value={editForm.state}
                       onChange={(e) => setEditForm({ ...editForm, state: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      required
                     />
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Country *
+                      Country
                     </label>
                     <input
                       type="text"
                       value={editForm.country}
                       onChange={(e) => setEditForm({ ...editForm, country: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      required
                     />
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Postal Code *
+                      Postal Code
                     </label>
                     <input
                       type="text"
                       value={editForm.postalCode}
                       onChange={(e) => setEditForm({ ...editForm, postalCode: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      required
                     />
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Current Clients *
+                      Current Clients
                     </label>
                     <input
                       type="number"
@@ -1377,13 +1382,12 @@ const AdminPartnershipsPage = () => {
                       value={editForm.currentClients}
                       onChange={(e) => setEditForm({ ...editForm, currentClients: parseInt(e.target.value) || 0 })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      required
                     />
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Monthly Target *
+                      Monthly Target
                     </label>
                     <input
                       type="number"
@@ -1391,46 +1395,42 @@ const AdminPartnershipsPage = () => {
                       value={editForm.monthlyTarget}
                       onChange={(e) => setEditForm({ ...editForm, monthlyTarget: parseInt(e.target.value) || 0 })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      required
                     />
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Investment Capacity *
+                      Investment Capacity
                     </label>
                     <input
                       type="text"
                       value={editForm.investmentCapacity}
                       onChange={(e) => setEditForm({ ...editForm, investmentCapacity: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      required
                     />
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Expected Commission *
+                      Expected Commission
                     </label>
                     <input
                       type="text"
                       value={editForm.expectedCommission}
                       onChange={(e) => setEditForm({ ...editForm, expectedCommission: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      required
                     />
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Local Network *
+                      Local Network
                     </label>
                     <input
                       type="text"
                       value={editForm.localNetwork}
                       onChange={(e) => setEditForm({ ...editForm, localNetwork: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      required
                     />
                   </div>
 
@@ -1465,6 +1465,7 @@ const AdminPartnershipsPage = () => {
                       <option value="low">Low</option>
                       <option value="medium">Medium</option>
                       <option value="high">High</option>
+                      <option value="urgent">Urgent</option>
                     </select>
                   </div>
                 </div>
@@ -1472,40 +1473,37 @@ const AdminPartnershipsPage = () => {
                 <div className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Experience *
+                      Experience
                     </label>
                     <textarea
                       value={editForm.experience}
                       onChange={(e) => setEditForm({ ...editForm, experience: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       rows={3}
-                      required
                     />
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Motivation *
+                      Motivation
                     </label>
                     <textarea
                       value={editForm.motivation}
                       onChange={(e) => setEditForm({ ...editForm, motivation: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       rows={3}
-                      required
                     />
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Expectations *
+                      Expectations
                     </label>
                     <textarea
                       value={editForm.expectations}
                       onChange={(e) => setEditForm({ ...editForm, expectations: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       rows={3}
-                      required
                     />
                   </div>
                 </div>

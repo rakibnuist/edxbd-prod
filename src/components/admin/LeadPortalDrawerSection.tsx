@@ -6,6 +6,8 @@ import {
   MessageSquare, Plus, QrCode, RefreshCw, Send, ShieldCheck,
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
+import { TRACKER_UNI_STATUSES } from '@/lib/application-tracker';
+import { parseNumericGpa } from '@/lib/wa-templates';
 import type { LeadRecord } from '@/lib/lead-workflow';
 import { toSafeExternalUrl } from '@/lib/safe-url';
 import { APPLICATION_STAGE_OPTIONS, portalProgressPct, resolvePortalMilestoneStep } from '@/lib/student-portal';
@@ -60,7 +62,8 @@ export default function LeadPortalDrawerSection({
   onUpdateLead,
   onTokenChanged,
 }: Props) {
-  const { authenticatedFetch } = useAuth();
+  const { user, authenticatedFetch } = useAuth();
+  const isCounselor = user?.role === 'counselor';
   const [loading, setLoading] = useState(true);
   const [busyAction, setBusyAction] = useState<string | null>(null);
   const [token, setToken] = useState<string | null>(lead.publicToken || null);
@@ -88,7 +91,16 @@ export default function LeadPortalDrawerSection({
   const [newUniName, setNewUniName] = useState('');
   const [newUniProgram, setNewUniProgram] = useState(lead.program || '');
   const [replyText, setReplyText] = useState('');
-  const [feedback, setFeedback] = useState<string | null>(null);
+  const [feedback, setFeedback] = useState<{ tone: 'ok' | 'err'; text: string } | null>(null);
+  const [assignmentDirty, setAssignmentDirty] = useState(false);
+
+  // Keep follow-up synced if FollowupScheduler or QuickInteractionLogger updates lead.nextFollowup
+  const incomingFollowup = lead.nextFollowup || '';
+  const [prevLeadFollowup, setPrevLeadFollowup] = useState(incomingFollowup);
+  if (incomingFollowup !== prevLeadFollowup) {
+    setPrevLeadFollowup(incomingFollowup);
+    setNextFollowup(incomingFollowup);
+  }
 
   const origin = typeof window !== 'undefined' ? window.location.origin : 'https://eduexpressint.com';
   const portalUrl = token ? `${origin}/track/${token}` : null;
@@ -115,8 +127,14 @@ export default function LeadPortalDrawerSection({
         if (data.lead) {
           setStage(data.lead.applicationStage || 'documents');
           setAssignedEmployeeId(data.lead.assignedEmployeeId || '');
+          setAssignmentDirty(false);
           setUniversity(data.lead.university || '');
           setDegree(data.lead.degree || '');
+          setGpa(
+            data.lead.gpa != null
+              ? String(data.lead.gpa)
+              : (data.lead.assessAcademicResults || ''),
+          );
           setNextFollowup(data.lead.nextFollowup || '');
           setVisaDeadline(data.lead.visaDeadline || '');
           setDepartureDate(data.lead.departureDate || '');
@@ -136,20 +154,25 @@ export default function LeadPortalDrawerSection({
 
   const handleEnsureToken = async (regenerate = false) => {
     setBusyAction('token');
+    setFeedback(null);
     try {
       const res = await authenticatedFetch(`/api/admin/leads/${encodeURIComponent(lead.id)}/portal`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action: regenerate ? 'regenerate_token' : 'ensure_token' }),
       });
+      const data = await res.json().catch(() => ({}));
       if (res.ok) {
-        const data = await res.json();
         setToken(data.publicToken);
         setPublicEnabled(true);
         onTokenChanged?.(lead.id, data.publicToken);
         await loadPortalDetails();
-        setFeedback(regenerate ? 'New tracking token generated.' : 'Student portal link activated.');
+        setFeedback({ tone: 'ok', text: regenerate ? 'New tracking token generated.' : 'Student portal link activated.' });
+      } else {
+        setFeedback({ tone: 'err', text: data.error || data.message || 'Could not update tracking link.' });
       }
+    } catch {
+      setFeedback({ tone: 'err', text: 'Network error updating tracking link.' });
     } finally {
       setBusyAction(null);
     }
@@ -158,15 +181,12 @@ export default function LeadPortalDrawerSection({
   const handleSaveCrmMeta = async () => {
     setBusyAction('meta');
     setFeedback(null);
-    const chosenEmp = employees.find((e) => e.id === assignedEmployeeId);
-    const numericGpa = Number.parseFloat(gpa);
+    const parsedGpa = parseNumericGpa(null, gpa);
     const payload: Record<string, unknown> = {
       applicationStage: stage,
-      assignedEmployeeId: assignedEmployeeId || null,
-      assignedTo: chosenEmp ? chosenEmp.name : null,
       university: university.trim() || null,
       degree: degree.trim() || null,
-      gpa: Number.isFinite(numericGpa) && numericGpa > 0 && numericGpa <= 5.5 ? numericGpa : null,
+      gpa: parsedGpa,
       nextFollowup: nextFollowup || null,
       visaDeadline: visaDeadline || null,
       departureDate: departureDate || null,
@@ -175,17 +195,27 @@ export default function LeadPortalDrawerSection({
       medicalProgram,
       publicEnabled,
     };
+    // Only send counselor assignment when an admin explicitly changed the dropdown (prevents wiping legacy/inactive assignees or counselor auto-claim)
+    if (!isCounselor && assignmentDirty) {
+      const chosenEmp = employees.find((e) => e.id === assignedEmployeeId);
+      payload.assignedEmployeeId = assignedEmployeeId || null;
+      payload.assignedTo = chosenEmp ? chosenEmp.name : null;
+    }
     const ok = await onUpdateLead(lead.id, payload);
     setBusyAction(null);
     if (ok) {
-      setFeedback('Pipeline stage, dossier dates & counselor assignment saved.');
+      setAssignmentDirty(false);
+      setFeedback({ tone: 'ok', text: 'Pipeline stage, dossier dates & counselor assignment saved.' });
       void loadPortalDetails();
+    } else {
+      setFeedback({ tone: 'err', text: 'Could not save workflow details. Check fields above and retry.' });
     }
   };
 
   const handleAddUni = async () => {
     if (!newUniName.trim()) return;
     setBusyAction('uni');
+    setFeedback(null);
     try {
       const res = await authenticatedFetch(`/api/admin/leads/${encodeURIComponent(lead.id)}/portal`, {
         method: 'POST',
@@ -196,10 +226,15 @@ export default function LeadPortalDrawerSection({
           program: newUniProgram.trim() || null,
         }),
       });
+      const data = await res.json().catch(() => ({}));
       if (res.ok) {
         setNewUniName('');
         await loadPortalDetails();
+      } else {
+        setFeedback({ tone: 'err', text: data.error || data.message || 'Could not add university.' });
       }
+    } catch {
+      setFeedback({ tone: 'err', text: 'Network error adding university.' });
     } finally {
       setBusyAction(null);
     }
@@ -207,13 +242,20 @@ export default function LeadPortalDrawerSection({
 
   const handleUpdateUniStatus = async (itemId: string, status: string) => {
     setBusyAction(`uni-${itemId}`);
+    setFeedback(null);
     try {
-      await authenticatedFetch(`/api/admin/leads/${encodeURIComponent(lead.id)}/portal`, {
+      const res = await authenticatedFetch(`/api/admin/leads/${encodeURIComponent(lead.id)}/portal`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ kind: 'university', itemId, status }),
       });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        setFeedback({ tone: 'err', text: data.error || data.message || 'Could not update university status.' });
+      }
       await loadPortalDetails();
+    } catch {
+      setFeedback({ tone: 'err', text: 'Network error updating university status.' });
     } finally {
       setBusyAction(null);
     }
@@ -221,13 +263,20 @@ export default function LeadPortalDrawerSection({
 
   const handleSeedDocs = async () => {
     setBusyAction('docs');
+    setFeedback(null);
     try {
-      await authenticatedFetch(`/api/admin/leads/${encodeURIComponent(lead.id)}/portal`, {
+      const res = await authenticatedFetch(`/api/admin/leads/${encodeURIComponent(lead.id)}/portal`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action: 'seed_documents' }),
       });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        setFeedback({ tone: 'err', text: data.error || data.message || 'Could not initialize document checklist.' });
+      }
       await loadPortalDetails();
+    } catch {
+      setFeedback({ tone: 'err', text: 'Network error initializing documents.' });
     } finally {
       setBusyAction(null);
     }
@@ -235,13 +284,20 @@ export default function LeadPortalDrawerSection({
 
   const handleUpdateDocStatus = async (itemId: string, status: string) => {
     setBusyAction(`doc-${itemId}`);
+    setFeedback(null);
     try {
-      await authenticatedFetch(`/api/admin/leads/${encodeURIComponent(lead.id)}/portal`, {
+      const res = await authenticatedFetch(`/api/admin/leads/${encodeURIComponent(lead.id)}/portal`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ kind: 'document', itemId, status }),
       });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        setFeedback({ tone: 'err', text: data.error || data.message || 'Could not update document status.' });
+      }
       await loadPortalDetails();
+    } catch {
+      setFeedback({ tone: 'err', text: 'Network error updating document status.' });
     } finally {
       setBusyAction(null);
     }
@@ -250,16 +306,22 @@ export default function LeadPortalDrawerSection({
   const handleSendStudentReply = async () => {
     if (!replyText.trim()) return;
     setBusyAction('reply');
+    setFeedback(null);
     try {
       const res = await authenticatedFetch(`/api/admin/leads/${encodeURIComponent(lead.id)}/portal`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action: 'reply_student', message: replyText.trim() }),
       });
+      const data = await res.json().catch(() => ({}));
       if (res.ok) {
         setReplyText('');
         await loadPortalDetails();
+      } else {
+        setFeedback({ tone: 'err', text: data.error || data.message || 'Could not send reply to student.' });
       }
+    } catch {
+      setFeedback({ tone: 'err', text: 'Network error sending reply.' });
     } finally {
       setBusyAction(null);
     }
@@ -294,9 +356,13 @@ export default function LeadPortalDrawerSection({
               type="button"
               onClick={async () => {
                 if (!portalUrl) return;
-                await navigator.clipboard.writeText(portalUrl);
-                setCopiedUrl(true);
-                setTimeout(() => setCopiedUrl(false), 1800);
+                try {
+                  await navigator.clipboard.writeText(portalUrl);
+                  setCopiedUrl(true);
+                  setTimeout(() => setCopiedUrl(false), 1800);
+                } catch {
+                  setFeedback({ tone: 'err', text: 'Clipboard access blocked. Copy the portal URL manually.' });
+                }
               }}
               className="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-100"
             >
@@ -392,6 +458,9 @@ export default function LeadPortalDrawerSection({
             onChange={(e) => setStage(e.target.value)}
             className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-2.5 py-2 text-xs font-medium text-slate-900"
           >
+            {!APPLICATION_STAGE_OPTIONS.some((opt) => opt.value === stage) && (
+              <option value={stage}>{stage.replaceAll('_', ' ')}</option>
+            )}
             {APPLICATION_STAGE_OPTIONS.map((opt) => (
               <option key={opt.value} value={opt.value}>{opt.label}</option>
             ))}
@@ -402,10 +471,14 @@ export default function LeadPortalDrawerSection({
           Assigned Counselor
           <select
             value={assignedEmployeeId}
-            onChange={(e) => setAssignedEmployeeId(e.target.value)}
-            className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-2.5 py-2 text-xs font-medium text-slate-900"
+            disabled={isCounselor}
+            onChange={(e) => {
+              setAssignedEmployeeId(e.target.value);
+              setAssignmentDirty(true);
+            }}
+            className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-2.5 py-2 text-xs font-medium text-slate-900 disabled:bg-slate-100 disabled:cursor-not-allowed"
           >
-            <option value="">-- Unassigned --</option>
+            <option value="">{lead.assignedTo && !assignedEmployeeId ? `${lead.assignedTo} (Legacy)` : '-- Unassigned --'}</option>
             {employees.map((emp) => (
               <option key={emp.id} value={emp.id}>
                 {emp.name} ({emp.empId} · {emp.team})
@@ -547,8 +620,12 @@ export default function LeadPortalDrawerSection({
       </div>
 
       {feedback && (
-        <p className="rounded-lg bg-emerald-50 px-3 py-2 text-xs font-semibold text-emerald-800">
-          {feedback}
+        <p
+          className={`rounded-lg px-3 py-2 text-xs font-semibold ${
+            feedback.tone === 'ok' ? 'bg-emerald-50 text-emerald-800' : 'bg-rose-50 text-rose-800'
+          }`}
+        >
+          {feedback.text}
         </p>
       )}
 
@@ -597,12 +674,9 @@ export default function LeadPortalDrawerSection({
                   onChange={(e) => handleUpdateUniStatus(app.id, e.target.value)}
                   className="rounded border border-slate-200 bg-slate-50 px-2 py-1 text-[11px] font-bold text-slate-800"
                 >
-                  <option value="documents">Documents</option>
-                  <option value="ready">Ready</option>
-                  <option value="submitted">Submitted</option>
-                  <option value="admitted">Admitted</option>
-                  <option value="returned">Returned</option>
-                  <option value="rejected">Rejected</option>
+                  {TRACKER_UNI_STATUSES.map((st) => (
+                    <option key={st.key} value={st.key}>{st.label}</option>
+                  ))}
                 </select>
               </div>
             ))}

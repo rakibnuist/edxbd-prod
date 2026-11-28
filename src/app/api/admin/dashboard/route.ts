@@ -89,7 +89,24 @@ export async function GET(request: NextRequest) {
           AND: [
             scopeWhere,
             { isApplication: true },
-            { status: { in: ['visa_approved', 'enrolled', 'fly'] } },
+            {
+              OR: [
+                { status: { in: ['visa_approved', 'enrolled', 'converted'] } },
+                {
+                  applicationStage: {
+                    in: [
+                      'visa_approved',
+                      'partial_payment',
+                      'air_ticket',
+                      'complete_payment',
+                      'pre_departure',
+                      'enrolled',
+                      'fly',
+                    ],
+                  },
+                },
+              ],
+            },
           ],
         },
       }),

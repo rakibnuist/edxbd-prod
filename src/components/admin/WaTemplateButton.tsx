@@ -35,14 +35,26 @@ export default function WaTemplateButton({ lead, compact = false, onEnsureToken 
 
   const handleOpenWa = async (key: WaTemplateKey) => {
     setBusyKey(key);
+    // Open window synchronously before any await so browsers don't block the popup
+    const needsAsyncToken = key === 'portal_invite' && !lead.publicToken && Boolean(onEnsureToken);
+    const popup = needsAsyncToken && typeof window !== 'undefined' ? window.open('', '_blank') : null;
     try {
       const portalUrl = key === 'portal_invite' ? await resolvePortalUrl() : null;
       const msg = formatWaTemplateMessage(key, lead, portalUrl);
       const url = buildWhatsAppUrl(lead.phone, msg);
       if (url && typeof window !== 'undefined') {
-        window.open(url, '_blank', 'noopener,noreferrer');
+        if (popup && !popup.closed) {
+          popup.opener = null;
+          popup.location.href = url;
+        } else {
+          window.open(url, '_blank', 'noopener,noreferrer');
+        }
+      } else if (popup && !popup.closed) {
+        popup.close();
       }
       setOpen(false);
+    } catch {
+      if (popup && !popup.closed) popup.close();
     } finally {
       setBusyKey(null);
     }
@@ -53,9 +65,11 @@ export default function WaTemplateButton({ lead, compact = false, onEnsureToken 
     try {
       const portalUrl = key === 'portal_invite' ? await resolvePortalUrl() : null;
       const msg = formatWaTemplateMessage(key, lead, portalUrl);
-      await navigator.clipboard.writeText(msg);
+      await navigator.clipboard?.writeText(msg);
       setCopiedKey(key);
       setTimeout(() => setCopiedKey(null), 1800);
+    } catch {
+      // Clipboard API may be unavailable on insecure contexts
     } finally {
       setBusyKey(null);
     }

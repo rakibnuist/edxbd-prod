@@ -61,8 +61,8 @@ export default function TelegramAlertsSettingsPanel() {
           },
         }),
       });
-      const json = await res.json();
-      if (!res.ok) throw new Error(json.error || 'Could not save alert settings.');
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(json.error || json.message || 'Could not save alert settings.');
       setTokenInput('');
       setTokenIsSet(Boolean(json.telegramConfig?.telegramBotTokenSet));
       setFeedback({ ok: true, text: 'Telegram & live notification settings saved.' });
@@ -78,8 +78,8 @@ export default function TelegramAlertsSettingsPanel() {
     setFeedback(null);
     try {
       const res = await authenticatedFetch('/api/admin/notifications', { method: 'POST' });
-      const json = await res.json();
-      if (!res.ok) throw new Error(json.error || 'Test alert failed.');
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(json.error || json.message || 'Test alert failed.');
       setFeedback({ ok: true, text: 'Test alert delivered cleanly to Telegram!' });
     } catch (err) {
       setFeedback({ ok: false, text: err instanceof Error ? err.message : 'Test alert failed.' });
@@ -193,10 +193,15 @@ export default function TelegramAlertsSettingsPanel() {
           </label>
         </div>
 
-        <div className="flex flex-wrap justify-end gap-2 pt-2">
+        <div className="flex flex-wrap items-center justify-end gap-2 pt-2">
+          {Boolean(tokenInput.trim()) && (
+            <span className="text-[11px] font-medium text-amber-700">
+              Save preferences first to test the new bot token.
+            </span>
+          )}
           <button
             type="button"
-            disabled={testing || (!tokenIsSet && !tokenInput)}
+            disabled={testing || !tokenIsSet || Boolean(tokenInput.trim())}
             onClick={handleTest}
             className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-4 py-2 text-xs font-bold text-slate-800 hover:bg-slate-50 disabled:opacity-50"
           >

@@ -477,7 +477,7 @@ export default function FinanceWorkspaceClient() {
     const res = await authenticatedFetch(`${base}/${id}`, { method: 'DELETE' });
     if (!res.ok) {
       const err = await res.json().catch(() => ({}));
-      throw new Error(err.error || 'Could not delete entry.');
+      throw new Error(err.error || err.message || 'Could not delete entry.');
     }
     setEntryModal(null);
     showNotice('ok', 'Ledger entry deleted.');
@@ -492,7 +492,7 @@ export default function FinanceWorkspaceClient() {
     });
     if (!res.ok) {
       const err = await res.json().catch(() => ({}));
-      throw new Error(err.error || 'Could not update opening cash.');
+      throw new Error(err.error || err.message || 'Could not update opening cash.');
     }
     setOpeningModalOpen(false);
     showNotice('ok', 'Baseline opening cash updated.');
@@ -507,7 +507,7 @@ export default function FinanceWorkspaceClient() {
     });
     if (!res.ok) {
       const err = await res.json().catch(() => ({}));
-      throw new Error(err.error || 'Could not record investment.');
+      throw new Error(err.error || err.message || 'Could not record investment.');
     }
     setInvestmentModalOpen(false);
     showNotice('ok', 'Partner capital contribution recorded.');
@@ -532,7 +532,7 @@ export default function FinanceWorkspaceClient() {
       });
       if (!res.ok) {
         const err = await res.json().catch(() => ({}));
-        throw new Error(err.error || 'Failed to save payroll');
+        throw new Error(err.error || err.message || 'Failed to save payroll');
       }
       showNotice('ok', `Payroll updated for ${row.name}.`);
       await loadPayroll();
@@ -546,9 +546,28 @@ export default function FinanceWorkspaceClient() {
 
   const handleTogglePayrollPaid = async (row: PayrollRecordDto) => {
     const nextStatus = row.status === 'paid' ? 'pending' : 'paid';
+    const pendingEdit = payrollEdits[row.id];
+    const effectiveBase =
+      pendingEdit?.baseSalary !== undefined && pendingEdit.baseSalary !== ''
+        ? Number(pendingEdit.baseSalary)
+        : row.baseSalary;
+    const effectiveBonus =
+      pendingEdit?.bonus !== undefined && pendingEdit.bonus !== ''
+        ? Number(pendingEdit.bonus)
+        : row.bonus;
+    const effectiveDeductions =
+      pendingEdit?.deductions !== undefined && pendingEdit.deductions !== ''
+        ? Number(pendingEdit.deductions)
+        : row.deductions;
+    const effectiveNetPay = Math.max(
+      0,
+      (Number.isFinite(effectiveBase) ? effectiveBase : row.baseSalary) +
+        (Number.isFinite(effectiveBonus) ? effectiveBonus : row.bonus) -
+        (Number.isFinite(effectiveDeductions) ? effectiveDeductions : row.deductions),
+    );
     const confirmMsg =
       nextStatus === 'paid'
-        ? `Mark ${row.name}'s ${formatMonthLabel(row.month)} salary (${formatBdt(row.netPay)}) as PAID? This automatically logs a Salary expense in the ledger.`
+        ? `Mark ${row.name}'s ${formatMonthLabel(row.month)} salary (${formatBdt(effectiveNetPay)}) as PAID? This automatically logs a Salary expense in the ledger.`
         : `Revert ${row.name}'s ${formatMonthLabel(row.month)} salary to PENDING and remove the linked Salary expense?`;
     if (!window.confirm(confirmMsg)) return;
 
@@ -556,7 +575,20 @@ export default function FinanceWorkspaceClient() {
     try {
       const res =
         nextStatus === 'paid'
-          ? await authenticatedFetch(`/api/admin/payroll/${row.id}`, { method: 'POST' })
+          ? pendingEdit
+            ? await authenticatedFetch(`/api/admin/payroll/${row.id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  baseSalary: Number.isFinite(effectiveBase) ? effectiveBase : row.baseSalary,
+                  bonus: Number.isFinite(effectiveBonus) ? effectiveBonus : row.bonus,
+                  deductions: Number.isFinite(effectiveDeductions) ? effectiveDeductions : row.deductions,
+                  notes: pendingEdit.notes !== undefined ? pendingEdit.notes : row.notes,
+                  syncEmployeeSalary: pendingEdit.baseSalary !== undefined,
+                  status: 'paid',
+                }),
+              })
+            : await authenticatedFetch(`/api/admin/payroll/${row.id}`, { method: 'POST' })
           : await authenticatedFetch(`/api/admin/payroll/${row.id}`, {
               method: 'PUT',
               headers: { 'Content-Type': 'application/json' },
@@ -564,7 +596,7 @@ export default function FinanceWorkspaceClient() {
             });
       if (!res.ok) {
         const err = await res.json().catch(() => ({}));
-        throw new Error(err.error || 'Failed to update payroll status');
+        throw new Error(err.error || err.message || 'Failed to update payroll status');
       }
       showNotice(
         'ok',
@@ -1374,7 +1406,12 @@ export default function FinanceWorkspaceClient() {
                       </td>
                       <td className="px-4 py-3.5 text-right tabular-nums text-slate-700">{pnlOverallMargin}%</td>
                       <td className="px-4 py-3.5 text-right tabular-nums text-slate-900">
-                        {formatBdt(summary.liveBalance)}
+                        <div>{formatBdt(pnlTotalNet)}</div>
+                        {summary.cashInitial !== 0 && (
+                          <div className="text-[10px] font-medium text-slate-500">
+                            Cash: {formatBdt(summary.liveBalance)}
+                          </div>
+                        )}
                       </td>
                       <td className="print:hidden" />
                     </tr>
@@ -1886,7 +1923,9 @@ export default function FinanceWorkspaceClient() {
                                 type="button"
                                 onClick={() => {
                                   if (window.confirm('Delete this income entry?')) {
-                                    void handleDeleteEntry('income', r.id);
+                                    void handleDeleteEntry('income', r.id).catch((err) =>
+                                      showNotice('err', err instanceof Error ? err.message : 'Could not delete entry.'),
+                                    );
                                   }
                                 }}
                                 className="rounded-lg border border-transparent p-1.5 text-slate-400 transition hover:border-rose-200 hover:bg-rose-50 hover:text-rose-600"
@@ -2071,7 +2110,9 @@ export default function FinanceWorkspaceClient() {
                                 type="button"
                                 onClick={() => {
                                   if (window.confirm('Delete this expense entry?')) {
-                                    void handleDeleteEntry('expense', r.id);
+                                    void handleDeleteEntry('expense', r.id).catch((err) =>
+                                      showNotice('err', err instanceof Error ? err.message : 'Could not delete entry.'),
+                                    );
                                   }
                                 }}
                                 className="rounded-lg border border-transparent p-1.5 text-slate-400 transition hover:border-rose-200 hover:bg-rose-50 hover:text-rose-600"

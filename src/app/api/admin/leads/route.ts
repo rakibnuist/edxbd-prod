@@ -22,13 +22,30 @@ export async function GET(request: NextRequest) {
 
     const isAdmin = isAdminRole(actor.role);
     const { searchParams } = new URL(request.url);
+    const forceSync = searchParams.get('sync') === '1';
+    let syncHeaders: Record<string, string> = {};
     if (isAdmin) {
-      await syncMetaInstantFormLeads({
-        force: searchParams.get('sync') === '1',
+      const syncResult = await syncMetaInstantFormLeads({
+        force: forceSync,
         onLeadCreated: (lead) => {
           after(() => sendCrmStage(lead, 'new'));
         },
-      }).catch(() => {});
+      }).catch((err: unknown) => ({
+        ok: false,
+        importedCount: 0,
+        updatedCount: 0,
+        error: err instanceof Error ? err.message : 'Meta Graph API sync failed.',
+      }));
+      if (forceSync) {
+        syncHeaders = {
+          'X-Meta-Sync-Ok': syncResult?.ok ? '1' : '0',
+          'X-Meta-Sync-Imported': String(syncResult?.importedCount ?? 0),
+          'X-Meta-Sync-Updated': String('updatedCount' in syncResult ? syncResult.updatedCount ?? 0 : 0),
+          ...(syncResult && !syncResult.ok && syncResult.error
+            ? { 'X-Meta-Sync-Error': String(syncResult.error).replace(/[\r\n]+/g, ' ').slice(0, 240) }
+            : {}),
+        };
+      }
     }
 
     const status = searchParams.get('status');
@@ -58,7 +75,9 @@ export async function GET(request: NextRequest) {
       ? leads
       : leads.map(({ serviceFee: _sf, paidAmount: _pa, deposit: _dep, ...rest }) => rest);
 
-    return NextResponse.json(payload, { headers: { 'Cache-Control': 'no-store, private' } });
+    return NextResponse.json(payload, {
+      headers: { 'Cache-Control': 'no-store, private', ...syncHeaders },
+    });
   } catch {
     // Error fetching leads
     return NextResponse.json(
@@ -106,10 +125,26 @@ export async function POST(request: NextRequest) {
           skippedCount++;
           continue;
         }
-        const autoAssigned = await resolveAutoAssignment({
-          assignedTeam: validated.data.assignedTeam,
-          country: validated.data.country,
-        });
+        const explicitAssignedTo = validated.data.assignedTo?.trim() || null;
+        let assignedTo: string | null = explicitAssignedTo;
+        let assignedEmployeeId: string | null = null;
+        if (explicitAssignedTo) {
+          const emp = await prisma.employee.findFirst({
+            where: { active: true, name: explicitAssignedTo },
+            select: { id: true, name: true },
+          });
+          if (emp) {
+            assignedEmployeeId = emp.id;
+            assignedTo = emp.name;
+          }
+        } else {
+          const autoAssigned = await resolveAutoAssignment({
+            assignedTeam: validated.data.assignedTeam,
+            country: validated.data.country,
+          });
+          assignedTo = autoAssigned.assignedTo;
+          assignedEmployeeId = autoAssigned.assignedEmployeeId;
+        }
         const lead = await prisma.lead.create({
           data: {
             ...validated.data,
@@ -117,8 +152,8 @@ export async function POST(request: NextRequest) {
             publicEnabled: true,
             gpa: parseNumericGpa(null, validated.data.assessAcademicResults),
             degree: validated.data.assessAcademicLevel || null,
-            assignedTo: autoAssigned.assignedTo,
-            assignedEmployeeId: autoAssigned.assignedEmployeeId,
+            assignedTo,
+            assignedEmployeeId,
             ...(validated.data.source.startsWith('meta_') ? { adTrackingConsent: true } : {}),
           },
         });
@@ -126,10 +161,10 @@ export async function POST(request: NextRequest) {
           type: 'lead_created',
           actorName: decoded.email,
           actorUserId: decoded.userId,
-          employeeId: autoAssigned.assignedEmployeeId,
+          employeeId: assignedEmployeeId,
           leadId: lead.id,
           leadName: lead.name,
-          toValue: autoAssigned.assignedTo || lead.assignedTeam,
+          toValue: assignedTo || lead.assignedTeam,
           details: `Batch import (${lead.source})`,
         });
         created.push(lead);
@@ -140,9 +175,14 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: 'No valid lead rows in import batch.' }, { status: 400 });
       }
 
+      const canSeeFinance = canAccessFinanceRole(decoded.role);
+      const safeCreated = canSeeFinance
+        ? created
+        : created.map(({ serviceFee: _sf, paidAmount: _pa, deposit: _dep, ...rest }) => rest);
+
       return NextResponse.json(
-        { created, importedCount: created.length, skippedCount, invalidCount },
-        { status: 201 }
+        { created: safeCreated, importedCount: created.length, skippedCount, invalidCount },
+        { status: 201, headers: { 'Cache-Control': 'no-store, private' } },
       );
     }
 
@@ -151,10 +191,26 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: validated.error || 'Invalid lead payload' }, { status: 400 });
     }
 
-    const autoAssigned = await resolveAutoAssignment({
-      assignedTeam: validated.data.assignedTeam,
-      country: validated.data.country,
-    });
+    const explicitAssignedTo = validated.data.assignedTo?.trim() || null;
+    let assignedTo: string | null = explicitAssignedTo;
+    let assignedEmployeeId: string | null = null;
+    if (explicitAssignedTo) {
+      const emp = await prisma.employee.findFirst({
+        where: { active: true, name: explicitAssignedTo },
+        select: { id: true, name: true },
+      });
+      if (emp) {
+        assignedEmployeeId = emp.id;
+        assignedTo = emp.name;
+      }
+    } else {
+      const autoAssigned = await resolveAutoAssignment({
+        assignedTeam: validated.data.assignedTeam,
+        country: validated.data.country,
+      });
+      assignedTo = autoAssigned.assignedTo;
+      assignedEmployeeId = autoAssigned.assignedEmployeeId;
+    }
     const lead = await prisma.lead.create({
       data: {
         ...validated.data,
@@ -162,22 +218,27 @@ export async function POST(request: NextRequest) {
         publicEnabled: true,
         gpa: parseNumericGpa(null, validated.data.assessAcademicResults),
         degree: validated.data.assessAcademicLevel || null,
-        assignedTo: autoAssigned.assignedTo,
-        assignedEmployeeId: autoAssigned.assignedEmployeeId,
+        assignedTo,
+        assignedEmployeeId,
       },
     });
     void logActivityEvent({
       type: 'lead_created',
       actorName: decoded.email,
       actorUserId: decoded.userId,
-      employeeId: autoAssigned.assignedEmployeeId,
+      employeeId: assignedEmployeeId,
       leadId: lead.id,
       leadName: lead.name,
-      toValue: autoAssigned.assignedTo || lead.assignedTeam,
+      toValue: assignedTo || lead.assignedTeam,
       details: `Created in Admin (${lead.country})`,
     });
 
-    return NextResponse.json(lead, { status: 201 });
+    if (!canAccessFinanceRole(decoded.role)) {
+      const { serviceFee: _sf, paidAmount: _pa, deposit: _dep, ...redactedLead } = lead;
+      return NextResponse.json(redactedLead, { status: 201, headers: { 'Cache-Control': 'no-store, private' } });
+    }
+
+    return NextResponse.json(lead, { status: 201, headers: { 'Cache-Control': 'no-store, private' } });
   } catch (error) {
     const bodyError = jsonBodyErrorResponse(error);
     if (bodyError) return bodyError;

@@ -27,8 +27,16 @@ export async function GET(request: NextRequest) {
         ...(employeeId ? { employeeId } : {}),
         ...(status && ALLOWED_STATUSES.has(status) ? { status } : { status: { not: 'cancelled' } }),
       },
-      orderBy: [{ status: 'asc' }, { dueDate: 'asc' }, { createdAt: 'desc' }],
+      orderBy: [{ status: 'asc' }, { createdAt: 'desc' }],
       take: 150,
+    });
+
+    tasks.sort((a, b) => {
+      if (a.status !== b.status) return a.status.localeCompare(b.status);
+      if (a.dueDate && b.dueDate) return a.dueDate.localeCompare(b.dueDate);
+      if (a.dueDate) return -1;
+      if (b.dueDate) return 1;
+      return b.createdAt.getTime() - a.createdAt.getTime();
     });
 
     return NextResponse.json({ tasks }, { headers: { 'Cache-Control': 'no-store, private' } });
@@ -50,9 +58,12 @@ export async function POST(request: NextRequest) {
 
     const employeeId = typeof body.employeeId === 'string' && body.employeeId.trim() ? body.employeeId.trim() : null;
     let assignedTo = typeof body.assignedTo === 'string' ? body.assignedTo.trim().slice(0, 120) || null : null;
-    if (employeeId && !assignedTo) {
-      const emp = await prisma.employee.findUnique({ where: { id: employeeId }, select: { name: true } });
-      if (emp) assignedTo = emp.name;
+    if (employeeId) {
+      const emp = await prisma.employee.findUnique({ where: { id: employeeId }, select: { id: true, name: true } });
+      if (!emp) {
+        return NextResponse.json({ error: 'Selected employee was not found.' }, { status: 400 });
+      }
+      if (!assignedTo) assignedTo = emp.name;
     }
 
     const priority = typeof body.priority === 'string' && ALLOWED_PRIORITIES.has(body.priority)
@@ -131,7 +142,7 @@ export async function PATCH(request: NextRequest) {
       void logActivityEvent({
         type: 'task_completed',
         actorName: updated.assignedTo || decoded.email,
-        actorUserId: decoded.userId,
+        actorUserId: isAdmin && updated.employeeId ? null : decoded.userId,
         employeeId: updated.employeeId,
         leadId: updated.leadId,
         toValue: updated.title,

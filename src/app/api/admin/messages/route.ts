@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { isAdminRole } from '@/lib/auth';
-import { verifyLiveAdminUser } from '@/lib/auth-user';
+import { verifyLiveAdminUser, verifyLiveStaffUser } from '@/lib/auth-user';
 import { getRequiredString, jsonBodyErrorResponse, readLimitedJson } from '@/lib/request-body';
 import prisma from '@/lib/prisma';
 
@@ -42,7 +42,10 @@ export async function POST(request: NextRequest) {
       }
     });
 
-    return NextResponse.json({ message: 'Message sent successfully' });
+    return NextResponse.json(
+      { message: 'Message sent successfully' },
+      { headers: { 'Cache-Control': 'no-store, private' } },
+    );
   } catch (error) {
     const bodyError = jsonBodyErrorResponse(error);
     if (bodyError) return bodyError;
@@ -51,9 +54,23 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// GET - List messages (admin or super_admin)
+// GET - List sent messages (admin) or received inbox messages (?box=inbox for any staff)
 export async function GET(request: NextRequest) {
   try {
+    const box = new URL(request.url).searchParams.get('box');
+    if (box === 'inbox') {
+      const staff = await verifyLiveStaffUser(request);
+      if (!staff) {
+        return NextResponse.json({ message: 'Unauthorized - Staff access required' }, { status: 403 });
+      }
+      const messages = await prisma.message.findMany({
+        where: { toUserId: staff.userId },
+        orderBy: { createdAt: 'desc' },
+        take: 100,
+      });
+      return NextResponse.json({ messages }, { headers: { 'Cache-Control': 'no-store, private' } });
+    }
+
     const decoded = await verifyLiveAdminUser(request);
 
     if (!decoded || !isAdminRole(decoded.role)) {
@@ -62,10 +79,11 @@ export async function GET(request: NextRequest) {
 
     const messages = await prisma.message.findMany({
       where: { fromUserId: decoded.userId },
-      orderBy: { createdAt: 'desc' }
+      orderBy: { createdAt: 'desc' },
+      take: 100,
     });
 
-    return NextResponse.json({ messages });
+    return NextResponse.json({ messages }, { headers: { 'Cache-Control': 'no-store, private' } });
   } catch (error) {
     console.error('Fetch messages error:', error);
     return NextResponse.json({ message: 'Internal server error' }, { status: 500 });

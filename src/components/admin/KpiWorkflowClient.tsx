@@ -67,6 +67,10 @@ type ApiKpiPayload = KpiReportResult & {
   recentDailyLogs: DailyLogItem[];
   openTasks: TaskItem[];
   recentActivities: RecentActivity[];
+  metaConnection?: {
+    configured: boolean;
+    pixelId: string | null;
+  };
 };
 
 type TraceDetailPayload = {
@@ -104,6 +108,19 @@ const WORKFLOW_BADGES: Record<WorkflowStageKey, { label: string; cls: string }> 
 
 function currentMonthIso(): string {
   return new Date(Date.now() + 6 * 3600 * 1000).toISOString().slice(0, 7);
+}
+
+function escapeCsvCell(value: unknown): string {
+  const raw = String(value ?? '');
+  const safe = /^[=+\-@\t\r]/.test(raw) ? `'${raw}` : raw;
+  return `"${safe.replace(/"/g, '""')}"`;
+}
+
+function getSourceVerdict(filesOpened: number, totalLeads: number): string {
+  if (filesOpened >= 5) return 'Top Performing Ad';
+  if (filesOpened > 0) return 'Converting';
+  if (totalLeads > 15) return 'High Inbound / Review Lead Quality';
+  return 'Growing';
 }
 
 export default function KpiWorkflowClient() {
@@ -155,11 +172,34 @@ export default function KpiWorkflowClient() {
 
   // Trace drawer
   const [traceEmpId, setTraceEmpId] = useState<string | null>(null);
+
+  // Individual Meta Ads analysis state
+  const [metaAdsPeriod, setMetaAdsPeriod] = useState<'auto' | 'month' | 'all'>('auto');
+  const [expandedAdKey, setExpandedAdKey] = useState<string | null>(null);
+  const [showAllLeadsForAd, setShowAllLeadsForAd] = useState<Record<string, boolean>>({});
+  const [syncingMeta, setSyncingMeta] = useState(false);
   const [traceData, setTraceData] = useState<TraceDetailPayload | null>(null);
   const [traceLoading, setTraceLoading] = useState(false);
+  const [traceError, setTraceError] = useState<string | null>(null);
 
   const [refreshTick, setRefreshTick] = useState(0);
-  const userEmail = user?.email?.toLowerCase() || '';
+
+  const findSelfEmployee = useCallback(
+    (list: ComputedEmployeeKpi[]): ComputedEmployeeKpi | null => {
+      if (!user || list.length === 0) return null;
+      const emailLower = user.email?.trim().toLowerCase() || '';
+      const nameLower = user.name?.trim().toLowerCase() || '';
+      return (
+        (user.employeeId ? list.find((e) => e.employee.id === user.employeeId) : undefined) ||
+        (user.id ? list.find((e) => e.employee.userId === user.id) : undefined) ||
+        (user.employeeEmpId ? list.find((e) => e.employee.empId === user.employeeEmpId) : undefined) ||
+        (emailLower ? list.find((e) => e.employee.email?.trim().toLowerCase() === emailLower) : undefined) ||
+        (nameLower ? list.find((e) => e.employee.name.trim().toLowerCase() === nameLower) : undefined) ||
+        null
+      );
+    },
+    [user],
+  );
 
   const triggerReload = useCallback((showSpinner = false) => {
     if (showSpinner) setLoading(true);
@@ -173,16 +213,19 @@ export default function KpiWorkflowClient() {
       signal: controller.signal,
     })
       .then(async (res) => {
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error || 'Failed to load KPI report');
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(data.error || data.message || 'Failed to load KPI report');
         setReport(data);
         setError(null);
         const list: ComputedEmployeeKpi[] = Array.isArray(data.employees) ? data.employees : [];
         if (list.length > 0) {
-          const selfMatch = list.find((e) => e.employee.email?.toLowerCase() === userEmail) || list[0];
-          setActiveEmpId((prev) => prev || selfMatch.employee.id);
-          setTargetEmpId((prev) => prev || selfMatch.employee.id);
-          setTaskAssigneeId((prev) => prev || selfMatch.employee.id);
+          const selfMatch = findSelfEmployee(list);
+          if (selfMatch) {
+            setActiveEmpId((prev) => prev || selfMatch.employee.id);
+          }
+          const defaultTarget = selfMatch || list[0];
+          setTargetEmpId((prev) => prev || defaultTarget.employee.id);
+          setTaskAssigneeId((prev) => prev || defaultTarget.employee.id);
         }
       })
       .catch((err) => {
@@ -194,28 +237,75 @@ export default function KpiWorkflowClient() {
         if (!controller.signal.aborted) setLoading(false);
       });
     return () => controller.abort();
-  }, [authenticatedFetch, month, refreshTick, userEmail]);
+  }, [authenticatedFetch, month, refreshTick, findSelfEmployee]);
 
   const loadReport = async () => triggerReload(false);
 
   const openTraceDrawer = async (empId: string) => {
     setTraceEmpId(empId);
+    setTraceData(null);
+    setTraceError(null);
     setTraceLoading(true);
     try {
       const res = await authenticatedFetch(`/api/admin/kpi/${encodeURIComponent(empId)}?month=${encodeURIComponent(month)}`, {
         cache: 'no-store',
       });
-      if (res.ok) {
-        setTraceData(await res.json());
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        setTraceError(data.error || data.message || 'Could not load employee workflow trace.');
+      } else {
+        setTraceData(data);
       }
+    } catch {
+      setTraceError('Network error while loading employee workflow trace.');
     } finally {
       setTraceLoading(false);
     }
   };
 
+  const selfKpi = useMemo(
+    () => (report ? findSelfEmployee(report.employees) : null),
+    [report, findSelfEmployee],
+  );
+
   const activeKpi = useMemo(
-    () => report?.employees.find((e) => e.employee.id === activeEmpId) || report?.employees[0] || null,
-    [report, activeEmpId],
+    () =>
+      (activeEmpId ? report?.employees.find((e) => e.employee.id === activeEmpId) : null) ||
+      selfKpi ||
+      report?.employees[0] ||
+      null,
+    [report, activeEmpId, selfKpi],
+  );
+
+  // Sync KPI Target form inputs whenever selected targetEmpId or report.targets changes
+  const syncTargetInputsForEmployee = useCallback(
+    (empId: string, nextReport: ApiKpiPayload | null) => {
+      if (!nextReport || !empId) return;
+      const empRow = nextReport.employees.find((e) => e.employee.id === empId);
+      const t = nextReport.targets?.find(
+        (item) =>
+          item.employeeId === empId ||
+          (empRow && item.consultant.toLowerCase() === empRow.employee.name.toLowerCase()),
+      );
+      setTargetDailyActions(String(t?.targetDailyActions ?? empRow?.activity.targetDailyActions ?? 12));
+      setTargetFollowups(String(t?.targetFollowups ?? 10));
+      setTargetEnrolled(String(t?.targetEnrolled ?? 5));
+      setMaxSlaHours(String(t?.maxSlaHours ?? empRow?.sla.maxSlaHours ?? 24));
+    },
+    [],
+  );
+
+  const selectActiveEmployee = useCallback(
+    (empId: string) => {
+      setActiveEmpId(empId);
+      const todayLog = report?.recentDailyLogs.find(
+        (l) => l.employeeId === empId && l.date === report.today,
+      );
+      setAccomplishments(todayLog?.accomplishments || '');
+      setChallenges(todayLog?.challenges || '');
+      setTomorrowPlan(todayLog?.tomorrowPlan || '');
+    },
+    [report],
   );
 
   // Aggregate daily chart bars across entire team
@@ -237,13 +327,25 @@ export default function KpiWorkflowClient() {
   const handleOpenCheckOutModal = () => {
     if (!activeKpi) return;
     setCheckOutError(null);
-    const calls = activeKpi.funnel.todayCallsLogged ?? 0;
-    const leads = activeKpi.funnel.todayTouchedLeads ?? 0;
-    const files = activeKpi.funnel.todayFilesOpened ?? 0;
-    if (!accomplishments.trim()) {
-      setAccomplishments(
-        `Today completed ${calls} calls and contacted ${leads} students across active inquiries. Processed ${files} application files.`,
-      );
+    // Load any existing today's EOD log so checking out never overwrites an earlier detailed submission
+    const existingTodayLog = report?.recentDailyLogs.find(
+      (l) =>
+        (l.employeeId === activeKpi.employee.id || l.empId === activeKpi.employee.empId) &&
+        l.date === report.today,
+    );
+    if (existingTodayLog) {
+      setAccomplishments(existingTodayLog.accomplishments || '');
+      setChallenges(existingTodayLog.challenges || '');
+      setTomorrowPlan(existingTodayLog.tomorrowPlan || '');
+    } else {
+      const calls = activeKpi.funnel.todayCallsLogged ?? 0;
+      const leads = activeKpi.funnel.todayTouchedLeads ?? 0;
+      const files = activeKpi.funnel.todayFilesOpened ?? 0;
+      if (!accomplishments.trim()) {
+        setAccomplishments(
+          `Today completed ${calls} calls and contacted ${leads} students across active inquiries. Processed ${files} application files.`,
+        );
+      }
     }
     setCheckOutModalOpen(true);
   };
@@ -272,8 +374,8 @@ export default function KpiWorkflowClient() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ employeeId: activeKpi.employee.id, mode, ...locationPayload }),
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Attendance update failed');
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || data.message || 'Attendance update failed');
       const locLabel = data.locationStatus?.locationLabel ? ` · ${data.locationStatus.locationLabel}` : '';
       setNotice(
         mode === 'checkin'
@@ -310,9 +412,9 @@ export default function KpiWorkflowClient() {
           tomorrowPlan: tomorrowPlan.trim(),
         }),
       });
-      const logData = await logRes.json();
+      const logData = await logRes.json().catch(() => ({}));
       if (!logRes.ok) {
-        throw new Error(logData.error || 'Failed to submit daily log');
+        throw new Error(logData.error || logData.message || 'Failed to submit daily log');
       }
 
       // 2. Perform attendance checkout
@@ -324,14 +426,17 @@ export default function KpiWorkflowClient() {
           mode: 'checkout',
         }),
       });
-      const attData = await attRes.json();
+      const attData = await attRes.json().catch(() => ({}));
       if (!attRes.ok) {
-        throw new Error(attData.error || 'Attendance check-out failed');
+        throw new Error(attData.error || attData.message || 'Attendance check-out failed');
       }
 
       setNotice(
-        `স্বাগতম! ${activeKpi.employee.name} সফলভাবে চেক-আউট সম্পন্ন করেছেন (${attData.checkOut}, ${attData.hoursWorked}h)। EOD রিপোর্ট সংরক্ষিত হয়েছে।`,
+        `চেক-আউট সম্পন্ন! ${activeKpi.employee.name} সফলভাবে চেক-আউট সম্পন্ন করেছেন (${attData.checkOut}, ${attData.hoursWorked}h)। EOD রিপোর্ট সংরক্ষিত হয়েছে।`,
       );
+      setAccomplishments('');
+      setChallenges('');
+      setTomorrowPlan('');
       setCheckOutModalOpen(false);
       await loadReport();
     } catch (err) {
@@ -400,8 +505,8 @@ export default function KpiWorkflowClient() {
           tomorrowPlan: tomorrowPlan.trim(),
         }),
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Failed to submit daily log');
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || data.message || 'Failed to submit daily log');
       setNotice(`Daily EOD reflection logged for ${activeKpi.employee.name}.`);
       setAccomplishments('');
       setChallenges('');
@@ -411,6 +516,35 @@ export default function KpiWorkflowClient() {
       setError(err instanceof Error ? err.message : 'Daily log error');
     } finally {
       setBusy(false);
+    }
+  };
+
+  const handleSyncMetaAds = async () => {
+    setSyncingMeta(true);
+    setNotice(null);
+    setError(null);
+    try {
+      const res = await authenticatedFetch('/api/admin/leads?sync=1', { cache: 'no-store' });
+      const syncOk = res.headers.get('X-Meta-Sync-Ok') === '1';
+      const imported = Number(res.headers.get('X-Meta-Sync-Imported') || '0');
+      const updated = Number(res.headers.get('X-Meta-Sync-Updated') || '0');
+      const syncErr = res.headers.get('X-Meta-Sync-Error');
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || data.message || 'Meta Ads sync failed');
+      }
+      if (!syncOk && syncErr) {
+        setError(`Meta Ads sync warning: ${syncErr}`);
+      } else {
+        setNotice(
+          `Meta Ads synced directly: ${imported} new lead${imported === 1 ? '' : 's'} imported, ${updated} existing lead${updated === 1 ? '' : 's'} enriched with individual ad attribution.`,
+        );
+      }
+      await loadReport();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Meta Ads sync failed');
+    } finally {
+      setSyncingMeta(false);
     }
   };
 
@@ -428,9 +562,9 @@ export default function KpiWorkflowClient() {
     sortedCounselors.forEach((emp, idx) => {
       lines.push([
         idx + 1,
-        `"${emp.employee.name}"`,
-        `"${emp.employee.role}"`,
-        `"${emp.employee.team}"`,
+        escapeCsvCell(emp.employee.name),
+        escapeCsvCell(emp.employee.role),
+        escapeCsvCell(emp.employee.team),
         emp.funnel.callsLogged || 0,
         emp.activity.touchedLeadsMonth,
         emp.funnel.totalAssigned,
@@ -440,19 +574,50 @@ export default function KpiWorkflowClient() {
       ].join(','));
     });
 
+    const activeMetaPeriod =
+      metaAdsPeriod === 'auto'
+        ? (report.metaAdMetrics?.length ?? 0) > 0
+          ? 'month'
+          : 'all'
+        : metaAdsPeriod;
+    const metaRows =
+      activeMetaPeriod === 'all' ? report.metaAdMetricsAllTime || [] : report.metaAdMetrics || [];
+
+    lines.push('');
+    lines.push(`--- INDIVIDUAL META ADS PERFORMANCE (${activeMetaPeriod === 'all' ? 'ALL TIME' : report.month}) ---`);
+    lines.push(['Ad Name', 'Ad ID', 'Ad Set', 'Campaign', 'Channel', 'Total Leads', 'Contacted', 'Qualified', 'Files Opened', 'High GPA (>=3.5)', 'Avg GPA', 'Lead to File %', 'Quality Score', 'Verdict'].join(','));
+    metaRows.forEach((ad) => {
+      lines.push([
+        escapeCsvCell(ad.adName),
+        escapeCsvCell(ad.adId || ''),
+        escapeCsvCell(ad.adsetName || ''),
+        escapeCsvCell(ad.campaignName),
+        escapeCsvCell(ad.channelLabel),
+        ad.totalLeads,
+        ad.contactedLeads,
+        ad.qualifiedLeads,
+        ad.filesOpened,
+        ad.highGpaCount,
+        ad.avgGpa ?? '',
+        `${ad.conversionRatePct}%`,
+        `${ad.qualityScore}/100`,
+        escapeCsvCell(ad.verdictLabel),
+      ].join(','));
+    });
+
     lines.push('');
     lines.push('--- AD CAMPAIGN & ACQUISITION PERFORMANCE ---');
     lines.push(['Acquisition Source', 'Category', 'Total Inbound Leads', 'Contacted Leads', 'Files Opened', 'Conversion Rate %', 'Verdict'].join(','));
     (report.sourceMetrics || []).forEach((src) => {
-      const verdict = src.filesOpened >= 5 ? 'Top Performing Ad' : src.filesOpened > 0 ? 'Converting' : src.totalLeads > 10 ? 'High Inbound / Review Lead Quality' : 'Low Volume';
+      const verdict = getSourceVerdict(src.filesOpened, src.totalLeads);
       lines.push([
-        `"${formatFriendlySource(src.source)}"`,
-        `"${src.categoryLabel}"`,
+        escapeCsvCell(formatFriendlySource(src.source)),
+        escapeCsvCell(src.categoryLabel),
         src.totalLeads,
         src.contactedLeads,
         src.filesOpened,
         `${src.conversionRatePct}%`,
-        `"${verdict}"`,
+        escapeCsvCell(verdict),
       ].join(','));
     });
 
@@ -483,8 +648,8 @@ export default function KpiWorkflowClient() {
           category: taskCategory,
         }),
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Failed to assign task');
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || data.message || 'Failed to assign task');
       setTaskTitle('');
       setNotice('Task directive assigned cleanly.');
       await loadReport();
@@ -497,13 +662,18 @@ export default function KpiWorkflowClient() {
 
   const handleTaskStatus = async (id: string, status: string) => {
     setBusy(true);
+    setError(null);
     try {
       const res = await authenticatedFetch('/api/admin/tasks', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id, status }),
       });
-      if (res.ok) await loadReport();
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || data.message || 'Failed to update task');
+      await loadReport();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to update task');
     } finally {
       setBusy(false);
     }
@@ -511,11 +681,16 @@ export default function KpiWorkflowClient() {
 
   const handleDeleteTask = async (id: string) => {
     setBusy(true);
+    setError(null);
     try {
       const res = await authenticatedFetch(`/api/admin/tasks?id=${encodeURIComponent(id)}`, {
         method: 'DELETE',
       });
-      if (res.ok) await loadReport();
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || data.message || 'Failed to delete task');
+      await loadReport();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to delete task');
     } finally {
       setBusy(false);
     }
@@ -526,6 +701,7 @@ export default function KpiWorkflowClient() {
     if (!targetEmpId) return;
     setBusy(true);
     setNotice(null);
+    setError(null);
     try {
       const res = await authenticatedFetch('/api/admin/kpi', {
         method: 'POST',
@@ -539,7 +715,8 @@ export default function KpiWorkflowClient() {
           maxSlaHours: Number(maxSlaHours),
         }),
       });
-      if (!res.ok) throw new Error('Could not save KPI targets');
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || data.message || 'Could not save KPI targets');
       setNotice('KPI & SLA targets updated for selected counselor.');
       await loadReport();
     } catch (err) {
@@ -559,8 +736,8 @@ export default function KpiWorkflowClient() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action: 'seed_defaults', month }),
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Could not seed default targets');
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || data.message || 'Could not seed default targets');
       setNotice(`Seeded default ${month} KPI targets (${data.createdCount} added).`);
       await loadReport();
     } catch (err) {
@@ -580,8 +757,8 @@ export default function KpiWorkflowClient() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ scope }),
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Auto-assignment failed');
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || data.message || 'Auto-assignment failed');
       setNotice(`Auto-assigned ${data.assignedCount} unassigned leads evenly across counselors.`);
       await loadReport();
     } catch (err) {
@@ -613,7 +790,10 @@ export default function KpiWorkflowClient() {
             <input
               type="month"
               value={month}
-              onChange={(e) => setMonth(e.target.value)}
+              onChange={(e) => {
+                const v = e.target.value;
+                if (/^\d{4}-(0[1-9]|1[0-2])$/.test(v)) setMonth(v);
+              }}
               className="bg-transparent text-xs font-bold text-slate-900 outline-none"
             />
           </label>
@@ -643,9 +823,27 @@ export default function KpiWorkflowClient() {
                     <span>Quick Daily Attendance</span>
                     <span className="text-[11px] font-medium text-slate-500">· Dhaka (GMT+6)</span>
                   </h2>
-                  <p className="text-xs text-slate-500 truncate">
-                    Staff: <span className="font-semibold text-slate-800">{activeKpi.employee.name}</span> ({activeKpi.employee.empId})
-                  </p>
+                  <div className="flex flex-wrap items-center gap-1.5 text-xs text-slate-500">
+                    <span>Staff:</span>
+                    {isCounselor ? (
+                      <span>
+                        <span className="font-semibold text-slate-800">{activeKpi.employee.name}</span> ({activeKpi.employee.empId})
+                      </span>
+                    ) : (
+                      <select
+                        aria-label="Select staff member for quick attendance"
+                        value={activeKpi.employee.id}
+                        onChange={(e) => selectActiveEmployee(e.target.value)}
+                        className="rounded-md border border-slate-200 bg-white px-2 py-0.5 text-xs font-semibold text-slate-800 shadow-2xs outline-none hover:border-slate-300 focus:border-[#0f3a5c]"
+                      >
+                        {report.employees.map((e) => (
+                          <option key={e.employee.id} value={e.employee.id}>
+                            {e.employee.name} ({e.employee.empId})
+                          </option>
+                        ))}
+                      </select>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
@@ -876,8 +1074,8 @@ export default function KpiWorkflowClient() {
       {effectiveTab === 'overview' && report && (
         <div className="space-y-6">
           {/* Team Daily Output Chart */}
-          <div className="rounded-xl border border-slate-200/80 bg-white p-5 shadow-sm">
-            <div className="mb-3 flex items-center justify-between">
+          <div className="rounded-xl border border-slate-200/80 bg-white p-4 sm:p-5 shadow-sm">
+            <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
               <div>
                 <h2 className="text-sm font-bold text-slate-900">Daily Team Workflow Throughput ({month})</h2>
                 <p className="text-xs text-slate-500">Tracked CRM actions, follow-up updates, logs, and attendance events per Dhaka calendar day</p>
@@ -1007,7 +1205,7 @@ export default function KpiWorkflowClient() {
                           </div>
                         </td>
                         <td className="px-3 py-3">
-                          <div className="font-semibold text-slate-800">{row.tasks.open + row.tasks.inProgress} open / {row.tasks.doneMonth} done</div>
+                          <div className="font-semibold text-slate-800">{row.tasks.open + row.tasks.inProgress + row.tasks.blocked} open / {row.tasks.doneMonth} done</div>
                           <div className="text-[10px] text-slate-500">Log streak: {row.discipline.streak}d</div>
                         </td>
                         <td className="px-4 py-3 text-right">
@@ -1025,7 +1223,7 @@ export default function KpiWorkflowClient() {
                   {report.employees.length === 0 && (
                     <tr>
                       <td colSpan={8} className="px-4 py-8 text-center text-sm text-slate-500">
-                        No active employees found yet. Add team members under &ldquo;Tasks, SLA Targets & Roster&rdquo;.
+                        No active employees found yet. Add team members under Team &amp; Users.
                       </td>
                     </tr>
                   )}
@@ -1035,8 +1233,8 @@ export default function KpiWorkflowClient() {
           </div>
 
           {/* SLA Bottleneck Queue */}
-          <div className="rounded-xl border border-slate-200/80 bg-white p-5 shadow-sm">
-            <div className="mb-3 flex items-center justify-between">
+          <div className="rounded-xl border border-slate-200/80 bg-white p-4 sm:p-5 shadow-sm">
+            <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
               <div>
                 <h2 className="flex items-center gap-1.5 text-sm font-bold text-slate-900">
                   <AlertTriangle size={15} className="text-red-600" />
@@ -1109,29 +1307,387 @@ export default function KpiWorkflowClient() {
         </div>
       )}
 
-      {effectiveTab === 'analytics' && report && (
+      {effectiveTab === 'analytics' && report && (() => {
+        const monthMetaAds = report.metaAdMetrics || [];
+        const allTimeMetaAds = report.metaAdMetricsAllTime || [];
+        const resolvedMetaPeriod: 'month' | 'all' =
+          metaAdsPeriod === 'auto' ? (monthMetaAds.length > 0 ? 'month' : 'all') : metaAdsPeriod;
+        const activeMetaAds = resolvedMetaPeriod === 'all' ? allTimeMetaAds : monthMetaAds;
+        const monthMetaLeadCount = monthMetaAds.reduce((sum, a) => sum + a.totalLeads, 0);
+        const allTimeMetaLeadCount = allTimeMetaAds.reduce((sum, a) => sum + a.totalLeads, 0);
+        const activeMetaLeadCount = activeMetaAds.reduce((sum, a) => sum + a.totalLeads, 0);
+        const activeMetaFilesCount = activeMetaAds.reduce((sum, a) => sum + a.filesOpened, 0);
+        const activeMetaQualifiedCount = activeMetaAds.reduce((sum, a) => sum + a.qualifiedLeads, 0);
+        const topMetaAd = activeMetaAds[0] || null;
+        const hasUnsplitCampaignOnly = activeMetaAds.some((a) => a.attributionQuality === 'campaign_only');
+
+        return (
         <div className="space-y-6">
           {/* Header Action Bar */}
           <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-200/80 bg-white p-4 shadow-sm">
             <div>
               <h2 className="text-base font-extrabold text-slate-900">
-                Counselor Outreach Leaderboard &amp; Ad Campaign Performance
+                Counselor Outreach Leaderboard &amp; Meta Ad ROI
               </h2>
               <p className="mt-0.5 text-xs text-slate-500">
-                Month: {report.month} · Real-time Conversion Funnel &amp; Acquisition Quality
+                Month: {report.month} · Individual Meta Ads Lead Analysis, Conversion Funnel &amp; Acquisition Quality
               </p>
             </div>
-            <button
-              type="button"
-              onClick={handleExportAnalyticsCsv}
-              className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2 text-xs font-bold text-slate-800 transition hover:border-slate-300 hover:bg-slate-100"
-            >
-              <Download size={14} /> Export CSV Report
-            </button>
+            <div className="flex flex-wrap items-center gap-2">
+              <button
+                type="button"
+                onClick={handleSyncMetaAds}
+                disabled={syncingMeta}
+                className="inline-flex items-center gap-1.5 rounded-xl bg-[#0f3a5c] px-3.5 py-2 text-xs font-bold text-white transition hover:bg-[#12436b] disabled:opacity-60"
+              >
+                <RefreshCw size={13} className={syncingMeta ? 'animate-spin' : ''} />
+                {syncingMeta ? 'Syncing Meta Ads...' : 'Sync Meta Ads'}
+              </button>
+              <button
+                type="button"
+                onClick={handleExportAnalyticsCsv}
+                className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2 text-xs font-bold text-slate-800 transition hover:border-slate-300 hover:bg-slate-100"
+              >
+                <Download size={14} /> Export CSV
+              </button>
+            </div>
           </div>
 
-          {/* Section 1: Counselor Performance Leaderboard */}
-          <div className="rounded-xl border border-slate-200/80 bg-white p-5 shadow-sm">
+          {/* Section 1: Individual Meta Ads Performance & Clickable Lead Analysis */}
+          <div className="rounded-xl border border-slate-200/80 bg-white p-4 sm:p-5 shadow-sm">
+            <div className="flex flex-wrap items-start justify-between gap-3 mb-4">
+              <div>
+                <div className="flex flex-wrap items-center gap-2">
+                  <h3 className="flex items-center gap-2 text-sm font-bold text-slate-900">
+                    <Sparkles size={16} className="text-blue-600" />
+                    Individual Meta Ads Performance &amp; Lead Analysis
+                  </h3>
+                  <span
+                    className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[10px] font-bold border ${
+                      report.metaConnection?.configured
+                        ? 'border-emerald-200 bg-emerald-50 text-emerald-800'
+                        : 'border-amber-200 bg-amber-50 text-amber-800'
+                    }`}
+                  >
+                    <span
+                      className={`size-1.5 rounded-full ${
+                        report.metaConnection?.configured ? 'bg-emerald-500' : 'bg-amber-500'
+                      }`}
+                    />
+                    {report.metaConnection?.configured
+                      ? `Meta Graph Connected${report.metaConnection.pixelId ? ` · Pixel ${report.metaConnection.pixelId.slice(-6)}` : ''}`
+                      : 'Meta Token Not Set'}
+                  </span>
+                </div>
+                <p className="mt-1 text-xs text-slate-500">
+                  See exactly which individual Meta ad creative or Instant Form drives qualified students &amp; opened files. Click any ad row to inspect its exact leads.
+                </p>
+              </div>
+
+              <div className="inline-flex rounded-xl border border-slate-200 bg-slate-50 p-1 text-[11px] font-bold">
+                <button
+                  type="button"
+                  onClick={() => setMetaAdsPeriod('month')}
+                  className={`rounded-lg px-2.5 py-1.5 transition ${
+                    resolvedMetaPeriod === 'month'
+                      ? 'bg-[#0f3a5c] text-white shadow-2xs'
+                      : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  {report.month} ({monthMetaLeadCount})
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setMetaAdsPeriod('all')}
+                  className={`rounded-lg px-2.5 py-1.5 transition ${
+                    resolvedMetaPeriod === 'all'
+                      ? 'bg-[#0f3a5c] text-white shadow-2xs'
+                      : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  All Time ({allTimeMetaLeadCount})
+                </button>
+              </div>
+            </div>
+
+            {/* Summary KPI Strip */}
+            <div className="mb-4 grid grid-cols-2 gap-2.5 sm:grid-cols-4">
+              <div className="rounded-xl border border-slate-200/80 bg-slate-50/70 p-3">
+                <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Tracked Ads</p>
+                <p className="mt-0.5 text-xl font-extrabold tabular-nums text-slate-900">{activeMetaAds.length}</p>
+              </div>
+              <div className="rounded-xl border border-blue-200/70 bg-blue-50/50 p-3">
+                <p className="text-[10px] font-bold uppercase tracking-wider text-blue-700">Meta Ad Leads</p>
+                <p className="mt-0.5 text-xl font-extrabold tabular-nums text-blue-900">{activeMetaLeadCount}</p>
+              </div>
+              <div className="rounded-xl border border-emerald-200/70 bg-emerald-50/50 p-3">
+                <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-700">Qualified / Files</p>
+                <p className="mt-0.5 text-xl font-extrabold tabular-nums text-emerald-900">
+                  {activeMetaQualifiedCount} <span className="text-xs font-semibold text-emerald-700">/ {activeMetaFilesCount} files</span>
+                </p>
+              </div>
+              <div className="rounded-xl border border-purple-200/70 bg-purple-50/50 p-3">
+                <p className="text-[10px] font-bold uppercase tracking-wider text-purple-700">Top Ad</p>
+                <p className="mt-0.5 truncate text-xs font-extrabold text-purple-950" title={topMetaAd?.adName || 'None'}>
+                  {topMetaAd ? topMetaAd.adName : 'No Meta leads yet'}
+                </p>
+                {topMetaAd && (
+                  <p className="text-[10px] font-semibold text-purple-700">
+                    {topMetaAd.totalLeads} leads · {topMetaAd.filesOpened} files
+                  </p>
+                )}
+              </div>
+            </div>
+
+            {hasUnsplitCampaignOnly && (
+              <div className="mb-4 flex flex-wrap items-center justify-between gap-2 rounded-xl border border-amber-200 bg-amber-50/80 px-3.5 py-2.5 text-xs text-amber-900">
+                <span>
+                  Some earlier Instant Form leads were saved before individual <code className="rounded bg-amber-100 px-1 font-mono text-[11px]">ad_id / ad_name</code> tracking. Click <strong>Sync Meta Ads</strong> to backfill individual ad names from Meta Graph API.
+                </span>
+                <button
+                  type="button"
+                  onClick={handleSyncMetaAds}
+                  disabled={syncingMeta}
+                  className="shrink-0 rounded-lg border border-amber-300 bg-white px-2.5 py-1 text-[11px] font-bold text-amber-900 hover:bg-amber-100 disabled:opacity-60"
+                >
+                  {syncingMeta ? 'Syncing...' : 'Backfill Now'}
+                </button>
+              </div>
+            )}
+
+            {activeMetaAds.length === 0 ? (
+              <div className="rounded-xl border border-dashed border-slate-200 p-8 text-center text-xs text-slate-500">
+                No Meta Ads leads recorded for {resolvedMetaPeriod === 'all' ? 'any period' : report.month}. Switch to <strong>All Time</strong> or click <strong>Sync Meta Ads</strong>.
+              </div>
+            ) : (
+              <div className="space-y-2.5">
+                {activeMetaAds.map((ad) => {
+                  const isExpanded = expandedAdKey === ad.adKey;
+                  const showAll = Boolean(showAllLeadsForAd[ad.adKey]);
+                  const visibleLeads = showAll ? ad.leads : ad.leads.slice(0, 20);
+                  const verdictBadge =
+                    ad.verdict === 'winner'
+                      ? 'border-purple-200 bg-purple-100 text-purple-900'
+                      : ad.verdict === 'working'
+                        ? 'border-emerald-200 bg-emerald-100 text-emerald-800'
+                        : ad.verdict === 'review'
+                          ? 'border-amber-200 bg-amber-100 text-amber-900'
+                          : 'border-slate-200 bg-slate-100 text-slate-700';
+
+                  return (
+                    <div
+                      key={ad.adKey}
+                      className={`overflow-hidden rounded-xl border transition ${
+                        isExpanded ? 'border-[#0f3a5c]/40 bg-slate-50/40 shadow-xs' : 'border-slate-200/90 bg-white hover:border-slate-300'
+                      }`}
+                    >
+                      <button
+                        type="button"
+                        onClick={() => setExpandedAdKey(isExpanded ? null : ad.adKey)}
+                        className="w-full p-3.5 text-left transition hover:bg-slate-50/60"
+                      >
+                        <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+                          {/* Left: Ad identity */}
+                          <div className="flex min-w-0 items-start gap-2.5">
+                            <span className="mt-0.5 grid size-6 shrink-0 place-items-center rounded-lg bg-slate-100 text-slate-600">
+                              {isExpanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+                            </span>
+                            <div className="min-w-0">
+                              <div className="flex flex-wrap items-center gap-1.5">
+                                <span className="text-xs sm:text-sm font-extrabold text-slate-900 break-words">
+                                  {ad.adName}
+                                </span>
+                                <span
+                                  className={`rounded-md px-1.5 py-0.5 text-[10px] font-bold ${
+                                    ad.channel === 'instant_form'
+                                      ? 'bg-indigo-50 text-indigo-800 border border-indigo-200/80'
+                                      : 'bg-sky-50 text-sky-800 border border-sky-200/80'
+                                  }`}
+                                >
+                                  {ad.channelLabel}
+                                </span>
+                                <span
+                                  className={`rounded-md px-1.5 py-0.5 text-[10px] font-semibold ${
+                                    ad.attributionQuality === 'direct_ad'
+                                      ? 'bg-emerald-50 text-emerald-700'
+                                      : ad.attributionQuality === 'creative_utm'
+                                        ? 'bg-blue-50 text-blue-700'
+                                        : 'bg-amber-50 text-amber-800'
+                                  }`}
+                                >
+                                  {ad.attributionQuality === 'direct_ad'
+                                    ? 'Direct Meta Ad ID'
+                                    : ad.attributionQuality === 'creative_utm'
+                                      ? 'UTM Creative'
+                                      : 'Campaign / Form Level'}
+                                </span>
+                              </div>
+                              <div className="mt-1 flex flex-wrap items-center gap-x-2.5 gap-y-0.5 text-[11px] text-slate-500">
+                                <span>Campaign: <strong className="font-semibold text-slate-700">{ad.campaignName}</strong></span>
+                                {ad.adsetName && <span>· Ad Set: {ad.adsetName}</span>}
+                                {ad.adId && <span className="font-mono text-[10px] text-slate-400">· ID: {ad.adId}</span>}
+                                {ad.rawCode && ad.rawCode !== ad.adId && (
+                                  <span className="font-mono text-[10px] text-slate-400">· utm: {ad.rawCode}</span>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Right: Metrics grid (mobile 2x2 / desktop compact strip) */}
+                          <div className="grid grid-cols-2 gap-2 sm:grid-cols-5 lg:flex lg:shrink-0 lg:items-center lg:gap-4 pl-8 lg:pl-0">
+                            <div className="rounded-lg bg-slate-50 px-2.5 py-1.5 text-center lg:bg-transparent lg:p-0">
+                              <div className="text-[10px] font-semibold text-slate-400">Leads</div>
+                              <div className="text-sm font-extrabold tabular-nums text-slate-900">{ad.totalLeads}</div>
+                            </div>
+                            <div className="rounded-lg bg-slate-50 px-2.5 py-1.5 text-center lg:bg-transparent lg:p-0">
+                              <div className="text-[10px] font-semibold text-slate-400">Contacted</div>
+                              <div className="text-xs font-bold tabular-nums text-slate-700">
+                                {ad.contactedLeads} <span className="text-[10px] text-slate-400">({ad.contactRatePct}%)</span>
+                              </div>
+                            </div>
+                            <div className="rounded-lg bg-slate-50 px-2.5 py-1.5 text-center lg:bg-transparent lg:p-0">
+                              <div className="text-[10px] font-semibold text-slate-400">Qual / Files</div>
+                              <div className="text-xs font-extrabold tabular-nums text-emerald-700">
+                                {ad.qualifiedLeads} / {ad.filesOpened}
+                              </div>
+                            </div>
+                            <div className="rounded-lg bg-slate-50 px-2.5 py-1.5 text-center lg:bg-transparent lg:p-0">
+                              <div className="text-[10px] font-semibold text-slate-400">Avg GPA / Score</div>
+                              <div className="text-xs font-bold tabular-nums text-[#0f3a5c]">
+                                {ad.avgGpa !== null ? ad.avgGpa.toFixed(2) : '—'} · {ad.qualityScore}/100
+                              </div>
+                            </div>
+                            <div className="col-span-2 flex items-center justify-end sm:col-span-1">
+                              <span className={`rounded-full border px-2.5 py-1 text-[10px] font-bold whitespace-nowrap ${verdictBadge}`}>
+                                {ad.verdictLabel}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </button>
+
+                      {/* Click-to-Inspect Individual Leads Drill-Down */}
+                      {isExpanded && (
+                        <div className="border-t border-slate-200/80 bg-white px-3.5 py-3">
+                          <div className="mb-2.5 flex flex-wrap items-center justify-between gap-2">
+                            <p className="text-[11px] font-bold text-slate-700">
+                              Individual Leads from <span className="text-[#0f3a5c]">{ad.adName}</span> ({ad.leads.length} total · {ad.highGpaCount} GPA ≥ 3.5 · {ad.conversionRatePct}% lead-to-file)
+                            </p>
+                            <Link
+                              href="/admin/leads"
+                              className="text-[11px] font-bold text-[#0f3a5c] hover:underline"
+                            >
+                              Open Full Leads CRM →
+                            </Link>
+                          </div>
+
+                          <div className="overflow-x-auto rounded-lg border border-slate-100">
+                            <table className="w-full min-w-[600px] text-left text-xs">
+                              <thead className="bg-slate-50 text-[10px] font-extrabold uppercase tracking-wider text-slate-500">
+                                <tr>
+                                  <th className="px-3 py-2">Student</th>
+                                  <th className="px-3 py-2">GPA / Result</th>
+                                  <th className="px-3 py-2">Status / Stage</th>
+                                  <th className="px-3 py-2">Counselor</th>
+                                  <th className="px-3 py-2">Date</th>
+                                  <th className="px-3 py-2 text-right">Actions</th>
+                                </tr>
+                              </thead>
+                              <tbody className="divide-y divide-slate-100">
+                                {visibleLeads.map((lead) => {
+                                  const waUrl = buildWhatsAppUrl(lead.phone);
+                                  const leadHref = lead.isApplication
+                                    ? `/admin/applications?search=${encodeURIComponent(lead.phone || lead.name)}`
+                                    : `/admin/leads?lead=${encodeURIComponent(lead.id)}`;
+                                  return (
+                                    <tr key={lead.id} className="hover:bg-slate-50/70">
+                                      <td className="px-3 py-2">
+                                        <Link href={leadHref} className="font-bold text-slate-900 hover:text-blue-700 hover:underline">
+                                          {lead.name}
+                                        </Link>
+                                        <div className="text-[10px] text-slate-500">{lead.phone} · {lead.country}</div>
+                                      </td>
+                                      <td className="px-3 py-2">
+                                        {lead.gpa !== null ? (
+                                          <span className={`rounded px-1.5 py-0.5 text-[10px] font-bold tabular-nums ${
+                                            lead.gpa >= 3.5 ? 'bg-emerald-50 text-emerald-800' : 'bg-slate-100 text-slate-700'
+                                          }`}>
+                                            GPA {lead.gpa.toFixed(2)}
+                                          </span>
+                                        ) : lead.academicText ? (
+                                          <span className="text-[11px] text-slate-600">{lead.academicText.slice(0, 28)}</span>
+                                        ) : (
+                                          <span className="text-[10px] text-slate-400">—</span>
+                                        )}
+                                      </td>
+                                      <td className="px-3 py-2">
+                                        <span className={`inline-block rounded px-1.5 py-0.5 text-[10px] font-bold capitalize ${
+                                          lead.isApplication
+                                            ? 'bg-emerald-100 text-emerald-800'
+                                            : lead.status === 'new'
+                                              ? 'bg-amber-50 text-amber-800'
+                                              : 'bg-blue-50 text-blue-800'
+                                        }`}>
+                                          {lead.isApplication ? `File: ${lead.applicationStage.replace(/_/g, ' ')}` : lead.status.replace(/_/g, ' ')}
+                                        </span>
+                                      </td>
+                                      <td className="px-3 py-2 text-[11px] text-slate-600">
+                                        {lead.assignedTo || 'Unassigned'}
+                                      </td>
+                                      <td className="px-3 py-2 font-mono text-[10px] text-slate-500 whitespace-nowrap">
+                                        {lead.createdAt.slice(0, 10)}
+                                      </td>
+                                      <td className="px-3 py-2 text-right whitespace-nowrap">
+                                        <div className="inline-flex items-center gap-1.5">
+                                          {waUrl && (
+                                            <a
+                                              href={waUrl}
+                                              target="_blank"
+                                              rel="noopener noreferrer"
+                                              className="rounded border border-emerald-200 bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-800 hover:bg-emerald-100"
+                                            >
+                                              WA
+                                            </a>
+                                          )}
+                                          <Link
+                                            href={leadHref}
+                                            className="rounded border border-slate-200 bg-white px-2 py-0.5 text-[10px] font-bold text-[#0f3a5c] hover:bg-slate-50"
+                                          >
+                                            Open →
+                                          </Link>
+                                        </div>
+                                      </td>
+                                    </tr>
+                                  );
+                                })}
+                              </tbody>
+                            </table>
+                          </div>
+
+                          {ad.leads.length > 20 && (
+                            <div className="mt-2.5 text-center">
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  setShowAllLeadsForAd((prev) => ({ ...prev, [ad.adKey]: !showAll }))
+                                }
+                                className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-1 text-[11px] font-bold text-slate-700 hover:bg-slate-100"
+                              >
+                                {showAll ? 'Show First 20 Leads' : `Show All ${ad.leads.length} Leads`}
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+
+          {/* Section 2: Counselor Performance Leaderboard */}
+          <div className="rounded-xl border border-slate-200/80 bg-white p-4 sm:p-5 shadow-sm">
             <div className="mb-4">
               <h3 className="flex items-center gap-2 text-sm font-bold text-slate-900">
                 <Award size={16} className="text-amber-500" />
@@ -1313,7 +1869,8 @@ export default function KpiWorkflowClient() {
             </div>
           </div>
         </div>
-      )}
+        );
+      })()}
 
       {effectiveTab === 'workspace' && report && (
         <div className="grid gap-6 lg:grid-cols-3">
@@ -1328,7 +1885,7 @@ export default function KpiWorkflowClient() {
                 <select
                   value={activeEmpId || activeKpi?.employee.id || ''}
                   disabled={isCounselor}
-                  onChange={(e) => setActiveEmpId(e.target.value)}
+                  onChange={(e) => selectActiveEmployee(e.target.value)}
                   className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-bold text-slate-900 disabled:bg-slate-100 disabled:cursor-not-allowed"
                 >
                   {report.employees.map((e) => (
@@ -1459,53 +2016,65 @@ export default function KpiWorkflowClient() {
             <div className="rounded-xl border border-slate-200/80 bg-white p-5 shadow-sm">
               <h3 className="text-sm font-bold text-slate-900">Active Tasks</h3>
               <div className="mt-3 space-y-2 max-h-72 overflow-y-auto">
-                {openTasks.filter((t) => !activeKpi || !t.employeeId || t.employeeId === activeKpi.employee.id).map((t) => (
-                  <div key={t.id} className="rounded-lg border border-slate-200 p-3 text-xs">
-                    <div className="flex items-start justify-between gap-2">
-                      <p className="font-bold text-slate-900">{t.title}</p>
-                      <span className={`shrink-0 rounded px-1.5 py-0.5 text-[10px] font-bold uppercase ${
-                        t.priority === 'urgent' || t.priority === 'high' ? 'bg-red-50 text-red-700' : 'bg-slate-100 text-slate-600'
-                      }`}>{t.priority}</span>
-                    </div>
-                    <p className="mt-1 text-[11px] text-slate-500">
-                      {t.assignedTo || 'Unassigned'}{t.dueDate ? ` · Due ${t.dueDate}` : ''}
-                    </p>
-                    <div className="mt-2 flex gap-1.5">
-                      {t.status !== 'in_progress' && (
+                {(() => {
+                  const visibleTasks = openTasks.filter(
+                    (t) => !activeKpi || !t.employeeId || t.employeeId === activeKpi.employee.id,
+                  );
+                  if (visibleTasks.length === 0) {
+                    return <p className="text-xs text-slate-400">All clear — no pending tasks.</p>;
+                  }
+                  return visibleTasks.map((t) => (
+                    <div key={t.id} className="rounded-lg border border-slate-200 p-3 text-xs">
+                      <div className="flex items-start justify-between gap-2">
+                        <p className="font-bold text-slate-900">{t.title}</p>
+                        <span className={`shrink-0 rounded px-1.5 py-0.5 text-[10px] font-bold uppercase ${
+                          t.priority === 'urgent' || t.priority === 'high' ? 'bg-red-50 text-red-700' : 'bg-slate-100 text-slate-600'
+                        }`}>{t.priority}</span>
+                      </div>
+                      <p className="mt-1 text-[11px] text-slate-500">
+                        {t.assignedTo || 'Unassigned'}{t.dueDate ? ` · Due ${t.dueDate}` : ''}
+                      </p>
+                      <div className="mt-2 flex gap-1.5">
+                        {t.status !== 'in_progress' && (
+                          <button
+                            type="button"
+                            onClick={() => handleTaskStatus(t.id, 'in_progress')}
+                            className="rounded border border-blue-200 bg-blue-50 px-2 py-0.5 text-[10px] font-bold text-blue-700"
+                          >
+                            Start
+                          </button>
+                        )}
                         <button
                           type="button"
-                          onClick={() => handleTaskStatus(t.id, 'in_progress')}
-                          className="rounded border border-blue-200 bg-blue-50 px-2 py-0.5 text-[10px] font-bold text-blue-700"
+                          onClick={() => handleTaskStatus(t.id, 'done')}
+                          className="rounded border border-emerald-200 bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-800"
                         >
-                          Start
+                          Mark Done
                         </button>
-                      )}
-                      <button
-                        type="button"
-                        onClick={() => handleTaskStatus(t.id, 'done')}
-                        className="rounded border border-emerald-200 bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-800"
-                      >
-                        Mark Done
-                      </button>
+                      </div>
                     </div>
-                  </div>
-                ))}
-                {openTasks.length === 0 && <p className="text-xs text-slate-400">All clear — no pending tasks.</p>}
+                  ));
+                })()}
               </div>
             </div>
 
             <div className="rounded-xl border border-slate-200/80 bg-white p-5 shadow-sm">
               <h3 className="text-sm font-bold text-slate-900">Recent Daily Logs</h3>
               <div className="mt-3 space-y-2.5 max-h-72 overflow-y-auto">
-                {report.recentDailyLogs.slice(0, 8).map((log) => (
-                  <div key={log.id} className="rounded-lg border border-slate-100 bg-slate-50 p-2.5 text-xs">
-                    <div className="flex justify-between font-bold text-slate-800">
-                      <span>{log.empId}</span>
-                      <span className="text-slate-500">{log.date}</span>
+                {report.recentDailyLogs.slice(0, 8).map((log) => {
+                  const matchedEmp = report.employees.find(
+                    (e) => e.employee.id === log.employeeId || e.employee.empId === log.empId,
+                  );
+                  return (
+                    <div key={log.id} className="rounded-lg border border-slate-100 bg-slate-50 p-2.5 text-xs">
+                      <div className="flex justify-between font-bold text-slate-800">
+                        <span>{matchedEmp ? `${matchedEmp.employee.name} (${log.empId})` : log.empId}</span>
+                        <span className="text-slate-500">{log.date}</span>
+                      </div>
+                      <p className="mt-1 text-slate-700 line-clamp-3">{log.accomplishments}</p>
                     </div>
-                    <p className="mt-1 text-slate-700 line-clamp-3">{log.accomplishments}</p>
-                  </div>
-                ))}
+                  );
+                })}
                 {report.recentDailyLogs.length === 0 && (
                   <p className="text-xs text-slate-400">No daily logs submitted yet this month.</p>
                 )}
@@ -1630,7 +2199,11 @@ export default function KpiWorkflowClient() {
               <form onSubmit={handleSaveTargets} className="space-y-3">
                 <select
                   value={targetEmpId}
-                  onChange={(e) => setTargetEmpId(e.target.value)}
+                  onChange={(e) => {
+                    const nextId = e.target.value;
+                    setTargetEmpId(nextId);
+                    syncTargetInputsForEmployee(nextId, report);
+                  }}
                   className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-bold"
                 >
                   {report.employees.map((e) => (
@@ -1809,12 +2382,16 @@ export default function KpiWorkflowClient() {
               </button>
             </div>
 
-            {traceLoading || !traceData ? (
+            {traceError ? (
+              <div className="mt-6 rounded-xl border border-rose-200 bg-rose-50 p-4 text-xs font-semibold text-rose-800">
+                {traceError}
+              </div>
+            ) : traceLoading || !traceData ? (
               <div className="py-12 text-center text-sm text-slate-500">Loading employee activity stream…</div>
             ) : (
               <div className="mt-5 space-y-6">
                 {traceData.kpi && (
-                  <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                  <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
                     <div className="rounded-xl bg-slate-50 p-3">
                       <p className="text-[11px] text-slate-500">Total Score</p>
                       <p className="text-xl font-extrabold text-[#0f3a5c]">{traceData.kpi.score}/100</p>
@@ -1822,6 +2399,10 @@ export default function KpiWorkflowClient() {
                     <div className="rounded-xl bg-slate-50 p-3">
                       <p className="text-[11px] text-slate-500">Attendance</p>
                       <p className="text-xl font-extrabold text-emerald-700">{traceData.kpi.pillars.attendance}/25</p>
+                    </div>
+                    <div className="rounded-xl bg-slate-50 p-3">
+                      <p className="text-[11px] text-slate-500">Daily Log</p>
+                      <p className="text-xl font-extrabold text-amber-700">{traceData.kpi.pillars.discipline}/15</p>
                     </div>
                     <div className="rounded-xl bg-slate-50 p-3">
                       <p className="text-[11px] text-slate-500">CRM Activity</p>
@@ -1925,7 +2506,7 @@ export default function KpiWorkflowClient() {
                   </span>
                 </div>
 
-                <div className="mt-3 grid grid-cols-3 gap-2 text-center">
+                <div className="mt-3 grid grid-cols-1 sm:grid-cols-3 gap-2 text-center">
                   <div className="rounded-xl border border-emerald-100 bg-white p-2.5 shadow-2xs">
                     <span className="block text-[11px] font-semibold text-slate-500">Calls Logged</span>
                     <span className="text-lg font-bold text-emerald-700">

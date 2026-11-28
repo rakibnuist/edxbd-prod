@@ -23,7 +23,7 @@ async function buildLeadFlowSnapshot() {
   const todayIso = dhakaTodayIso();
   const dayStart = dhakaStartUtc(todayIso);
 
-  const [settings, employees, todayAttendances, openLeads, newLeads] = await Promise.all([
+  const [settings, employees, todayAttendances, openLeads, newLeads, todayAssignedEvents] = await Promise.all([
     getAllSettings(),
     prisma.employee.findMany({
       orderBy: [{ active: 'desc' }, { empId: 'asc' }],
@@ -45,10 +45,14 @@ async function buildLeadFlowSnapshot() {
     }),
     prisma.lead.findMany({
       where: { status: { notIn: CLOSED_LEAD_STATUSES } },
-      select: { assignedEmployeeId: true, status: true, updatedAt: true },
+      select: { assignedEmployeeId: true, status: true },
     }),
     prisma.lead.findMany({
-      where: { status: 'new' },
+      where: {
+        status: 'new',
+        isApplication: false,
+        leadMarket: { not: 'China' },
+      },
       select: {
         id: true,
         country: true,
@@ -57,6 +61,15 @@ async function buildLeadFlowSnapshot() {
         assignedEmployeeId: true,
         assignedTo: true,
       },
+    }),
+    prisma.activityEvent.findMany({
+      where: {
+        employeeId: { not: null },
+        leadId: { not: null },
+        type: { in: ['lead_created', 'lead_assigned'] },
+        createdAt: { gte: dayStart },
+      },
+      select: { employeeId: true, leadId: true },
     }),
   ]);
 
@@ -67,16 +80,22 @@ async function buildLeadFlowSnapshot() {
 
   const openByEmp = new Map<string, number>();
   const untouchedByEmp = new Map<string, number>();
-  const todayByEmp = new Map<string, number>();
+  const todayLeadSets = new Map<string, Set<string>>();
   for (const lead of openLeads) {
     if (!lead.assignedEmployeeId) continue;
     openByEmp.set(lead.assignedEmployeeId, (openByEmp.get(lead.assignedEmployeeId) || 0) + 1);
     if (lead.status === 'new') {
       untouchedByEmp.set(lead.assignedEmployeeId, (untouchedByEmp.get(lead.assignedEmployeeId) || 0) + 1);
     }
-    if (lead.updatedAt >= dayStart) {
-      todayByEmp.set(lead.assignedEmployeeId, (todayByEmp.get(lead.assignedEmployeeId) || 0) + 1);
+  }
+  for (const ev of todayAssignedEvents) {
+    if (!ev.employeeId || !ev.leadId) continue;
+    let set = todayLeadSets.get(ev.employeeId);
+    if (!set) {
+      set = new Set<string>();
+      todayLeadSets.set(ev.employeeId, set);
     }
+    set.add(ev.leadId);
   }
 
   const eligibleEmpIds = new Set<string>();
@@ -91,7 +110,7 @@ async function buildLeadFlowSnapshot() {
       checkedInToday: checkedInSet.has(emp.id),
       activeLeadsCount: openByEmp.get(emp.id) || 0,
       untouchedLeadsCount: untouchedByEmp.get(emp.id) || 0,
-      todayAssignedCount: todayByEmp.get(emp.id) || 0,
+      todayAssignedCount: todayLeadSets.get(emp.id)?.size || 0,
     };
   });
 
@@ -180,6 +199,7 @@ export async function POST(request: NextRequest) {
       return id;
     };
 
+    const claimedUserIds = new Set(existingEmployees.map((e) => e.userId).filter((id): id is string => Boolean(id)));
     const matchedIds = new Map<string, typeof THREE_OFFICE_COUNSELORS_PRESET[number]>();
 
     for (const preset of THREE_OFFICE_COUNSELORS_PRESET) {
@@ -187,21 +207,24 @@ export async function POST(request: NextRequest) {
         (e) => preset.match.test(e.name) || (e.email && preset.match.test(e.email)),
       );
       const matchedUser = users.find(
-        (u) => preset.match.test(u.name) || preset.match.test(u.email),
+        (u) => !claimedUserIds.has(u.id) && (preset.match.test(u.name) || preset.match.test(u.email)),
       );
 
       if (existing) {
+        const assignUserId = matchedUser && !existing.userId ? matchedUser.id : undefined;
+        if (assignUserId) claimedUserIds.add(assignUserId);
         const updated = await prisma.employee.update({
           where: { id: existing.id },
           data: {
             role: preset.role,
             team: preset.team,
             active: true,
-            ...(matchedUser && !existing.userId ? { userId: matchedUser.id } : {}),
+            ...(assignUserId ? { userId: assignUserId } : {}),
           },
         });
         matchedIds.set(updated.empId.toUpperCase(), preset);
       } else {
+        if (matchedUser) claimedUserIds.add(matchedUser.id);
         const created = await prisma.employee.create({
           data: {
             empId: allocEmpId(),

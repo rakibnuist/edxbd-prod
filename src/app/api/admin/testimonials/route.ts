@@ -2,8 +2,11 @@ import { NextRequest, NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
 import prisma from '@/lib/prisma';
 import { verifyLiveAdminUser } from '@/lib/auth-user';
+import { jsonBodyErrorResponse, readLimitedJson } from '@/lib/request-body';
+import { toSafeSitePathOrUrl } from '@/lib/safe-url';
 
-const forbidden = () => NextResponse.json({ error: 'Admin access required' }, { status: 403 });
+const NO_STORE = { 'Cache-Control': 'no-store, private' };
+const forbidden = () => NextResponse.json({ error: 'Admin access required' }, { status: 403, headers: NO_STORE });
 
 const optional = (value: unknown) => String(value || '').trim() || null;
 const dateOrNull = (value: unknown) => {
@@ -11,12 +14,19 @@ const dateOrNull = (value: unknown) => {
   const date = new Date(String(value));
   return Number.isNaN(date.getTime()) ? null : date;
 };
-// A story can go live once it has a photo, a name and the story text.
-const publicReady = (body: Record<string, unknown>) => Boolean(
-  optional(body.image) && optional(body.name || body.studentName || body.displayName) &&
-  optional(body.quote || body.content) && !dateOrNull(body.consentRevokedAt)
-);
-const testimonialData = (body: Record<string, unknown>) => ({
+// A story can go live once it has a valid photo, name, story text, and active (non-revoked, non-expired) consent.
+const publicReady = (body: Record<string, unknown>, safeImage: string | null) => {
+  const expiresAt = dateOrNull(body.consentExpiresAt);
+  const consentCurrent = !expiresAt || expiresAt >= new Date();
+  return Boolean(
+    safeImage &&
+      optional(body.name || body.studentName || body.displayName) &&
+      optional(body.quote || body.content) &&
+      !dateOrNull(body.consentRevokedAt) &&
+      consentCurrent,
+  );
+};
+const testimonialData = (body: Record<string, unknown>, safeImage: string | null) => ({
   studentName: String(body.name || body.studentName || body.displayName || 'Student').trim(),
   displayName: optional(body.displayName),
   content: String(body.quote || body.content || '').trim(),
@@ -24,7 +34,7 @@ const testimonialData = (body: Record<string, unknown>) => ({
   university: optional(body.university),
   program: optional(body.program),
   country: optional(body.country),
-  image: optional(body.image),
+  image: safeImage,
   rating: Math.min(5, Math.max(1, Number(body.rating) || 5)),
   featured: body.featured === true,
   academicProfile: optional(body.academicProfile),
@@ -39,7 +49,7 @@ const testimonialData = (body: Record<string, unknown>) => ({
   consentExpiresAt: dateOrNull(body.consentExpiresAt),
   consentRevokedAt: dateOrNull(body.consentRevokedAt),
   consentImageApproved: body.consentImageApproved === true,
-  isPublished: (body.isActive ?? body.isPublished) === true && publicReady(body),
+  isPublished: (body.isActive ?? body.isPublished) === true && publicReady(body, safeImage),
 });
 
 export async function GET(request: NextRequest) {
@@ -57,12 +67,12 @@ export async function GET(request: NextRequest) {
       isActive: t.isPublished ?? true,
     }));
 
-    return NextResponse.json(testimonials);
+    return NextResponse.json(testimonials, { headers: NO_STORE });
   } catch (error) {
     console.error('Fetch testimonials error:', error);
     return NextResponse.json(
       { error: 'Failed to fetch testimonials' },
-      { status: 500 }
+      { status: 500, headers: NO_STORE }
     );
   }
 }
@@ -70,13 +80,24 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     if (!(await verifyLiveAdminUser(request))) return forbidden();
-    const body = await request.json() as Record<string, unknown>;
-    if ((body.isActive ?? body.isPublished) === true && !publicReady(body)) {
-      return NextResponse.json({ error: 'Add the real photo, written-consent evidence, consent date and photo approval before publishing.' }, { status: 400 });
+    const body = await readLimitedJson(request, 64 * 1024);
+    const rawImage = optional(body.image);
+    const safeImage = rawImage ? toSafeSitePathOrUrl(rawImage) : null;
+    if (rawImage && !safeImage) {
+      return NextResponse.json(
+        { error: 'Photo must be a safe site path (/...) or an http(s) URL.' },
+        { status: 400, headers: NO_STORE },
+      );
+    }
+    if ((body.isActive ?? body.isPublished) === true && !publicReady(body, safeImage)) {
+      return NextResponse.json(
+        { error: 'Add a real student photo, name, and story (without revoked or expired consent) before publishing.' },
+        { status: 400, headers: NO_STORE },
+      );
     }
 
     const testimonial = await prisma.testimonial.create({
-      data: testimonialData(body),
+      data: testimonialData(body, safeImage),
     });
 
     const formatted = {
@@ -91,12 +112,14 @@ export async function POST(request: NextRequest) {
     revalidatePath('/success-stories');
     revalidatePath('/proof-library');
 
-    return NextResponse.json(formatted, { status: 201 });
+    return NextResponse.json(formatted, { status: 201, headers: NO_STORE });
   } catch (error) {
+    const bodyErr = jsonBodyErrorResponse(error);
+    if (bodyErr) return bodyErr;
     console.error('Create testimonial error:', error);
     return NextResponse.json(
       { error: 'Failed to create testimonial' },
-      { status: 500 }
+      { status: 500, headers: NO_STORE }
     );
   }
 }

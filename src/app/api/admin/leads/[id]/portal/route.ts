@@ -1,6 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { FINANCE_ACTIVITY_TYPES, canAccessFinanceRole } from '@/lib/auth';
-import { canAccessLeadScope, verifyLiveAdminUser, verifyLiveStaffUser } from '@/lib/auth-user';
+import { FINANCE_ACTIVITY_TYPES, canAccessFinanceRole, isAdminRole } from '@/lib/auth';
+import {
+  canAccessLeadScope,
+  findLinkedEmployeeForUser,
+  verifyLiveAdminUser,
+  verifyLiveStaffUser,
+} from '@/lib/auth-user';
 import { generatePublicToken, logActivityEvent } from '@/lib/crm-operations';
 import { getDocsTemplateForDestination } from '@/lib/application-tracker';
 import { jsonBodyErrorResponse, readLimitedJson } from '@/lib/request-body';
@@ -13,17 +18,27 @@ const ALLOWED_UNI_STATUSES = new Set([
 ]);
 const ALLOWED_DOC_STATUSES = new Set(['pending', 'received', 'verified', 'rejected', 'not_required']);
 
+async function resolvePortalActor(request: NextRequest) {
+  const admin = await verifyLiveAdminUser(request);
+  const staff = admin ? null : await verifyLiveStaffUser(request);
+  const actor = admin || staff;
+  if (!actor) return null;
+  const employee = staff
+    ? staff.employee
+    : await findLinkedEmployeeForUser(actor.userId, actor.email);
+  return { ...actor, employee };
+}
+
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
   try {
-    const admin = await verifyLiveAdminUser(request);
-    const staff = admin ? null : await verifyLiveStaffUser(request);
-    const actor = admin || staff;
+    const actor = await resolvePortalActor(request);
     if (!actor) {
       return NextResponse.json({ message: 'Unauthorized - Staff access required' }, { status: 403 });
     }
+    const isAdmin = isAdminRole(actor.role);
     const { id } = await params;
     const lead = await prisma.lead.findUnique({
       where: { id },
@@ -51,10 +66,10 @@ export async function GET(
       },
     });
     if (!lead) return NextResponse.json({ error: 'Lead not found' }, { status: 404 });
-    if (!admin && lead.leadMarket === 'China') {
+    if (!isAdmin && lead.leadMarket === 'China') {
       return NextResponse.json({ message: 'Unauthorized - China market data is restricted' }, { status: 403 });
     }
-    if (!canAccessLeadScope({ role: actor.role, employee: staff?.employee }, lead)) {
+    if (!canAccessLeadScope({ role: actor.role, employee: actor.employee }, lead)) {
       return NextResponse.json({ message: 'Unauthorized - Lead assigned to another counselor' }, { status: 403 });
     }
 
@@ -86,12 +101,12 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> },
 ) {
   try {
-    const admin = await verifyLiveAdminUser(request);
-    const staff = admin ? null : await verifyLiveStaffUser(request);
-    const decoded = admin || staff;
+    const decoded = await resolvePortalActor(request);
     if (!decoded) {
       return NextResponse.json({ message: 'Unauthorized - Staff access required' }, { status: 403 });
     }
+    const isAdmin = isAdminRole(decoded.role);
+    const actorEmployeeId = decoded.employee?.id || null;
     const { id } = await params;
     const lead = await prisma.lead.findUnique({
       where: { id },
@@ -106,10 +121,10 @@ export async function POST(
       },
     });
     if (!lead) return NextResponse.json({ error: 'Lead not found' }, { status: 404 });
-    if (!admin && lead.leadMarket === 'China') {
+    if (!isAdmin && lead.leadMarket === 'China') {
       return NextResponse.json({ message: 'Unauthorized - China market data is restricted' }, { status: 403 });
     }
-    if (!canAccessLeadScope({ role: decoded.role, employee: staff?.employee }, lead)) {
+    if (!canAccessLeadScope({ role: decoded.role, employee: decoded.employee }, lead)) {
       return NextResponse.json({ message: 'Unauthorized - Lead assigned to another counselor' }, { status: 403 });
     }
 
@@ -185,7 +200,7 @@ export async function POST(
         type: 'uni_app_status',
         actorName: decoded.email,
         actorUserId: decoded.userId,
-        employeeId: lead.assignedEmployeeId,
+        employeeId: actorEmployeeId,
         leadId: id,
         leadName: lead.name,
         toValue: `${university} (${status})`,
@@ -215,7 +230,7 @@ export async function POST(
         type: action === 'add_note' ? 'note' : 'reply_to_student',
         actorName: decoded.email,
         actorUserId: decoded.userId,
-        employeeId: lead.assignedEmployeeId,
+        employeeId: actorEmployeeId,
         leadId: id,
         leadName: lead.name,
         details: message,
@@ -236,22 +251,22 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> },
 ) {
   try {
-    const admin = await verifyLiveAdminUser(request);
-    const staff = admin ? null : await verifyLiveStaffUser(request);
-    const decoded = admin || staff;
+    const decoded = await resolvePortalActor(request);
     if (!decoded) {
       return NextResponse.json({ message: 'Unauthorized - Staff access required' }, { status: 403 });
     }
+    const isAdmin = isAdminRole(decoded.role);
+    const actorEmployeeId = decoded.employee?.id || null;
     const { id } = await params;
     const lead = await prisma.lead.findUnique({
       where: { id },
       select: { id: true, name: true, leadMarket: true, assignedTo: true, assignedEmployeeId: true },
     });
     if (!lead) return NextResponse.json({ error: 'Lead not found' }, { status: 404 });
-    if (!admin && lead.leadMarket === 'China') {
+    if (!isAdmin && lead.leadMarket === 'China') {
       return NextResponse.json({ message: 'Unauthorized - China market data is restricted' }, { status: 403 });
     }
-    if (!canAccessLeadScope({ role: decoded.role, employee: staff?.employee }, lead)) {
+    if (!canAccessLeadScope({ role: decoded.role, employee: decoded.employee }, lead)) {
       return NextResponse.json({ message: 'Unauthorized - Lead assigned to another counselor' }, { status: 403 });
     }
 
@@ -280,7 +295,7 @@ export async function PATCH(
           type: 'uni_app_status',
           actorName: decoded.email,
           actorUserId: decoded.userId,
-          employeeId: lead.assignedEmployeeId,
+          employeeId: actorEmployeeId,
           leadId: id,
           leadName: lead.name,
           fromValue: `${existing.university}: ${existing.status}`,
@@ -317,7 +332,7 @@ export async function PATCH(
         type: 'document_updated',
         actorName: decoded.email,
         actorUserId: decoded.userId,
-        employeeId: lead.assignedEmployeeId,
+        employeeId: actorEmployeeId,
         leadId: id,
         leadName: lead.name,
         fromValue: `${existing.docType}: ${existing.status}`,
@@ -339,12 +354,12 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> },
 ) {
   try {
-    const admin = await verifyLiveAdminUser(request);
-    const staff = admin ? null : await verifyLiveStaffUser(request);
-    const decoded = admin || staff;
+    const decoded = await resolvePortalActor(request);
     if (!decoded) {
       return NextResponse.json({ message: 'Unauthorized - Staff access required' }, { status: 403 });
     }
+    const isAdmin = isAdminRole(decoded.role);
+    const actorEmployeeId = decoded.employee?.id || null;
 
     const { id } = await params;
     const lead = await prisma.lead.findUnique({
@@ -352,10 +367,10 @@ export async function DELETE(
       select: { id: true, name: true, leadMarket: true, assignedTo: true, assignedEmployeeId: true },
     });
     if (!lead) return NextResponse.json({ error: 'Lead not found' }, { status: 404 });
-    if (!admin && lead.leadMarket === 'China') {
+    if (!isAdmin && lead.leadMarket === 'China') {
       return NextResponse.json({ message: 'Unauthorized - China market data is restricted' }, { status: 403 });
     }
-    if (!canAccessLeadScope({ role: decoded.role, employee: staff?.employee }, lead)) {
+    if (!canAccessLeadScope({ role: decoded.role, employee: decoded.employee }, lead)) {
       return NextResponse.json({ message: 'Unauthorized - Lead assigned to another counselor' }, { status: 403 });
     }
 
@@ -374,7 +389,7 @@ export async function DELETE(
         type: 'uni_app_removed',
         actorName: decoded.email,
         actorUserId: decoded.userId,
-        employeeId: lead.assignedEmployeeId,
+        employeeId: actorEmployeeId,
         leadId: id,
         leadName: lead.name,
         fromValue: existing.university,

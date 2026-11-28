@@ -1,7 +1,11 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { canAccessLeadScope, verifyLiveAdminUser, verifyLiveStaffUser } from '@/lib/auth-user';
-import { logActivityEvent } from '@/lib/crm-operations';
+import { NextRequest, NextResponse, after } from 'next/server';
+import { FINANCE_ACTIVITY_TYPES, canAccessFinanceRole } from '@/lib/auth';
+import { canAccessLeadScope, verifyLiveStaffUser } from '@/lib/auth-user';
+import { generatePublicToken } from '@/lib/crm-operations';
+import { generateNextLeadRef, getDocsTemplateForDestination } from '@/lib/application-tracker';
 import { dhakaTimeNow, dhakaTodayIso } from '@/lib/kpi-workflow';
+import { isLeadStatus } from '@/lib/lead-workflow';
+import { sendCrmStage } from '@/lib/meta-crm-events';
 import { jsonBodyErrorResponse, readLimitedJson } from '@/lib/request-body';
 import prisma from '@/lib/prisma';
 
@@ -10,9 +14,7 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> },
 ) {
   try {
-    const admin = await verifyLiveAdminUser(request);
-    const staff = admin ? null : await verifyLiveStaffUser(request);
-    const actor = admin || staff;
+    const actor = await verifyLiveStaffUser(request);
 
     if (!actor) {
       return NextResponse.json({ message: 'Unauthorized - Staff access required' }, { status: 403 });
@@ -34,12 +36,16 @@ export async function GET(
       return NextResponse.json({ error: 'Lead not found' }, { status: 404 });
     }
 
-    if (!canAccessLeadScope({ role: actor.role, employee: staff?.employee }, lead)) {
+    if (!canAccessLeadScope(actor, lead)) {
       return NextResponse.json({ message: 'Unauthorized - Lead is assigned to another counselor' }, { status: 403 });
     }
 
+    const canSeeFinance = canAccessFinanceRole(actor.role);
     const activities = await prisma.activityEvent.findMany({
-      where: { leadId: id },
+      where: {
+        leadId: id,
+        ...(canSeeFinance ? {} : { type: { notIn: [...FINANCE_ACTIVITY_TYPES] } }),
+      },
       orderBy: { createdAt: 'desc' },
       take: 50,
       select: {
@@ -66,9 +72,7 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> },
 ) {
   try {
-    const admin = await verifyLiveAdminUser(request);
-    const staff = admin ? null : await verifyLiveStaffUser(request);
-    const actor = admin || staff;
+    const actor = await verifyLiveStaffUser(request);
 
     if (!actor) {
       return NextResponse.json({ message: 'Unauthorized - Staff access required' }, { status: 403 });
@@ -83,18 +87,35 @@ export async function POST(
       return NextResponse.json({ error: 'Lead not found' }, { status: 404 });
     }
 
-    if (!canAccessLeadScope({ role: actor.role, employee: staff?.employee }, lead)) {
+    if (!canAccessLeadScope(actor, lead)) {
       return NextResponse.json({ message: 'Unauthorized - Lead is assigned to another counselor' }, { status: 403 });
     }
 
     const body = await readLimitedJson(request, 32 * 1024);
-    const outcome = typeof body.outcome === 'string' ? body.outcome.trim() : 'Call Completed';
-    const summary = typeof body.summary === 'string' ? body.summary.trim() : '';
-    const nextFollowup = typeof body.nextFollowup === 'string' && body.nextFollowup.trim() ? body.nextFollowup.trim() : null;
-    const newStatus = typeof body.newStatus === 'string' && body.newStatus.trim() ? body.newStatus.trim() : null;
-    const channel = typeof body.channel === 'string' ? body.channel.trim() : 'Phone Call';
+    const outcome = typeof body.outcome === 'string' && body.outcome.trim()
+      ? body.outcome.trim().slice(0, 120)
+      : 'Call Completed';
+    const summary = typeof body.summary === 'string' ? body.summary.trim().slice(0, 2000) : '';
+    const rawFollowup = typeof body.nextFollowup === 'string' ? body.nextFollowup.trim() : '';
+    let nextFollowup: string | null = null;
+    if (rawFollowup) {
+      const normalized = rawFollowup.replace(' ', 'T');
+      if (!/^\d{4}-\d{2}-\d{2}(?:T\d{2}:\d{2}(?::\d{2})?)?$/.test(normalized)) {
+        return NextResponse.json({ error: 'nextFollowup must be YYYY-MM-DD or YYYY-MM-DDTHH:mm.' }, { status: 400 });
+      }
+      nextFollowup = normalized.slice(0, 16);
+    }
 
-    const actorDisplay = staff?.employee?.name || actor.email.split('@')[0];
+    const rawStatus = typeof body.newStatus === 'string' && body.newStatus.trim() ? body.newStatus.trim() : null;
+    if (rawStatus && !isLeadStatus(rawStatus)) {
+      return NextResponse.json({ error: 'Choose a supported lead status.' }, { status: 400 });
+    }
+    const newStatus = rawStatus;
+    const channel = typeof body.channel === 'string' && body.channel.trim()
+      ? body.channel.trim().slice(0, 60)
+      : 'Phone Call';
+
+    const actorDisplay = actor.employee?.name || actor.name || actor.email.split('@')[0];
     const today = dhakaTodayIso();
     const timeNow = dhakaTimeNow();
 
@@ -106,7 +127,7 @@ export async function POST(
       : formattedNote;
 
     const leadUpdateData: Record<string, unknown> = {
-      notes: updatedNotes.slice(0, 15000),
+      notes: updatedNotes.slice(0, 12000),
       updatedAt: new Date(),
     };
 
@@ -114,8 +135,29 @@ export async function POST(
       leadUpdateData.nextFollowup = nextFollowup;
     }
 
-    if (newStatus && newStatus !== lead.status) {
+    // Do not downgrade an active Application Tracker file back to a pre-application lead status
+    const isAppPromotion =
+      newStatus &&
+      ['application_started', 'application_submitted', 'admission_received', 'visa_applied', 'visa_approved'].includes(
+        newStatus,
+      );
+
+    if (newStatus && newStatus !== lead.status && (!lead.isApplication || isAppPromotion)) {
       leadUpdateData.status = newStatus;
+      if (isAppPromotion && !lead.isApplication) {
+        leadUpdateData.isApplication = true;
+        if (!lead.leadRef) {
+          const refs = await prisma.lead.findMany({ where: { leadRef: { not: null } }, select: { leadRef: true } });
+          leadUpdateData.leadRef = generateNextLeadRef(refs.map((r) => r.leadRef));
+        }
+        if (!lead.publicToken) {
+          leadUpdateData.publicToken = generatePublicToken();
+          leadUpdateData.publicEnabled = true;
+        }
+        if (!lead.applicationStage || lead.applicationStage === 'documents') {
+          leadUpdateData.applicationStage = 'documents';
+        }
+      }
     }
 
     const [updatedLead, activity] = await prisma.$transaction([
@@ -128,7 +170,7 @@ export async function POST(
           type: 'call_logged',
           actorName: actorDisplay,
           actorUserId: actor.userId,
-          employeeId: staff?.employee?.id || lead.assignedEmployeeId || null,
+          employeeId: actor.employee?.id || null,
           leadId: lead.id,
           leadName: lead.name,
           toValue: outcome,
@@ -138,10 +180,33 @@ export async function POST(
       }),
     ]);
 
+    if (leadUpdateData.isApplication === true && !lead.isApplication) {
+      const docCount = await prisma.leadDocument.count({ where: { leadId: lead.id } });
+      if (docCount === 0) {
+        const templateDocs = getDocsTemplateForDestination(lead.country);
+        await prisma.leadDocument.createMany({
+          data: templateDocs.map((docType) => ({
+            leadId: lead.id,
+            docType,
+            status: 'pending',
+            updatedBy: actor.email,
+          })),
+        }).catch(() => {});
+      }
+    }
+
+    if (updatedLead.status !== lead.status) {
+      after(() => sendCrmStage(updatedLead, updatedLead.status));
+    }
+
+    const safeLead = canAccessFinanceRole(actor.role)
+      ? updatedLead
+      : (({ serviceFee: _sf, paidAmount: _pa, deposit: _dep, ...rest }) => rest)(updatedLead);
+
     return NextResponse.json({
       success: true,
       activity,
-      lead: updatedLead,
+      lead: safeLead,
     }, { headers: { 'Cache-Control': 'no-store, private' } });
   } catch (error) {
     const bodyError = jsonBodyErrorResponse(error);

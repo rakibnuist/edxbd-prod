@@ -26,6 +26,8 @@ type Props = {
   leads: LeadRecord[];
   employees?: EmployeeOption[];
   initialLeadId?: string | null;
+  initialQueue?: string | null;
+  initialSearch?: string | null;
   loading: boolean;
   importing?: boolean;
   syncingMeta?: boolean;
@@ -36,6 +38,7 @@ type Props = {
   onSyncMeta?: () => Promise<void>;
   onAutoAssign?: (scope: 'new' | 'untouched_pool' | 'untouched_rebalance' | 'all_active') => Promise<void>;
   onUpdate: (id: string, data: Record<string, unknown>) => Promise<boolean>;
+  onLocalLeadPatch?: (id: string, patch: Partial<LeadRecord>) => void;
   onDelete?: (id: string) => Promise<boolean>;
   isCounselor?: boolean;
   onEnsureToken?: (id: string) => Promise<string | null>;
@@ -43,6 +46,12 @@ type Props = {
   onCopilot?: (id: string, options: { language: FitResponseLanguage; focus?: string }) => Promise<{ data?: LeadCopilotResult; error?: string }>;
   onImportCsv?: (file: File) => void;
 };
+
+const VALID_QUEUES = new Set<LeadQueue>(['all', 'new', 'follow_up', 'no_response', 'in_progress', 'closed']);
+function normalizeInitialQueue(raw?: string | null): LeadQueue {
+  if (raw && VALID_QUEUES.has(raw as LeadQueue)) return raw as LeadQueue;
+  return 'all';
+}
 
 const control = 'min-h-10 rounded-lg border border-gray-300 bg-white px-3 text-sm text-gray-900 outline-none focus-visible:ring-2 focus-visible:ring-[#12436b] disabled:cursor-wait disabled:opacity-60';
 const quietButton = `${control} inline-flex items-center justify-center gap-2 hover:bg-gray-50 disabled:cursor-not-allowed`;
@@ -154,6 +163,7 @@ function Detail({
   saving,
   onClose,
   onUpdate,
+  onLocalLeadPatch,
   onDelete,
   onEnsureToken,
   onTokenChanged,
@@ -164,6 +174,7 @@ function Detail({
   saving: boolean;
   onClose: () => void;
   onUpdate: Props['onUpdate'];
+  onLocalLeadPatch?: Props['onLocalLeadPatch'];
   onDelete?: Props['onDelete'];
   onEnsureToken?: Props['onEnsureToken'];
   onTokenChanged?: Props['onTokenChanged'];
@@ -171,6 +182,12 @@ function Detail({
 }) {
   const dialog = useRef<HTMLDialogElement>(null);
   const [notes, setNotes] = useState(lead.notes || '');
+  const [prevLeadNotes, setPrevLeadNotes] = useState(lead.notes || '');
+  if ((lead.notes || '') !== prevLeadNotes) {
+    const incoming = lead.notes || '';
+    setPrevLeadNotes(incoming);
+    if (notes === prevLeadNotes) setNotes(incoming);
+  }
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [noteError, setNoteError] = useState(false);
@@ -375,9 +392,10 @@ function Detail({
             phone={lead.phone}
             currentStatus={lead.status}
             currentFollowup={lead.nextFollowup}
+            isApplication={Boolean(lead.isApplication)}
             onLeadUpdated={(updated) => {
-              if (updated.notes) setNotes(updated.notes);
-              onUpdate(lead.id, updated as any);
+              if (updated.notes !== undefined) setNotes(updated.notes || '');
+              onLocalLeadPatch?.(lead.id, updated);
             }}
           />
         </section>
@@ -451,10 +469,74 @@ function Detail({
   );
 }
 
+function QuickFollowupDialog({
+  lead,
+  saving,
+  onClose,
+  onUpdate,
+}: {
+  lead: LeadRecord;
+  saving: boolean;
+  onClose: () => void;
+  onUpdate: Props['onUpdate'];
+}) {
+  const dialogRef = useRef<HTMLDialogElement>(null);
+  useEffect(() => {
+    const node = dialogRef.current;
+    if (node && !node.open) node.showModal();
+    return () => {
+      if (node?.open) node.close();
+    };
+  }, []);
+
+  return (
+    <dialog
+      ref={dialogRef}
+      onCancel={onClose}
+      aria-labelledby="quick-followup-modal-title"
+      className="fixed inset-0 z-50 m-auto max-h-[92vh] w-[calc(100%-1.5rem)] max-w-lg overflow-y-auto rounded-2xl border border-slate-200 bg-white p-4 shadow-2xl backdrop:bg-black/50 sm:p-6"
+    >
+      <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+        <div className="flex items-center gap-2.5">
+          <span className="grid size-9 place-items-center rounded-lg bg-blue-50 text-[#12436b]">
+            <CalendarClock size={18} />
+          </span>
+          <div>
+            <h3 id="quick-followup-modal-title" className="text-sm font-bold text-slate-900">
+              Schedule Re-contact
+            </h3>
+            <p className="text-xs text-slate-500">
+              {lead.name} · {lead.phone || lead.country}
+            </p>
+          </div>
+        </div>
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label="Close scheduling modal"
+          className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
+        >
+          <X size={18} />
+        </button>
+      </div>
+      <div className="mt-4">
+        <FollowupScheduler
+          lead={lead}
+          saving={saving}
+          onUpdate={onUpdate}
+          onClose={onClose}
+        />
+      </div>
+    </dialog>
+  );
+}
+
 export default function LeadWorkspace({
   leads,
   employees = [],
   initialLeadId = null,
+  initialQueue = null,
+  initialSearch = null,
   loading,
   importing,
   syncingMeta,
@@ -465,6 +547,7 @@ export default function LeadWorkspace({
   onSyncMeta,
   onAutoAssign,
   onUpdate,
+  onLocalLeadPatch,
   onDelete,
   onEnsureToken,
   onTokenChanged,
@@ -474,8 +557,8 @@ export default function LeadWorkspace({
 }: Props) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [viewMode, setViewMode] = useState<'table' | 'kanban'>('table');
-  const [search, setSearch] = useState('');
-  const [queue, setQueue] = useState<LeadQueue>('all');
+  const [search, setSearch] = useState(initialSearch || '');
+  const [queue, setQueue] = useState<LeadQueue>(() => normalizeInitialQueue(initialQueue));
   const [status, setStatus] = useState('all');
   const [country, setCountry] = useState('all');
   const [source, setSource] = useState('all');
@@ -486,6 +569,23 @@ export default function LeadWorkspace({
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [page, setPage] = useState(1);
   const [selectedId, setSelectedId] = useState<string | null>(initialLeadId);
+  const [prevUrlParams, setPrevUrlParams] = useState({ initialLeadId, initialQueue, initialSearch });
+  if (
+    prevUrlParams.initialLeadId !== initialLeadId ||
+    prevUrlParams.initialQueue !== initialQueue ||
+    prevUrlParams.initialSearch !== initialSearch
+  ) {
+    setPrevUrlParams({ initialLeadId, initialQueue, initialSearch });
+    if (initialLeadId !== prevUrlParams.initialLeadId) setSelectedId(initialLeadId);
+    if (initialQueue !== prevUrlParams.initialQueue) {
+      setQueue(normalizeInitialQueue(initialQueue));
+      setPage(1);
+    }
+    if (initialSearch !== prevUrlParams.initialSearch) {
+      setSearch(initialSearch || '');
+      setPage(1);
+    }
+  }
   const [schedulingLead, setSchedulingLead] = useState<LeadRecord | null>(null);
   const [draggingId, setDraggingId] = useState<string | null>(null);
 
@@ -548,12 +648,16 @@ export default function LeadWorkspace({
     ];
     const escapeCsv = (val: string | number | null | undefined) => {
       if (val === null || val === undefined || val === '') return '""';
-      return `"${String(val).replace(/"/g, '""')}"`;
+      const raw = String(val);
+      const safe = /^[=+\-@\t\r]/.test(raw) ? `'${raw}` : raw;
+      return `"${safe.replace(/"/g, '""')}"`;
     };
+    const dhakaDay = (d: Date) =>
+      new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Dhaka' }).format(d);
     const origin = typeof window !== 'undefined' ? window.location.origin : 'https://eduexpressint.com';
     const csvRows = filtered.map((l) => [
       escapeCsv(l.id),
-      escapeCsv(new Date(l.createdAt).toISOString().split('T')[0]),
+      escapeCsv(dhakaDay(new Date(l.createdAt))),
       escapeCsv(l.name),
       escapeCsv(l.phone),
       escapeCsv(l.email),
@@ -576,7 +680,7 @@ export default function LeadWorkspace({
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `eduexpress-leads-${queue}-${new Date().toISOString().slice(0, 10)}.csv`;
+    link.download = `eduexpress-leads-${queue}-${dhakaDay(new Date())}.csv`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -753,7 +857,7 @@ export default function LeadWorkspace({
             { id: 'positive_clients' as LeadQuickPreset, label: '🌟 Positive / Qualified', icon: FolderCheck },
             { id: 'paid_leads' as LeadQuickPreset, label: '🟣 Paid Ads (Meta)', icon: null },
             { id: 'organic_leads' as LeadQuickPreset, label: '🟢 Organic Web', icon: null },
-            { id: 'followup_due' as LeadQuickPreset, label: 'Follow-ups Due Today', icon: CalendarClock },
+            { id: 'followup_today' as LeadQuickPreset, label: 'Follow-ups Due Today', icon: CalendarClock },
             { id: 'followup_overdue' as LeadQuickPreset, label: 'Overdue Follow-ups', icon: AlertCircle },
             { id: 'followup_upcoming' as LeadQuickPreset, label: 'Upcoming Follow-ups', icon: Clock },
             { id: 'china_hot' as LeadQuickPreset, label: 'China Hot (GPA >= 3.5)', icon: Flame },
@@ -1304,6 +1408,7 @@ export default function LeadWorkspace({
           saving={savingId === selected.id}
           onClose={() => setSelectedId(null)}
           onUpdate={onUpdate}
+          onLocalLeadPatch={onLocalLeadPatch}
           onDelete={onDelete}
           onEnsureToken={onEnsureToken}
           onTokenChanged={onTokenChanged}
@@ -1312,48 +1417,13 @@ export default function LeadWorkspace({
       )}
 
       {currentSchedulingLead && (
-        <dialog
-          open
-          onCancel={() => setSchedulingLead(null)}
-          aria-labelledby="quick-followup-modal-title"
-          className="fixed inset-0 z-50 m-auto max-h-[92vh] w-[calc(100%-1.5rem)] max-w-lg overflow-y-auto rounded-2xl border border-slate-200 bg-white p-4 shadow-2xl backdrop:bg-black/50 sm:p-6"
-        >
-          <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-            <div className="flex items-center gap-2.5">
-              <span className="grid size-9 place-items-center rounded-lg bg-blue-50 text-[#12436b]">
-                <CalendarClock size={18} />
-              </span>
-              <div>
-                <h3 id="quick-followup-modal-title" className="text-sm font-bold text-slate-900">
-                  Schedule Re-contact
-                </h3>
-                <p className="text-xs text-slate-500">
-                  {currentSchedulingLead.name} · {currentSchedulingLead.phone || currentSchedulingLead.country}
-                </p>
-              </div>
-            </div>
-            <button
-              type="button"
-              onClick={() => setSchedulingLead(null)}
-              aria-label="Close scheduling modal"
-              className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
-            >
-              <X size={18} />
-            </button>
-          </div>
-          <div className="mt-4">
-            <FollowupScheduler
-              lead={currentSchedulingLead}
-              saving={savingId === currentSchedulingLead.id}
-              onUpdate={async (id, data) => {
-                const ok = await onUpdate(id, data);
-                if (ok) setSchedulingLead(null);
-                return ok;
-              }}
-              onClose={() => setSchedulingLead(null)}
-            />
-          </div>
-        </dialog>
+        <QuickFollowupDialog
+          key={currentSchedulingLead.id}
+          lead={currentSchedulingLead}
+          saving={savingId === currentSchedulingLead.id}
+          onClose={() => setSchedulingLead(null)}
+          onUpdate={onUpdate}
+        />
       )}
     </div>
   );

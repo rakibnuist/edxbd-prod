@@ -52,6 +52,13 @@ export async function GET(request: NextRequest) {
   }
 }
 
+function isValidIsoCalendarDate(value: string): boolean {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+  const [y, m, d] = value.split('-').map(Number);
+  const dt = new Date(Date.UTC(y, m - 1, d));
+  return dt.getUTCFullYear() === y && dt.getUTCMonth() === m - 1 && dt.getUTCDate() === d;
+}
+
 export async function POST(request: NextRequest) {
   try {
     const admin = await verifyLiveAdminUser(request);
@@ -82,24 +89,40 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Valid employee is required.' }, { status: 400 });
     }
 
-    const date = isAdmin && typeof body.date === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(body.date)
-      ? body.date
+    const rawDate = typeof body.date === 'string' ? body.date.trim() : '';
+    const date = isAdmin && rawDate && isValidIsoCalendarDate(rawDate)
+      ? rawDate
       : dhakaTodayIso();
     const mode = typeof body.mode === 'string' ? body.mode : 'checkin';
     const existing = await prisma.attendance.findUnique({
       where: { empId_date: { empId: employee.empId, date } },
     });
 
-    const nowTime = dhakaTimeNow();
-    let checkIn = isAdmin && typeof body.checkIn === 'string' ? body.checkIn.trim().slice(0, 10) : existing?.checkIn || null;
-    let checkOut = isAdmin && typeof body.checkOut === 'string' ? body.checkOut.trim().slice(0, 10) : existing?.checkOut || null;
-    let status = isAdmin && typeof body.status === 'string' ? body.status.trim().slice(0, 30) : existing?.status || 'Present';
+    // Prevent duplicate check-in POST from overwriting original GPS audit trail or bypassing strictLocation
+    if (mode === 'checkin' && existing?.checkIn) {
+      return NextResponse.json(
+        {
+          ...existing,
+          alreadyCheckedIn: true,
+          locationStatus: resolveAttendanceLocationStatus(existing.source, existing.notes),
+        },
+        { headers: { 'Cache-Control': 'no-store, private' } },
+      );
+    }
 
+    const nowTime = dhakaTimeNow();
+    let checkIn = isAdmin && typeof body.checkIn === 'string' ? body.checkIn.trim().slice(0, 10) || null : existing?.checkIn || null;
+    let checkOut = isAdmin && typeof body.checkOut === 'string' ? body.checkOut.trim().slice(0, 10) || null : existing?.checkOut || null;
+    let status = isAdmin && typeof body.status === 'string' && body.status.trim() ? body.status.trim().slice(0, 30) : existing?.status || 'Present';
+
+    // EduExpress Dhaka HQ opens at 11:00 AM (Sat–Thu); grace period until 11:15 AM
     if (mode === 'checkin' && !checkIn) {
       checkIn = nowTime;
-      status = nowTime > '10:20' ? 'Late' : 'Present';
+      status = nowTime > '11:15' ? 'Late' : 'Present';
     } else if (mode === 'checkout') {
-      if (!checkIn) checkIn = nowTime;
+      if (!existing?.checkIn && !checkIn) {
+        return NextResponse.json({ error: 'Cannot check out before checking in for today.' }, { status: 400 });
+      }
       checkOut = nowTime;
     }
 
@@ -134,7 +157,7 @@ export async function POST(request: NextRequest) {
         : appendCheckInLocationNote(rawUserNote ?? existing?.notes, location);
 
     const hoursWorked = computeHoursWorked(checkIn, checkOut);
-    const preserveCheckInLocationOnCheckout = mode === 'checkout' && Boolean(existing?.checkIn);
+    const preserveExistingLocation = mode === 'checkout' && Boolean(existing?.checkIn);
     const saved = await prisma.attendance.upsert({
       where: { empId_date: { empId: employee.empId, date } },
       update: {
@@ -148,7 +171,7 @@ export async function POST(request: NextRequest) {
           ? { source: nextSource, notes: computedNotes }
           : mode === 'manual'
             ? { source: 'manual', notes: computedNotes }
-            : preserveCheckInLocationOnCheckout
+            : preserveExistingLocation
               ? {}
               : { source: nextSource, notes: computedNotes }),
       },
@@ -166,17 +189,19 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    if (!existing) {
+    if (!existing?.checkIn && saved.checkIn) {
       void logActivityEvent({
         type: 'attendance_in',
         actorName: employee.name,
-        actorUserId: decoded.userId,
+        actorUserId: employee.userId || (isAdmin ? null : decoded.userId),
         employeeId: employee.id,
-        toValue: `${status} (${checkIn || date})`,
+        toValue: `${status} (${saved.checkIn})`,
         details:
-          location.latitude !== null && location.longitude !== null
-            ? `${location.locationLabel} (${location.latitude}, ${location.longitude})`
-            : location.locationLabel,
+          mode === 'manual'
+            ? 'Manual Admin Entry'
+            : location.latitude !== null && location.longitude !== null
+              ? `${location.locationLabel} (${location.latitude}, ${location.longitude})`
+              : location.locationLabel,
       });
     }
 

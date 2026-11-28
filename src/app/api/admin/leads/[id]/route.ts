@@ -55,13 +55,19 @@ async function applyLeadUpdateAndLog(
   id: string,
   validatedData: NonNullable<ReturnType<typeof validateLeadUpdate>['data']>,
   actor: { userId: string; email: string; role: string; employee?: { id: string; empId: string; name: string; team: string; email: string | null } | null },
-): Promise<{ status: 'not_found' } | { status: 'forbidden' } | { status: 'ok'; lead: NonNullable<Awaited<ReturnType<typeof prisma.lead.update>>> }> {
+): Promise<
+  | { status: 'not_found' }
+  | { status: 'forbidden' }
+  | { status: 'bad_request'; error: string }
+  | { status: 'ok'; lead: NonNullable<Awaited<ReturnType<typeof prisma.lead.update>>> }
+> {
   const before = await prisma.lead.findUnique({
     where: { id },
     select: {
       id: true,
       name: true,
       country: true,
+      leadMarket: true,
       status: true,
       isApplication: true,
       leadRef: true,
@@ -113,12 +119,37 @@ async function applyLeadUpdateAndLog(
         delete updatePayload.assignedTo;
       }
     }
-  } else if (typeof updatePayload.assignedEmployeeId === 'string' && updatePayload.assignedEmployeeId && !('assignedTo' in updatePayload)) {
-    const emp = await prisma.employee.findUnique({
-      where: { id: updatePayload.assignedEmployeeId },
-      select: { name: true },
-    });
-    if (emp) updatePayload.assignedTo = emp.name;
+  } else {
+    if ('assignedEmployeeId' in updatePayload) {
+      const empId = updatePayload.assignedEmployeeId;
+      if (typeof empId === 'string' && empId) {
+        const emp = await prisma.employee.findUnique({
+          where: { id: empId },
+          select: { id: true, name: true },
+        });
+        if (!emp) {
+          return { status: 'bad_request', error: 'Selected counselor was not found.' };
+        }
+        updatePayload.assignedTo = emp.name;
+      } else {
+        updatePayload.assignedEmployeeId = null;
+        if (!('assignedTo' in updatePayload)) {
+          updatePayload.assignedTo = null;
+        }
+      }
+    } else if ('assignedTo' in updatePayload) {
+      const nameStr = typeof updatePayload.assignedTo === 'string' ? updatePayload.assignedTo.trim() : '';
+      if (!nameStr) {
+        updatePayload.assignedTo = null;
+        updatePayload.assignedEmployeeId = null;
+      } else {
+        const emp = await prisma.employee.findFirst({
+          where: { name: nameStr },
+          select: { id: true, name: true },
+        });
+        updatePayload.assignedEmployeeId = emp ? emp.id : null;
+      }
+    }
   }
   if ('assessAcademicResults' in updatePayload && !('gpa' in updatePayload)) {
     const parsedGpa = parseNumericGpa(
@@ -128,13 +159,21 @@ async function applyLeadUpdateAndLog(
     if (parsedGpa !== null) updatePayload.gpa = parsedGpa;
   }
 
-  const lead = await prisma.lead.update({
-    where: { id },
-    data: updatePayload,
-  }).catch(() => null);
-  if (!lead) return { status: 'not_found' };
+  let lead: Awaited<ReturnType<typeof prisma.lead.update>>;
+  try {
+    lead = await prisma.lead.update({
+      where: { id },
+      data: updatePayload,
+    });
+  } catch (err) {
+    const code = (err as { code?: string } | null)?.code;
+    if (code === 'P2025') return { status: 'not_found' };
+    if (code === 'P2003') return { status: 'bad_request', error: 'Invalid employee reference.' };
+    throw err;
+  }
 
   const actorDisplay = actor.employee?.name || actor.email;
+  const actorEmpId = actor.employee?.id || null;
 
   if (isOpeningFile && !before.isApplication) {
     const docCount = await prisma.leadDocument.count({ where: { leadId: lead.id } });
@@ -153,7 +192,7 @@ async function applyLeadUpdateAndLog(
       type: 'application_opened',
       actorName: actorDisplay,
       actorUserId: actor.userId,
-      employeeId: actor.employee?.id || lead.assignedEmployeeId,
+      employeeId: actorEmpId,
       leadId: lead.id,
       leadName: lead.name,
       toValue: `${lead.leadRef || ''} · ${lead.country} (${lead.applicationStage || 'documents'})`,
@@ -166,7 +205,7 @@ async function applyLeadUpdateAndLog(
       type: 'lead_status_changed',
       actorName: actorDisplay,
       actorUserId: actor.userId,
-      employeeId: actor.employee?.id || lead.assignedEmployeeId,
+      employeeId: actorEmpId,
       leadId: lead.id,
       leadName: lead.name,
       fromValue: before.status,
@@ -178,7 +217,7 @@ async function applyLeadUpdateAndLog(
       type: 'application_stage_changed',
       actorName: actorDisplay,
       actorUserId: actor.userId,
-      employeeId: actor.employee?.id || lead.assignedEmployeeId,
+      employeeId: actorEmpId,
       leadId: lead.id,
       leadName: lead.name,
       fromValue: before.applicationStage,
@@ -190,7 +229,7 @@ async function applyLeadUpdateAndLog(
       type: 'lead_assigned',
       actorName: actorDisplay,
       actorUserId: actor.userId,
-      employeeId: actor.employee?.id || lead.assignedEmployeeId,
+      employeeId: lead.assignedEmployeeId || actorEmpId,
       leadId: lead.id,
       leadName: lead.name,
       fromValue: before.assignedTo || 'Unassigned',
@@ -202,7 +241,7 @@ async function applyLeadUpdateAndLog(
       type: 'note',
       actorName: actorDisplay,
       actorUserId: actor.userId,
-      employeeId: actor.employee?.id || lead.assignedEmployeeId,
+      employeeId: actorEmpId,
       leadId: lead.id,
       leadName: lead.name,
       details: typeof updatePayload.notes === 'string' ? updatePayload.notes.slice(0, 300) : null,
@@ -213,7 +252,7 @@ async function applyLeadUpdateAndLog(
       type: 'followup_scheduled',
       actorName: actorDisplay,
       actorUserId: actor.userId,
-      employeeId: actor.employee?.id || lead.assignedEmployeeId,
+      employeeId: actorEmpId,
       leadId: lead.id,
       leadName: lead.name,
       fromValue: before.nextFollowup || 'None',
@@ -230,9 +269,7 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const admin = await verifyLiveAdminUser(request);
-    const staff = admin ? null : await verifyLiveStaffUser(request);
-    const actor = admin || staff;
+    const actor = await verifyLiveStaffUser(request);
 
     if (!actor) {
       return NextResponse.json({ message: 'Unauthorized - Staff access required' }, { status: 403 });
@@ -244,12 +281,12 @@ export async function PUT(
     const validated = validateLeadUpdate(body);
     if (!validated.data) return NextResponse.json({ error: validated.error }, { status: 400 });
 
-    const res = await applyLeadUpdateAndLog(id, validated.data, {
-      ...actor,
-      employee: staff?.employee,
-    });
+    const res = await applyLeadUpdateAndLog(id, validated.data, actor);
     if (res.status === 'forbidden') {
       return NextResponse.json({ message: 'Unauthorized - Lead is assigned to another counselor' }, { status: 403 });
+    }
+    if (res.status === 'bad_request') {
+      return NextResponse.json({ error: res.error }, { status: 400 });
     }
     if (res.status === 'not_found') {
       return NextResponse.json({ error: 'Lead not found' }, { status: 404 });
@@ -277,9 +314,7 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const admin = await verifyLiveAdminUser(request);
-    const staff = admin ? null : await verifyLiveStaffUser(request);
-    const actor = admin || staff;
+    const actor = await verifyLiveStaffUser(request);
 
     if (!actor) {
       return NextResponse.json({ message: 'Unauthorized - Staff access required' }, { status: 403 });
@@ -291,12 +326,12 @@ export async function PATCH(
     const validated = validateLeadUpdate(body);
     if (!validated.data) return NextResponse.json({ error: validated.error }, { status: 400 });
 
-    const res = await applyLeadUpdateAndLog(id, validated.data, {
-      ...actor,
-      employee: staff?.employee,
-    });
+    const res = await applyLeadUpdateAndLog(id, validated.data, actor);
     if (res.status === 'forbidden') {
       return NextResponse.json({ message: 'Unauthorized - Lead is assigned to another counselor' }, { status: 403 });
+    }
+    if (res.status === 'bad_request') {
+      return NextResponse.json({ error: res.error }, { status: 400 });
     }
     if (res.status === 'not_found') {
       return NextResponse.json({ error: 'Lead not found' }, { status: 404 });

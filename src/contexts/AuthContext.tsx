@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useState, ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
 
 interface User {
@@ -40,7 +40,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       .finally(() => setLoading(false));
   }, []);
 
-  const login = async (email: string, password: string): Promise<{ success: boolean; user?: User }> => {
+  const login = useCallback(async (email: string, password: string): Promise<{ success: boolean; user?: User }> => {
     try {
       const response = await fetch('/api/auth/login', {
         method: 'POST',
@@ -61,9 +61,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } catch {
       return { success: false };
     }
-  };
+  }, []);
 
-  const logout = async () => {
+  const logout = useCallback(async () => {
     try {
       await fetch('/api/auth/logout', {
         method: 'POST',
@@ -74,15 +74,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(null);
       router.push('/login');
     }
-  };
+  }, [router]);
 
-  const getAuthHeaders = (): Record<string, string> => {
+  const getAuthHeaders = useCallback((): Record<string, string> => {
     // Authentication is carried by the httpOnly cookie. Callers set a content
     // type only when needed so FormData uploads retain their multipart boundary.
     return {};
-  };
+  }, []);
 
-  const refreshToken = async (): Promise<boolean> => {
+  const refreshToken = useCallback(async (): Promise<boolean> => {
     try {
       const response = await fetch('/api/auth/me', {
         method: 'GET',
@@ -100,9 +100,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       console.error('Token refresh failed:', error);
       return false;
     }
-  };
+  }, []);
 
-  const authenticatedFetch = async (url: string, options: RequestInit = {}): Promise<Response> => {
+  const authenticatedFetch = useCallback(async (url: string, options: RequestInit = {}): Promise<Response> => {
     // First attempt with current token
     const authHeaders = getAuthHeaders();
     const mergedHeaders: Record<string, string> = {
@@ -116,24 +116,43 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       credentials: 'include',
     });
 
-    if (response.status === 401 || response.status === 403) {
+    if (response.status === 401) {
       setUser(null);
       router.push('/login');
+    } else if (response.status === 403) {
+      // 403 can mean either an authenticated RBAC denial OR an expired session on legacy routes.
+      // Verify live session state via /api/auth/me before logging the user out.
+      try {
+        const sessionCheck = await fetch('/api/auth/me', {
+          method: 'GET',
+          credentials: 'include',
+          cache: 'no-store',
+        });
+        if (sessionCheck.status === 401) {
+          setUser(null);
+          router.push('/login');
+        }
+      } catch {
+        // Keep current session on transient network failure during session probe
+      }
     }
 
     return response;
-  };
+  }, [getAuthHeaders, router]);
 
-  const value = {
-    user,
-    loading,
-    login,
-    logout,
-    isAuthenticated: !!user,
-    getAuthHeaders,
-    refreshToken,
-    authenticatedFetch,
-  };
+  const value = useMemo(
+    () => ({
+      user,
+      loading,
+      login,
+      logout,
+      isAuthenticated: !!user,
+      getAuthHeaders,
+      refreshToken,
+      authenticatedFetch,
+    }),
+    [user, loading, login, logout, getAuthHeaders, refreshToken, authenticatedFetch],
+  );
 
   return (
     <AuthContext.Provider value={value}>

@@ -107,31 +107,31 @@ function AdminHeader({
 
   return (
     <header className="sticky top-0 z-30 flex items-center justify-between border-b border-slate-200/80 bg-white/95 px-3 py-2.5 sm:px-4 sm:py-3 backdrop-blur lg:px-6 print:hidden">
-      <div className="flex items-center gap-2 sm:gap-3">
+      <div className="flex min-w-0 items-center gap-2 sm:gap-3">
         {/* Mobile Hamburger Drawer Trigger */}
         <button
           type="button"
           onClick={onOpenSidebar}
           aria-label="Open navigation drawer"
-          className="inline-flex size-9 items-center justify-center rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100 hover:text-slate-900 lg:hidden"
+          className="inline-flex size-9 shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100 hover:text-slate-900 lg:hidden"
         >
           <Menu size={18} />
         </button>
 
         {/* Mobile Brand Mark */}
-        <Link href="/admin" className="flex items-center gap-1.5 lg:hidden">
+        <Link href="/admin" className="flex shrink-0 items-center gap-1.5 lg:hidden">
           <span className="grid size-7 place-items-center rounded-lg bg-gradient-to-br from-amber-400 to-amber-500 font-heading text-[11px] font-bold text-slate-950 shadow-xs">
             EE
           </span>
         </Link>
 
         {/* Breadcrumb / Current Route Title */}
-        <div className="flex items-center gap-1.5 sm:gap-2">
+        <div className="flex min-w-0 items-center gap-1.5 sm:gap-2">
           <span className="hidden text-xs font-semibold text-slate-400 sm:inline">
             {isCounselor ? 'Counselor Desk' : 'EduExpress Admin'}
           </span>
           <span className="hidden text-slate-300 sm:inline">/</span>
-          <h1 className="max-w-[130px] truncate text-sm font-bold text-slate-900 xs:max-w-[200px] sm:max-w-none sm:text-base">
+          <h1 className="max-w-[160px] truncate text-sm font-bold text-slate-900 sm:max-w-none sm:text-base">
             {activeName}
           </h1>
         </div>
@@ -450,7 +450,7 @@ function AdminShell({ children }: { children: React.ReactNode }) {
                 onOpenSidebar={() => setSidebarOpen(true)}
               />
 
-              <main className="min-w-0 flex-1 overflow-auto bg-slate-50/70 p-3 pb-24 sm:p-6 sm:pb-6 lg:p-8 lg:pb-8 print:overflow-visible print:bg-white print:p-0">
+              <main className="min-w-0 flex-1 overflow-auto bg-slate-50/70 p-3 pb-24 sm:p-6 sm:pb-24 lg:p-8 lg:pb-8 print:overflow-visible print:bg-white print:p-0">
                 {routeAllowed ? (
                   children
                 ) : blockedFinance && !isCounselor ? (

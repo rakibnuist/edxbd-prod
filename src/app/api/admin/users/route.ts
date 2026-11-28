@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
 import { ALLOWED_USER_ROLES, isAdminRole } from '@/lib/auth';
 import { verifyLiveAdminUser } from '@/lib/auth-user';
+import { jsonBodyErrorResponse, readLimitedJson } from '@/lib/request-body';
 import prisma from '@/lib/prisma';
 
 const ALLOWED_ROLES = ALLOWED_USER_ROLES;
@@ -46,12 +47,14 @@ export async function GET(request: NextRequest) {
     ]);
 
     const empByUserId = new Map(employees.filter((e) => e.userId).map((e) => [e.userId!, e]));
-    const empByEmail = new Map(
-      employees.filter((e) => e.email).map((e) => [e.email!.trim().toLowerCase(), e]),
+    const unlinkedEmpByEmail = new Map(
+      employees
+        .filter((e) => !e.userId && e.email)
+        .map((e) => [e.email!.trim().toLowerCase(), e]),
     );
 
     const enrichedUsers = users.map((u) => {
-      const emp = empByUserId.get(u.id) || empByEmail.get(u.email.trim().toLowerCase()) || null;
+      const emp = empByUserId.get(u.id) || unlinkedEmpByEmail.get(u.email.trim().toLowerCase()) || null;
       return {
         ...u,
         employee: emp
@@ -76,8 +79,12 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
     }
 
-    const body = await request.json();
-    const { name, email, password, role = 'counselor', employeeId } = body ?? {};
+    const body = await readLimitedJson(request, 16 * 1024);
+    const name = body.name;
+    const email = body.email;
+    const password = body.password;
+    const role = (typeof body.role === 'string' ? body.role : 'counselor') as (typeof ALLOWED_ROLES)[number];
+    const employeeId = body.employeeId;
 
     // Validate required fields and primitive types
     if (
@@ -128,6 +135,25 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Verify target employee linkage before creating user to prevent hijacking another user's staff profile
+    let validatedTargetEmp: { id: string; email: string | null } | null = null;
+    if (typeof employeeId === 'string' && employeeId.trim()) {
+      const targetEmp = await prisma.employee.findUnique({
+        where: { id: employeeId.trim() },
+        select: { id: true, email: true, userId: true },
+      });
+      if (!targetEmp) {
+        return NextResponse.json({ message: 'Selected staff profile was not found' }, { status: 400 });
+      }
+      if (targetEmp.userId) {
+        return NextResponse.json(
+          { message: 'That staff profile is already linked to another login account' },
+          { status: 409 },
+        );
+      }
+      validatedTargetEmp = { id: targetEmp.id, email: targetEmp.email };
+    }
+
     // Hash password
     const saltRounds = 12;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
@@ -144,18 +170,15 @@ export async function POST(request: NextRequest) {
 
     // Link employee profile if provided explicitly or matched by email
     let linkedEmployee: { id: string; empId: string; name: string; team: string; phone: string | null } | null = null;
-    if (typeof employeeId === 'string' && employeeId.trim()) {
-      const targetEmp = await prisma.employee.findUnique({ where: { id: employeeId.trim() } });
-      if (targetEmp) {
-        linkedEmployee = await prisma.employee.update({
-          where: { id: targetEmp.id },
-          data: {
-            userId: user.id,
-            ...(!targetEmp.email ? { email: normalizedEmail } : {}),
-          },
-          select: { id: true, empId: true, name: true, team: true, phone: true },
-        });
-      }
+    if (validatedTargetEmp) {
+      linkedEmployee = await prisma.employee.update({
+        where: { id: validatedTargetEmp.id },
+        data: {
+          userId: user.id,
+          ...(!validatedTargetEmp.email ? { email: normalizedEmail } : {}),
+        },
+        select: { id: true, empId: true, name: true, team: true, phone: true },
+      });
     } else {
       const matchedEmp = await prisma.employee.findFirst({
         where: { email: normalizedEmail, userId: null },
@@ -180,11 +203,16 @@ export async function POST(request: NextRequest) {
       updatedAt: user.updatedAt
     };
 
-    return NextResponse.json({
-      message: 'User created successfully',
-      user: userResponse
-    });
+    return NextResponse.json(
+      {
+        message: 'User created successfully',
+        user: userResponse,
+      },
+      { headers: { 'Cache-Control': 'no-store, private' } },
+    );
   } catch (error) {
+    const bodyError = jsonBodyErrorResponse(error);
+    if (bodyError) return bodyError;
     console.error('Create user error:', error);
     return NextResponse.json({ message: 'Internal server error' }, { status: 500 });
   }

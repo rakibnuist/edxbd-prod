@@ -53,7 +53,7 @@ async function loadLeadFlowPool(options?: {
     ? ['new', ...CLOSED_LEAD_STATUSES]
     : CLOSED_LEAD_STATUSES;
 
-  const [settings, activeEmployees, todayAttendances, todayLeads] = await Promise.all([
+  const [settings, activeEmployees, todayAttendances, todayAssignedEvents] = await Promise.all([
     getAllSettings(),
     prisma.employee.findMany({
       where: { active: true },
@@ -77,12 +77,15 @@ async function loadLeadFlowPool(options?: {
       where: { date: todayIso },
       select: { employeeId: true, checkIn: true },
     }),
-    prisma.lead.findMany({
+    // Track actual today lead assignments/creations (NOT lead.updatedAt which bumps on calls/notes)
+    prisma.activityEvent.findMany({
       where: {
-        assignedEmployeeId: { not: null },
-        updatedAt: { gte: dayStart },
+        employeeId: { not: null },
+        type: { in: ['lead_created', 'lead_assigned'] },
+        leadId: { not: null },
+        createdAt: { gte: dayStart },
       },
-      select: { assignedEmployeeId: true, updatedAt: true },
+      select: { employeeId: true, leadId: true, createdAt: true },
     }),
   ]);
 
@@ -90,14 +93,19 @@ async function loadLeadFlowPool(options?: {
   const checkedInSet = new Set(
     todayAttendances.filter((a) => Boolean(a.checkIn)).map((a) => a.employeeId),
   );
-  const todayCountMap = new Map<string, number>();
+  const todayAssignedLeadSets = new Map<string, Set<string>>();
   const lastAssignedMap = new Map<string, number>();
-  for (const row of todayLeads) {
-    if (!row.assignedEmployeeId) continue;
-    todayCountMap.set(row.assignedEmployeeId, (todayCountMap.get(row.assignedEmployeeId) || 0) + 1);
-    const ms = row.updatedAt.getTime();
-    if (ms > (lastAssignedMap.get(row.assignedEmployeeId) || 0)) {
-      lastAssignedMap.set(row.assignedEmployeeId, ms);
+  for (const row of todayAssignedEvents) {
+    if (!row.employeeId || !row.leadId) continue;
+    let set = todayAssignedLeadSets.get(row.employeeId);
+    if (!set) {
+      set = new Set<string>();
+      todayAssignedLeadSets.set(row.employeeId, set);
+    }
+    set.add(row.leadId);
+    const ms = row.createdAt.getTime();
+    if (ms > (lastAssignedMap.get(row.employeeId) || 0)) {
+      lastAssignedMap.set(row.employeeId, ms);
     }
   }
 
@@ -111,8 +119,8 @@ async function loadLeadFlowPool(options?: {
       name: e.name,
       team: e.team,
       role: e.role,
-      activeCount: options?.excludeNewFromActiveCount ? 0 : e._count.leads,
-      todayAssignedCount: options?.excludeNewFromActiveCount ? 0 : todayCountMap.get(e.id) || 0,
+      activeCount: e._count.leads,
+      todayAssignedCount: options?.excludeNewFromActiveCount ? 0 : todayAssignedLeadSets.get(e.id)?.size || 0,
       checkedInToday: checkedInSet.has(e.id),
       lastAssignedAtMs: options?.excludeNewFromActiveCount ? 0 : lastAssignedMap.get(e.id) || 0,
     };
@@ -142,7 +150,7 @@ export async function resolveAutoAssignment(input: {
 }
 
 export async function seedDefaultMonthlyTargets(rawMonth?: string): Promise<{ month: string; createdCount: number }> {
-  const month = rawMonth && /^\d{4}-\d{2}$/.test(rawMonth)
+  const month = rawMonth && /^\d{4}-(0[1-9]|1[0-2])$/.test(rawMonth)
     ? rawMonth
     : new Date(Date.now() + 6 * 3600 * 1000).toISOString().slice(0, 7);
 
@@ -202,7 +210,11 @@ export async function distributeUnassignedLeads(options: {
   }
 
   const eligibleIdList = Array.from(eligibleIds);
-  const whereClause =
+  const marketAndLeadGuard = {
+    isApplication: false,
+    leadMarket: { not: 'China' },
+  };
+  const scopeFilter =
     options.scope === 'untouched_rebalance'
       ? { status: 'new' }
       : options.scope === 'untouched_pool'
@@ -224,6 +236,7 @@ export async function distributeUnassignedLeads(options: {
               assignedTo: null,
               status: 'new',
             };
+  const whereClause = { AND: [marketAndLeadGuard, scopeFilter] };
 
   const targetLeads = await prisma.lead.findMany({
     where: whereClause,
@@ -270,11 +283,11 @@ export async function distributeUnassignedLeads(options: {
         },
       });
       assignedCount++;
+      breakdown[chosen.name] = (breakdown[chosen.name] || 0) + 1;
     }
     chosen.activeCount++;
     chosen.todayAssignedCount = (chosen.todayAssignedCount || 0) + 1;
     chosen.lastAssignedAtMs = seqMs++;
-    breakdown[chosen.name] = (breakdown[chosen.name] || 0) + 1;
   }
 
   if (assignedCount > 0) {

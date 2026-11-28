@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
   Activity,
   AlertTriangle,
@@ -17,34 +17,25 @@ import {
   FolderKanban,
   FolderPlus,
   Globe2,
-  GraduationCap,
-  Handshake,
   Landmark,
   Layers,
   MapPin,
   MessageCircle,
-  MessageSquareQuote,
   Phone,
   PiggyBank,
   RefreshCw,
   Search,
-  Settings,
-  ShieldCheck,
-  TrendingUp,
-  UserCheck,
-  UserCog,
   Users2,
   Wallet,
   X,
-  Zap,
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { canAccessFinanceRole } from '@/lib/roles';
 import AdminTeamManagerPanel from '@/components/admin/AdminTeamManagerPanel';
-import MetaConnectionPanel from '@/components/admin/MetaConnectionPanel';
 import CounselorDashboardCheckInCard from '@/components/admin/CounselorDashboardCheckInCard';
 import type { ConsultancyExecutiveSnapshot } from '@/lib/consultancy-analytics';
 import { formatBdt, type FinanceDashboardSnapshot } from '@/lib/finance-logic';
+import { buildWhatsAppUrl } from '@/lib/wa-templates';
 import type {
   CounselorDeskSummary,
   OfficePulseActivityItem,
@@ -155,10 +146,6 @@ function formatDhakaDate(isoString: string): string {
   }
 }
 
-function cleanDigits(phone: string): string {
-  return phone.replace(/\D/g, '');
-}
-
 export default function AdminDashboardPage() {
   const { user, isAuthenticated, loading: authLoading, authenticatedFetch } = useAuth();
   const isCounselor = user?.role === 'counselor';
@@ -167,7 +154,7 @@ export default function AdminDashboardPage() {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [syncing, setSyncing] = useState(false);
-  const [syncMessage, setSyncMessage] = useState<string | null>(null);
+  const [syncMessage, setSyncMessage] = useState<{ tone: 'ok' | 'err'; text: string } | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   // Simplified Tabs & Actions
@@ -181,44 +168,69 @@ export default function AdminDashboardPage() {
     leadName?: string;
   } | null>(null);
 
-  const fetchDashboard = async (background = false) => {
-    try {
-      if (background) {
-        setRefreshing(true);
-      } else {
-        setLoading(true);
+  const fetchDashboard = useCallback(
+    async (background = false) => {
+      try {
+        if (background) {
+          setRefreshing(true);
+        } else {
+          setLoading(true);
+        }
+        setError(null);
+        const response = await authenticatedFetch('/api/admin/dashboard', { cache: 'no-store' });
+        if (!response.ok) {
+          const errPayload = await response.json().catch(() => ({}));
+          throw new Error(
+            errPayload.error || errPayload.message || `Dashboard request failed (${response.status})`,
+          );
+        }
+        const data = await response.json();
+        setStats(data);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Could not load dashboard data.');
+      } finally {
+        setLoading(false);
+        setRefreshing(false);
       }
-      setError(null);
-      const response = await authenticatedFetch('/api/admin/dashboard');
-      if (!response.ok) {
-        throw new Error(`Dashboard request failed (${response.status})`);
-      }
-      const data = await response.json();
-      setStats(data);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Could not load dashboard data.');
-    } finally {
-      setLoading(false);
-      setRefreshing(false);
-    }
-  };
+    },
+    [authenticatedFetch],
+  );
 
   const handleSyncMetaLeads = async () => {
     try {
       setSyncing(true);
       setSyncMessage(null);
-      const res = await authenticatedFetch('/api/admin/leads?sync=1');
-      if (res.ok) {
-        setSyncMessage('Meta Graph API synced successfully!');
-        await fetchDashboard(true);
+      const res = await authenticatedFetch('/api/admin/leads?sync=1', { cache: 'no-store' });
+      const syncOkHeader = res.headers.get('X-Meta-Sync-Ok');
+      const syncErrHeader = res.headers.get('X-Meta-Sync-Error');
+      const syncImported = res.headers.get('X-Meta-Sync-Imported');
+      if (!res.ok) {
+        const errPayload = await res.json().catch(() => ({}));
+        setSyncMessage({
+          tone: 'err',
+          text: errPayload.error || errPayload.message || `Meta sync failed (${res.status}).`,
+        });
+      } else if (syncOkHeader === '0') {
+        setSyncMessage({
+          tone: 'err',
+          text: syncErrHeader || 'Meta Graph API sync failed. Check token & Page access in Settings.',
+        });
       } else {
-        setSyncMessage('Sync request completed.');
+        const countNum = Number(syncImported || '0');
+        setSyncMessage({
+          tone: 'ok',
+          text:
+            countNum > 0
+              ? `Meta Graph API synced successfully (${countNum} new lead${countNum === 1 ? '' : 's'} imported).`
+              : 'Meta Graph API synced — all leads are up to date.',
+        });
+        await fetchDashboard(true);
       }
     } catch {
-      setSyncMessage('Sync call dispatched.');
+      setSyncMessage({ tone: 'err', text: 'Network error while contacting Meta Graph API.' });
     } finally {
       setSyncing(false);
-      setTimeout(() => setSyncMessage(null), 4000);
+      setTimeout(() => setSyncMessage(null), 5000);
     }
   };
 
@@ -231,7 +243,7 @@ export default function AdminDashboardPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ existingLeadId: leadId }),
       });
-      const data = await res.json();
+      const data = await res.json().catch(() => ({}));
       if (!res.ok) {
         setActionFeedback({
           type: 'error',
@@ -242,31 +254,13 @@ export default function AdminDashboardPage() {
 
       const assignedRef = data.application?.leadRef || data.leadRef || 'APP-FILE';
 
-      // Update local state immediately
-      setStats((prev) => {
-        if (!prev) return prev;
-        return {
-          ...prev,
-          totalApplications: (prev.totalApplications || 0) + 1,
-          recentLeads: prev.recentLeads.map((l) =>
-            l.id === leadId
-              ? {
-                  ...l,
-                  isApplication: true,
-                  leadRef: assignedRef,
-                  status: 'application_started',
-                }
-              : l,
-          ),
-        };
-      });
-
       setActionFeedback({
         type: 'success',
         leadName,
         leadRef: assignedRef,
         message: `File opened for ${leadName}! Moved to Application Tracker (${assignedRef}).`,
       });
+      await fetchDashboard(true);
     } catch {
       setActionFeedback({
         type: 'error',
@@ -278,11 +272,39 @@ export default function AdminDashboardPage() {
   };
 
   useEffect(() => {
-    if (isAuthenticated && !authLoading) {
-      fetchDashboard();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAuthenticated, authLoading]);
+    if (!isAuthenticated || authLoading) return;
+    let cancelled = false;
+    authenticatedFetch('/api/admin/dashboard', { cache: 'no-store' })
+      .then(async (response) => {
+        if (!response.ok) {
+          const errPayload = await response.json().catch(() => ({}));
+          throw new Error(
+            errPayload.error || errPayload.message || `Dashboard request failed (${response.status})`,
+          );
+        }
+        return response.json();
+      })
+      .then((data) => {
+        if (!cancelled) {
+          setStats(data);
+          setError(null);
+        }
+      })
+      .catch((err) => {
+        if (!cancelled) {
+          setError(err instanceof Error ? err.message : 'Could not load dashboard data.');
+        }
+      })
+      .finally(() => {
+        if (!cancelled) {
+          setLoading(false);
+          setRefreshing(false);
+        }
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [isAuthenticated, authLoading, authenticatedFetch]);
 
   if (authLoading || loading) {
     return (
@@ -389,8 +411,14 @@ export default function AdminDashboardPage() {
         </div>
 
         {syncMessage && (
-          <div className="relative z-10 mt-3 rounded-xl border border-emerald-400/40 bg-emerald-500/20 px-4 py-2 text-xs font-semibold text-emerald-100">
-            {syncMessage}
+          <div
+            className={`relative z-10 mt-3 rounded-xl border px-4 py-2 text-xs font-semibold ${
+              syncMessage.tone === 'ok'
+                ? 'border-emerald-400/40 bg-emerald-500/20 text-emerald-100'
+                : 'border-rose-400/50 bg-rose-500/20 text-rose-100'
+            }`}
+          >
+            {syncMessage.text}
           </div>
         )}
       </section>
@@ -668,12 +696,11 @@ export default function AdminDashboardPage() {
               {filteredRecentLeads.length > 0 ? (
                 filteredRecentLeads.map((lead) => {
                   const tone = statusTones[lead.status] || statusTones.new;
-                  const digits = cleanDigits(lead.phone || '');
-                  const waUrl = digits
-                    ? `https://wa.me/${digits}?text=${encodeURIComponent(
-                        `Hello ${lead.name}, thank you for contacting EduExpress regarding your study in China plans!`
-                      )}`
-                    : null;
+                  const destination = lead.country?.trim() || 'study abroad';
+                  const waUrl = buildWhatsAppUrl(
+                    lead.phone,
+                    `Hello ${lead.name}, thank you for contacting EduExpress International regarding your ${destination} study plans!`,
+                  );
 
                   return (
                     <div

@@ -41,19 +41,22 @@ export default function TestimonialsPage() {
   const [formData, setFormData] = useState({ ...emptyTestimonialForm });
   const [uploadingPhoto, setUploadingPhoto] = useState(false);
   const [formError, setFormError] = useState('');
+  const [pageError, setPageError] = useState('');
 
   const fetchTestimonials = async () => {
     try {
+      setPageError('');
       const response = await authenticatedFetch('/api/admin/testimonials');
-      if (response.ok) {
-        const data = await response.json();
+      const data = await response.json().catch(() => null);
+      if (response.ok && Array.isArray(data)) {
         setTestimonials(data);
       } else {
         setTestimonials([]);
+        setPageError((data && (data.error || data.message)) || `Failed to load testimonials (${response.status})`);
       }
-    } catch (_error) {
-      // Error fetching testimonials
+    } catch {
       setTestimonials([]);
+      setPageError('Network error while loading testimonials.');
     } finally {
       setLoading(false);
     }
@@ -95,7 +98,7 @@ export default function TestimonialsPage() {
         setFormData({ ...emptyTestimonialForm });
       } else {
         const result = await response.json().catch(() => ({}));
-        setFormError(result.error || 'The testimonial could not be saved.');
+        setFormError(result.error || result.message || 'The testimonial could not be saved.');
         const action = editingTestimonial ? 'update' : 'create';
         trackTestimonialManagement(action, { 
           testimonial_id: editingTestimonial?.id,
@@ -116,13 +119,12 @@ export default function TestimonialsPage() {
     body.append('image', file);
     body.append('folder', 'testimonials');
     try {
-      const response = await fetch('/api/upload', {
+      const response = await authenticatedFetch('/api/upload', {
         method: 'POST',
-        credentials: 'include',
         body,
       });
       const result = await response.json().catch(() => ({}));
-      if (!response.ok) setFormError(result.error || 'The student photo could not be uploaded.');
+      if (!response.ok) setFormError(result.error || result.message || 'The student photo could not be uploaded.');
       else setFormData(previous => ({ ...previous, image: result.imageUrl }));
     } catch {
       setFormError('The student photo could not be uploaded.');
@@ -132,19 +134,20 @@ export default function TestimonialsPage() {
   };
 
   const handleEdit = (testimonial: Testimonial) => {
+    setFormError('');
     setEditingTestimonial(testimonial);
     setFormData({
-      name: testimonial.name,
+      name: testimonial.name || '',
       displayName: testimonial.displayName || '',
-      location: testimonial.location,
-      university: testimonial.university,
-      program: testimonial.program,
-      quote: testimonial.quote,
-      rating: testimonial.rating,
+      location: testimonial.location || '',
+      university: testimonial.university || '',
+      program: testimonial.program || '',
+      quote: testimonial.quote || '',
+      rating: testimonial.rating || 5,
       image: testimonial.image || '',
-      country: testimonial.country,
-      isActive: testimonial.isActive,
-      featured: testimonial.featured,
+      country: testimonial.country || '',
+      isActive: testimonial.isActive !== false,
+      featured: Boolean(testimonial.featured),
       academicProfile: testimonial.academicProfile || '',
       decisionFactors: testimonial.decisionFactors || '',
       applicationTimeline: testimonial.applicationTimeline || '',
@@ -163,6 +166,7 @@ export default function TestimonialsPage() {
 
   const handleDelete = async (id: string) => {
     if (confirm('Are you sure you want to delete this testimonial?')) {
+      setPageError('');
       try {
         const response = await authenticatedFetch(`/api/admin/testimonials/${id}`, {
           method: 'DELETE',
@@ -170,14 +174,18 @@ export default function TestimonialsPage() {
 
         if (response.ok) {
           fetchTestimonials();
+        } else {
+          const result = await response.json().catch(() => ({}));
+          setPageError(result.error || result.message || 'Could not delete testimonial.');
         }
-      } catch (_error) {
-        // Error deleting testimonial
+      } catch {
+        setPageError('Network error while deleting testimonial.');
       }
     }
   };
 
   const toggleStatus = async (id: string, isActive: boolean) => {
+    setPageError('');
     try {
       const response = await authenticatedFetch(`/api/admin/testimonials/${id}`, {
         method: 'PATCH',
@@ -189,9 +197,12 @@ export default function TestimonialsPage() {
 
       if (response.ok) {
         fetchTestimonials();
+      } else {
+        const result = await response.json().catch(() => ({}));
+        setPageError(result.error || result.message || 'Could not update testimonial status.');
       }
-    } catch (_error) {
-      // Error updating testimonial status
+    } catch {
+      setPageError('Network error while updating testimonial status.');
     }
   };
 
@@ -217,6 +228,7 @@ export default function TestimonialsPage() {
         </div>
         <button
           onClick={() => {
+            setFormError('');
             setShowForm(true);
             setEditingTestimonial(null);
             setFormData({ ...emptyTestimonialForm });
@@ -226,6 +238,15 @@ export default function TestimonialsPage() {
           + Add Testimonial
         </button>
       </div>
+
+      {pageError && (
+        <div className="mb-4 flex items-center justify-between rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-medium text-rose-800">
+          <span>{pageError}</span>
+          <button type="button" onClick={() => setPageError('')} className="font-bold text-rose-600 hover:text-rose-900">
+            Dismiss
+          </button>
+        </div>
+      )}
 
       {/* Testimonials List */}
       <div className="bg-white rounded-lg shadow overflow-hidden">
@@ -330,8 +351,8 @@ export default function TestimonialsPage() {
 
       {/* Add/Edit Form Modal */}
       {showForm && (
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-          <div className="relative top-4 mx-auto max-h-[calc(100vh-2rem)] w-11/12 overflow-y-auto border bg-white p-5 shadow-lg md:w-3/4 lg:w-2/3">
+        <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-slate-900/50 p-2 sm:p-4">
+          <div className="relative w-full max-w-3xl max-h-[92dvh] overflow-y-auto rounded-xl border bg-white p-4 sm:p-5 shadow-lg">
             <div className="mt-3">
               <div className="flex justify-between items-center mb-4">
                 <h3 className="text-lg font-medium text-gray-900">
@@ -459,7 +480,7 @@ export default function TestimonialsPage() {
                           event.target.value = '';
                         }} />
                       </label>
-                      <input type="url" value={formData.image} onChange={(e) => setFormData({ ...formData, image: e.target.value })} className="mt-3 block w-full rounded-md border border-blue-200 bg-white px-3 py-2 text-xs" placeholder="Or paste an approved image URL" />
+                      <input type="text" value={formData.image} onChange={(e) => setFormData({ ...formData, image: e.target.value })} className="mt-3 block w-full rounded-md border border-blue-200 bg-white px-3 py-2 text-xs" placeholder="Or paste /uploads/... or an approved https:// image URL" />
                     </div>
                   </div>
                 </div>

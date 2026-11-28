@@ -60,7 +60,7 @@ const MAX_LENGTHS: Record<SettingKey, number> = {
   instagramUrl: 500, youtubeUrl: 500, introVideoTitle: 160, introVideoUrl: 500,
   introVideoPoster: 500, metaPixelId: 32, metaAccessToken: 4096, gtmId: 32, ga4Id: 32,
   officeLatitude: 32, officeLongitude: 32, officeRadiusMeters: 10, officeLocationStrict: 10,
-  leadFlowMode: 24, leadFlowAttendanceFilter: 32, leadFlowOnlyUntouched: 10, leadFlowRulesJson: 4000,
+  leadFlowMode: 24, leadFlowAttendanceFilter: 32, leadFlowOnlyUntouched: 10, leadFlowRulesJson: 16000,
 };
 
 const URL_KEYS = new Set<SettingKey>([

@@ -75,7 +75,7 @@ export async function PUT(
 
     return NextResponse.json({
       message: 'Partnership updated successfully',
-      partnership
+      partnership: serializePartnership(partnership as Record<string, unknown>)
     });
 
   } catch (error) {

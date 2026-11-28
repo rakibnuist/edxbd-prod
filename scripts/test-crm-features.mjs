@@ -28,6 +28,7 @@ const {
 
 const {
   filterLeads,
+  mapMetaGraphLeadToImportPayload,
   validateLeadUpdate,
 } = await import('../src/lib/lead-workflow.ts');
 
@@ -608,4 +609,121 @@ test('Consultancy analytics and student dossier validation support pipeline funn
   assert.equal(deadlines[1]?.id, 'lead-1');
   assert.equal(deadlines[1]?.deadlineType, 'visa');
   assert.equal(deadlines[1]?.daysUntil, 5);
+});
+
+test('Individual Meta Ads attribution & KPI analysis parses Graph API ads, website UTMs, and lead drill-downs', () => {
+  const mapped = mapMetaGraphLeadToImportPayload(
+    {
+      id: 'meta-lead-9001',
+      created_time: '2026-11-25T08:00:00+0000',
+      form_id: '986182003780725',
+      form_name: 'WebLead&InstantForm_18_4_2026',
+      campaign_id: '120251306120530245',
+      campaign_name: 'META_Leads_BD_China-Mar2027_2026Q1',
+      adset_id: '120251306120888',
+      adset_name: 'BD_HSC_Science_2026',
+      ad_id: '120251306120999',
+      ad_name: 'China CSCA Scholarship Reel V2',
+      platform: 'ig',
+      field_data: [
+        { name: 'full_name', values: ['Nusrat Jahan'] },
+        { name: 'phone_number', values: ['01711223344'] },
+        { name: 'gpa', values: ['4.85'] },
+      ],
+    },
+  );
+  assert.ok(mapped);
+  assert.ok(mapped.utm);
+  const parsedUtm = JSON.parse(mapped.utm);
+  assert.equal(parsedUtm.ad_id, '120251306120999');
+  assert.equal(parsedUtm.ad_name, 'China CSCA Scholarship Reel V2');
+  assert.equal(parsedUtm.adset_name, 'BD_HSC_Science_2026');
+  assert.equal(parsedUtm.utm_source, 'instagram');
+  assert.equal(parsedUtm.utm_medium, 'meta_instant_form');
+
+  const kpi = computeEmployeeKpiReport({
+    month: '2026-11',
+    nowMs: Date.parse('2026-11-28T06:00:00Z'),
+    employees: [],
+    attendances: [],
+    dailyLogs: [],
+    targets: [],
+    tasks: [],
+    activities: [],
+    leads: [
+      {
+        id: 'l-1',
+        name: 'Student A',
+        phone: '+8801711000001',
+        country: 'China',
+        status: 'application_started',
+        source: 'meta_china_march_2027',
+        utm: mapped.utm,
+        message: mapped.message,
+        isApplication: true,
+        applicationStage: 'documents',
+        assignedTo: 'Shamoyla Narmin',
+        assignedEmployeeId: null,
+        nextFollowup: null,
+        gpa: 4.85,
+        assessAcademicResults: '4.85',
+        createdAt: '2026-11-25T08:00:00Z',
+        updatedAt: '2026-11-26T08:00:00Z',
+      },
+      {
+        id: 'l-2',
+        name: 'Student B',
+        phone: '+8801711000002',
+        country: 'China',
+        status: 'qualified',
+        source: 'meta_china_march_2027',
+        utm: JSON.stringify({
+          utm_source: 'facebook',
+          utm_medium: 'paid_social',
+          utm_campaign: 'china_march_2027',
+          utm_term: '120250805557110245',
+          utm_content: 'bachelor_ielts_csca',
+        }),
+        message: 'Website assessment',
+        isApplication: false,
+        applicationStage: 'inquiry',
+        assignedTo: 'Afsana Meme',
+        assignedEmployeeId: null,
+        nextFollowup: null,
+        gpa: 4.2,
+        assessAcademicResults: '4.2',
+        createdAt: '2026-11-20T08:00:00Z',
+        updatedAt: '2026-11-21T08:00:00Z',
+      },
+      {
+        id: 'l-3',
+        name: 'Organic Student',
+        phone: '+8801711000003',
+        country: 'Malaysia',
+        status: 'new',
+        source: 'quick_contact_modal',
+        utm: '{}',
+        message: 'Organic inquiry',
+        isApplication: false,
+        applicationStage: 'inquiry',
+        assignedTo: null,
+        assignedEmployeeId: null,
+        nextFollowup: null,
+        gpa: null,
+        assessAcademicResults: null,
+        createdAt: '2026-11-22T08:00:00Z',
+        updatedAt: '2026-11-22T08:00:00Z',
+      },
+    ],
+  });
+
+  assert.equal(kpi.metaAdMetrics.length, 2);
+  assert.equal(kpi.metaAdMetrics[0]?.adName, 'China CSCA Scholarship Reel V2');
+  assert.equal(kpi.metaAdMetrics[0]?.filesOpened, 1);
+  assert.equal(kpi.metaAdMetrics[0]?.attributionQuality, 'direct_ad');
+  assert.equal(kpi.metaAdMetrics[0]?.leads[0]?.id, 'l-1');
+  assert.equal(kpi.metaAdMetrics[1]?.adName, 'Bachelor IELTS CSCA');
+  assert.equal(kpi.metaAdMetrics[1]?.adId, '120250805557110245');
+  assert.equal(kpi.metaAdMetrics[1]?.channel, 'website_ad');
+  assert.equal(kpi.metaAdMetricsAllTime.length, 2);
 });

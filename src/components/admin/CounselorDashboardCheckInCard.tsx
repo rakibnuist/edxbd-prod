@@ -17,6 +17,7 @@ import {
   Sparkles,
   Users2,
 } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
 import { captureBrowserLocation } from '@/lib/browser-geolocation';
 import type { CounselorDeskSummary } from '@/lib/office-pulse';
 
@@ -26,6 +27,7 @@ interface Props {
 }
 
 export default function CounselorDashboardCheckInCard({ desk, onCheckInSuccess }: Props) {
+  const { authenticatedFetch } = useAuth();
   const [locating, setLocating] = useState(false);
   const [checkingIn, setCheckingIn] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
@@ -54,7 +56,7 @@ export default function CounselorDashboardCheckInCard({ desk, onCheckInSuccess }
         setGpsTroubleshootOpen(true);
       }
 
-      const res = await fetch('/api/admin/attendance', {
+      const res = await authenticatedFetch('/api/admin/attendance', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -64,9 +66,9 @@ export default function CounselorDashboardCheckInCard({ desk, onCheckInSuccess }
         }),
       });
 
-      const data = await res.json();
+      const data = await res.json().catch(() => ({}));
       if (!res.ok) {
-        throw new Error(data.error || 'Check-in failed. Please retry.');
+        throw new Error(data.error || data.message || 'Check-in failed. Please retry.');
       }
 
       const locLabel = data.locationStatus?.locationLabel || (locPayload.latitude ? 'GPS Verified' : 'Standard Check-In');

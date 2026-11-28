@@ -53,15 +53,19 @@ export default function ContentPage() {
   const [editorMode, setEditorMode] = useState<'html' | 'preview'>('html');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [modalError, setModalError] = useState<string | null>(null);
 
   const filteredContents = useMemo(() => {
     let filtered = [...contents];
 
-    // Filter by category
+    // Filter by category (matches both primary category and categories array)
     if (selectedCategory !== 'all') {
-      filtered = filtered.filter(content =>
-        content.categories && content.categories.includes(selectedCategory)
-      );
+      const targetLower = selectedCategory.toLowerCase();
+      filtered = filtered.filter(content => {
+        const primaryMatch = (content.category || '').toLowerCase() === targetLower;
+        const arrayMatch = Array.isArray(content.categories) && content.categories.some(cat => cat.toLowerCase() === targetLower);
+        return primaryMatch || arrayMatch;
+      });
     }
 
     // Filter by type
@@ -105,21 +109,16 @@ export default function ContentPage() {
 
       if (response.ok) {
         const data = await response.json();
-        setContents(data);
-        console.log('Contents fetched successfully:', data);
-        console.log('Number of contents:', data.length);
+        setContents(Array.isArray(data) ? data : []);
       } else {
-        const errorData = await response.json();
-        console.error('Failed to fetch contents:', errorData);
-        console.error('Response status:', response.status);
-        console.error('Response statusText:', response.statusText);
+        const errorData = await response.json().catch(() => ({}));
 
         if (response.status === 403) {
           showMessage('error', 'Access denied. Please log in as an admin.');
         } else if (response.status === 500) {
           showMessage('error', 'Server error. Please check if the database is connected.');
         } else {
-          showMessage('error', `Failed to fetch contents: ${errorData.error || 'Unknown error'}`);
+          showMessage('error', `Failed to fetch contents: ${errorData.error || errorData.message || 'Unknown error'}`);
         }
       }
     } catch (error) {
@@ -180,60 +179,46 @@ export default function ContentPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setModalError(null);
 
     try {
       // Validate required fields
       if (!formData.title.trim()) {
-        showMessage('error', 'Title is required');
+        setModalError('Title is required.');
         return;
       }
       if (!formData.slug.trim()) {
-        showMessage('error', 'Slug is required');
+        setModalError('Slug is required.');
         return;
       }
       if (!formData.content.trim()) {
-        showMessage('error', 'Content is required');
+        setModalError('Content is required.');
         return;
       }
       if (!formData.author.trim()) {
-        showMessage('error', 'Author is required');
+        setModalError('Author is required.');
         return;
       }
-      if (formData.isPublished) {
-        const missing = [
-          !formData.reviewer.trim() && 'reviewer',
-          formData.sourceUrls.length === 0 && 'official source',
-          !formData.lastVerifiedAt && 'checked date',
-          !formData.nextReviewAt && 'next review date',
-          !formData.complianceApprovedAt && 'management approval',
-          !formData.seoApprovedAt && 'SEO approval',
-        ].filter(Boolean);
-        if (missing.length) {
-          showMessage('error', `Complete the Evidence First checks before publishing: ${missing.join(', ')}.`);
-          return;
-        }
-      }
 
-      // Get fresh token
+      const payload = {
+        ...formData,
+        tags: (formData.tags || []).map((t) => t.trim()).filter(Boolean),
+        sourceUrls: (formData.sourceUrls || []).map((u) => u.trim()).filter(Boolean),
+      };
+
       const url = editingContent ? `/api/admin/content/${editingContent.id}` : '/api/admin/content';
       const method = editingContent ? 'PUT' : 'POST';
-
-      console.log('Submitting content:', { url, method, formData });
 
       const response = await authenticatedFetch(url, {
         method,
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(payload),
       });
 
-      console.log('Response status:', response.status);
-      console.log('Response ok:', response.ok);
-
       if (response.ok) {
-        const result = await response.json();
-        console.log('Content saved successfully:', result);
+        const result = await response.json().catch(() => ({}));
 
         const action = editingContent ? 'update' : 'create';
         trackContentManagement(action, {
@@ -248,6 +233,7 @@ export default function ContentPage() {
         fetchContents();
         setShowForm(false);
         setEditingContent(null);
+        setModalError(null);
         setFormData({
           title: '',
           slug: '',
@@ -273,8 +259,7 @@ export default function ContentPage() {
         });
         setEditorMode('html');
       } else {
-        const errorData = await response.json();
-        console.error('API Error:', errorData);
+        const errorData = await response.json().catch(() => ({}));
 
         const action = editingContent ? 'update' : 'create';
         trackContentManagement(action, {
@@ -285,7 +270,9 @@ export default function ContentPage() {
         });
 
         const details = Array.isArray(errorData.details) ? ` ${errorData.details.join(' ')}` : '';
-        showMessage('error', `Failed to ${editingContent ? 'update' : 'create'} content: ${errorData.error || 'Unknown error'}${details}`);
+        const errMsg = `Failed to ${editingContent ? 'update' : 'create'} content: ${errorData.error || errorData.message || 'Unknown error'}${details}`;
+        setModalError(errMsg);
+        showMessage('error', errMsg);
       }
     } catch (error) {
       console.error('Network Error:', error);
@@ -297,13 +284,16 @@ export default function ContentPage() {
         error: 'network_error'
       });
 
-      showMessage('error', 'Network error. Please check your connection and try again.');
+      const errMsg = 'Network error. Please check your connection and try again.';
+      setModalError(errMsg);
+      showMessage('error', errMsg);
     } finally {
       setIsSubmitting(false);
     }
   };
 
   const handleEdit = (content: Content) => {
+    setModalError(null);
     setEditingContent(content);
     setFormData({
       title: content.title,
@@ -347,13 +337,16 @@ export default function ContentPage() {
             content_id: id,
             success: true
           });
+          showMessage('success', 'Content deleted successfully.');
           fetchContents();
         } else {
+          const errorData = await response.json().catch(() => ({}));
           trackContentManagement('delete', {
             content_id: id,
             success: false,
             error: 'api_error'
           });
+          showMessage('error', `Failed to delete content: ${errorData.error || errorData.message || 'Unknown error'}`);
         }
       } catch (_error) {
         trackContentManagement('delete', {
@@ -361,6 +354,7 @@ export default function ContentPage() {
           success: false,
           error: 'network_error'
         });
+        showMessage('error', 'Network error while deleting content.');
       }
     }
   };
@@ -452,6 +446,11 @@ export default function ContentPage() {
               <option value="all">All Categories</option>
               <option value="Announcement">Announcement</option>
               <option value="University">University</option>
+              <option value="University announcement">University announcement</option>
+              <option value="Student guide">Student guide</option>
+              <option value="Scholarship">Scholarship</option>
+              <option value="Visa">Visa</option>
+              <option value="Deadline">Deadline</option>
               <option value="Success">Success</option>
               <option value="Partnership">Partnership</option>
               <option value="News">News</option>
@@ -612,15 +611,18 @@ export default function ContentPage() {
 
       {/* Add/Edit Form Modal */}
       {showForm && (
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-          <div className="relative top-2 mx-auto max-h-[calc(100vh-1rem)] w-11/12 overflow-y-auto rounded-xl border bg-white p-3 shadow-lg sm:top-4 sm:w-10/12 sm:p-4 md:w-3/4 lg:w-2/3 lg:p-5">
+        <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-slate-900/50 p-2 sm:p-4">
+          <div className="relative w-full max-w-4xl max-h-[92dvh] overflow-y-auto rounded-xl border bg-white p-3 shadow-lg sm:p-4 lg:p-5">
             <div className="mt-2 sm:mt-3">
               <div className="flex justify-between items-center mb-3 sm:mb-4">
                 <h3 className="text-sm sm:text-base lg:text-lg font-medium text-gray-900">
                   {editingContent ? 'Edit Content' : 'Add New Content'}
                 </h3>
                 <button
-                  onClick={() => setShowForm(false)}
+                  onClick={() => {
+                    setModalError(null);
+                    setShowForm(false);
+                  }}
                   className="text-gray-500 hover:text-gray-600 touch-manipulation"
                 >
                   <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -628,6 +630,12 @@ export default function ContentPage() {
                   </svg>
                 </button>
               </div>
+
+              {modalError && (
+                <div role="alert" className="mb-3 rounded-lg border border-red-300 bg-red-50 px-3 py-2 text-xs font-medium text-red-800">
+                  {modalError}
+                </div>
+              )}
 
               <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
                 <div>
@@ -757,13 +765,13 @@ export default function ContentPage() {
 
                   {/* Image Link Input */}
                   <div className="mb-3 sm:mb-4">
-                    <label className="block text-xs sm:text-sm font-medium text-gray-600 mb-1 sm:mb-2">Image URL</label>
+                    <label className="block text-xs sm:text-sm font-medium text-gray-600 mb-1 sm:mb-2">Image URL or site path</label>
                     <input
-                      type="url"
+                      type="text"
                       value={formData.featuredImage}
                       onChange={(e) => setFormData({ ...formData, featuredImage: e.target.value })}
                       className="block w-full border border-gray-300 rounded-md px-2 sm:px-3 py-1.5 sm:py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-xs sm:text-sm touch-manipulation"
-                      placeholder="https://example.com/image.jpg"
+                      placeholder="/uploads/... or https://example.com/image.jpg"
                     />
                   </div>
 
@@ -831,7 +839,7 @@ export default function ContentPage() {
 
                 <div>
                   <label className="block text-xs sm:text-sm font-medium text-gray-700">Official source URLs, one per line</label>
-                  <textarea value={formData.sourceUrls.join('\n')} onChange={(e) => setFormData({ ...formData, sourceUrls: e.target.value.split('\n').map(item => item.trim()).filter(Boolean) })} rows={3} className="mt-1 block w-full rounded-md border border-gray-300 px-2 py-1.5 text-xs focus:border-blue-500 focus:outline-none sm:px-3 sm:py-2 sm:text-sm" placeholder="https://university-or-government-source.example/..." />
+                  <textarea value={formData.sourceUrls.join('\n')} onChange={(e) => setFormData({ ...formData, sourceUrls: e.target.value.split('\n') })} rows={3} className="mt-1 block w-full rounded-md border border-gray-300 px-2 py-1.5 text-xs focus:border-blue-500 focus:outline-none sm:px-3 sm:py-2 sm:text-sm" placeholder="https://university-or-government-source.example/..." />
                 </div>
 
                 <div className="grid gap-3 sm:grid-cols-2">
@@ -891,10 +899,10 @@ export default function ContentPage() {
                   <label className="block text-xs sm:text-sm font-medium text-gray-700">Tags (comma-separated)</label>
                   <input
                     type="text"
-                    value={formData.tags?.join(', ') || ''}
+                    value={formData.tags?.join(',') || ''}
                     onChange={(e) => setFormData({
                       ...formData,
-                      tags: e.target.value.split(',').map(tag => tag.trim()).filter(tag => tag)
+                      tags: e.target.value.split(',')
                     })}
                     className="mt-1 block w-full border border-gray-300 rounded-md px-2 sm:px-3 py-1.5 sm:py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-xs sm:text-sm touch-manipulation"
                     placeholder="study abroad, education, scholarship..."

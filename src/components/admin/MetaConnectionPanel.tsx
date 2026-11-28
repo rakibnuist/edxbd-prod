@@ -24,7 +24,7 @@ export default function MetaConnectionPanel({ refreshKey = 0, pendingChanges = f
     const controller = new AbortController();
     authenticatedFetch('/api/meta-status', { signal: controller.signal, cache: 'no-store' })
       .then(async response => { if (!response.ok) throw new Error('Could not load the Meta connection status.'); return response.json(); })
-      .then(data => setHealth(data))
+      .then(data => { setHealth(data); setError(null); })
       .catch(error => { if (!controller.signal.aborted) setError(error.message); })
       .finally(() => { if (!controller.signal.aborted) setLoading(false); });
     return () => controller.abort();
@@ -33,8 +33,8 @@ export default function MetaConnectionPanel({ refreshKey = 0, pendingChanges = f
     setChecking(true); setError(null); setCheckFeedback(null);
     try {
       const response = await authenticatedFetch('/api/meta-status', { method: 'POST' });
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.error || 'The connection check could not finish. Please retry.');
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(data.error || data.message || 'The connection check could not finish. Please retry.');
       setHealth(data); setCheckFeedback(data.check?.message || null);
     } catch (error) { setError(error instanceof Error ? error.message : 'Connection check failed.'); }
     finally { setChecking(false); }

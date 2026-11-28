@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
 import prisma from '@/lib/prisma';
 import { generateToken, isStaffRole } from '@/lib/auth';
+import { findLinkedEmployeeForUser } from '@/lib/auth-user';
 import { checkRateLimit, rateLimitExceeded } from '@/lib/rate-limit';
 import { getRequiredString, jsonBodyErrorResponse, readLimitedJson } from '@/lib/request-body';
 
@@ -62,13 +63,19 @@ export async function POST(request: NextRequest) {
     };
     const token = generateToken(tokenPayload);
 
+    const employee = await findLinkedEmployeeForUser(user.id, user.email);
+
     const response = NextResponse.json({
       message: 'Login successful',
       user: {
         id: user.id,
         email: user.email,
         name: user.name,
-        role: user.role
+        role: user.role,
+        employeeId: employee?.id || null,
+        employeeEmpId: employee?.empId || null,
+        employeeName: employee?.name || null,
+        employeeTeam: employee?.team || null,
       }
     });
     response.cookies.set('admin_session', token, {

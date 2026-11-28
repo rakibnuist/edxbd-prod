@@ -55,6 +55,8 @@ export async function GET(request: NextRequest) {
           gpa: true,
           assessAcademicResults: true,
           assignedTo: true,
+          isApplication: true,
+          leadRef: true,
           createdAt: true,
         },
       }),
@@ -72,7 +74,7 @@ export async function GET(request: NextRequest) {
               }),
         },
         orderBy: { createdAt: 'desc' },
-        take: 20,
+        take: 25,
         select: {
           id: true,
           type: true,
@@ -150,7 +152,25 @@ export async function GET(request: NextRequest) {
       });
     }
 
+    const portalLeadIds = Array.from(
+      new Set(portalEvents.map((ev) => ev.leadId).filter((id): id is string => Boolean(id))),
+    );
+    const portalLeadMetaList = portalLeadIds.length
+      ? await prisma.lead.findMany({
+          where: { id: { in: portalLeadIds } },
+          select: { id: true, name: true, leadRef: true, isApplication: true, leadMarket: true },
+        })
+      : [];
+    const portalLeadMap = new Map(portalLeadMetaList.map((l) => [l.id, l]));
+
     for (const ev of portalEvents) {
+      const leadMeta = ev.leadId ? portalLeadMap.get(ev.leadId) : null;
+      if (!isAdmin && leadMeta?.leadMarket === 'China') continue;
+      const href = leadMeta?.isApplication
+        ? `/admin/applications?search=${encodeURIComponent(leadMeta.leadRef || leadMeta.name)}`
+        : ev.leadId
+          ? `/admin/leads?lead=${encodeURIComponent(ev.leadId)}`
+          : '/admin/leads';
       items.push({
         id: `act-${ev.id}`,
         kind: ev.type === 'student_doc_upload' ? 'student_doc_upload' : 'student_message',
@@ -160,6 +180,7 @@ export async function GET(request: NextRequest) {
         subtitle: ev.toValue || ev.details || 'Open lead drawer to review',
         leadId: ev.leadId,
         leadName: ev.leadName,
+        href,
         createdAt: ev.createdAt.toISOString(),
         urgent: true,
       });
@@ -182,6 +203,9 @@ export async function GET(request: NextRequest) {
         subtitle: `${lead.country} · ${lead.assignedTo || 'Unassigned'} · ${lead.source}`,
         leadId: lead.id,
         leadName: lead.name,
+        href: lead.isApplication
+          ? `/admin/applications?search=${encodeURIComponent(lead.leadRef || lead.name)}`
+          : `/admin/leads?lead=${encodeURIComponent(lead.id)}`,
         createdAt: lead.createdAt.toISOString(),
         urgent: isHot || isUntouchedSla,
       });

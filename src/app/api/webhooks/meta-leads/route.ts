@@ -5,6 +5,7 @@ import { sendCrmStage } from '@/lib/meta-crm-events';
 import { generatePublicToken, recordNewLeadEffects, resolveAutoAssignment } from '@/lib/crm-operations';
 import { parseNumericGpa } from '@/lib/wa-templates';
 import {
+  buildMetaAttributionUtmJson,
   buildMetaInstantFormMessage,
   extractMetaFormFields,
   normalizeMetaLeadPhone,
@@ -25,8 +26,13 @@ type GraphLeadResponse = {
   created_time?: string | number;
   form_id?: string;
   form_name?: string;
+  ad_id?: string;
   ad_name?: string;
+  adset_id?: string;
+  adset_name?: string;
+  campaign_id?: string;
   campaign_name?: string;
+  platform?: string;
   field_data?: GraphLeadField[];
 };
 
@@ -35,8 +41,13 @@ type WebhookChangeValue = {
   page_id?: string;
   form_id?: string;
   form_name?: string;
+  ad_id?: string;
   ad_name?: string;
+  adset_id?: string;
+  adset_name?: string;
+  campaign_id?: string;
   campaign_name?: string;
+  platform?: string;
   created_time?: string | number;
   full_name?: string;
   name?: string;
@@ -107,7 +118,7 @@ async function fetchMetaLeadDetails(
   const queryLead = async (token: string): Promise<GraphLeadResponse | null> => {
     try {
       const url = new URL(`https://graph.facebook.com/${META_API_VERSION}/${encodeURIComponent(leadgenId)}`);
-      url.searchParams.set('fields', 'created_time,field_data,form_id,form_name,ad_name,campaign_name');
+      url.searchParams.set('fields', 'created_time,field_data,form_id,form_name,ad_id,ad_name,adset_id,adset_name,campaign_id,campaign_name,platform');
       const response = await fetch(url.toString(), {
         headers: { Authorization: `Bearer ${token}` },
         cache: 'no-store',
@@ -168,9 +179,15 @@ type NormalizedWebhookLeadInput = {
   rawName: string;
   rawPhone: string;
   rawEmail: string;
+  formId?: string;
   formName: string;
+  campaignId?: string;
   campaignName: string;
+  adsetId?: string;
+  adsetName?: string;
+  adId?: string;
   adName: string;
+  platform?: string;
   leadgenId: string;
   lastDegree: string;
   gpa: string;
@@ -200,6 +217,19 @@ async function persistNormalizedWebhookLead(
     country: 'China',
   });
   const parsedGpa = parseNumericGpa(null, input.gpa);
+  const utm = buildMetaAttributionUtmJson({
+    platform: input.platform,
+    medium: 'meta_instant_form',
+    campaignId: input.campaignId,
+    campaignName: input.campaignName || 'META_Leads_BD_China-Mar2027_2026Q1',
+    adsetId: input.adsetId,
+    adsetName: input.adsetName,
+    adId: input.adId,
+    adName: input.adName,
+    formId: input.formId,
+    formName: input.formName,
+    leadId: input.leadgenId,
+  });
 
   const createdLead = await prisma.lead.create({
     data: {
@@ -221,6 +251,7 @@ async function persistNormalizedWebhookLead(
       }),
       status: 'new',
       source: 'meta_china_march_2027',
+      utm: utm || null,
       leadType: 'assessment',
       assignedTeam: 'china',
       assignedTo: autoAssigned.assignedTo,
@@ -271,9 +302,15 @@ function normalizeDirectLeadRecord(raw: Record<string, unknown>): NormalizedWebh
     rawName: extracted.name,
     rawPhone: extracted.phone,
     rawEmail: extracted.email,
+    formId: stringMap.form_id || '',
     formName: stringMap.form_name || stringMap.form || 'WebLead&InstantForm_18_4_2026',
+    campaignId: stringMap.campaign_id || '',
     campaignName: stringMap.campaign_name || stringMap.campaign || 'META_Leads_BD_China-Mar2027_2026Q1',
+    adsetId: stringMap.adset_id || '',
+    adsetName: stringMap.adset_name || stringMap.adset || '',
+    adId: stringMap.ad_id || '',
     adName: stringMap.ad_name || stringMap.ad || '',
+    platform: stringMap.platform || '',
     leadgenId: stringMap.leadgen_id || stringMap.lead_id || stringMap.id || '',
     lastDegree: extracted.lastDegree,
     gpa: extracted.gpa,
@@ -369,9 +406,15 @@ export async function POST(request: NextRequest) {
           let rawName = (val.full_name || val.name || '').trim();
           let rawPhone = (val.phone_number || val.phone || val.whatsapp_number || '').trim();
           let rawEmail = (val.email || '').trim().toLowerCase();
+          let formId = (val.form_id || '').trim();
           let formName = (val.form_name || '').trim();
+          let adId = (val.ad_id || '').trim();
           let adName = (val.ad_name || '').trim();
+          let adsetId = (val.adset_id || '').trim();
+          let adsetName = (val.adset_name || '').trim();
+          let campaignId = (val.campaign_id || '').trim();
           let campaignName = (val.campaign_name || '').trim();
+          let platform = (val.platform || '').trim();
           let createdRaw: string | number | undefined = val.created_time;
 
           const inlineFields = extractMetaFormFields(extractFieldDataMap(val.field_data));
@@ -383,7 +426,7 @@ export async function POST(request: NextRequest) {
           let englishScore = inlineFields.englishScore;
           let whatsappPhone = inlineFields.whatsappPhone;
 
-          if ((!rawPhone || !lastDegree) && leadgenId && accessToken) {
+          if ((!rawPhone || !lastDegree || !adName) && leadgenId && accessToken) {
             const graphLead = await fetchMetaLeadDetails(leadgenId, accessToken, pageId || undefined);
             if (graphLead) {
               const graphFields = extractMetaFormFields(extractFieldDataMap(graphLead.field_data));
@@ -394,9 +437,15 @@ export async function POST(request: NextRequest) {
               gpa = gpa || graphFields.gpa;
               englishScore = englishScore || graphFields.englishScore;
               whatsappPhone = whatsappPhone || graphFields.whatsappPhone;
+              formId = formId || (graphLead.form_id || '').trim();
               formName = formName || (graphLead.form_name || '').trim();
+              adId = adId || (graphLead.ad_id || '').trim();
               adName = adName || (graphLead.ad_name || '').trim();
+              adsetId = adsetId || (graphLead.adset_id || '').trim();
+              adsetName = adsetName || (graphLead.adset_name || '').trim();
+              campaignId = campaignId || (graphLead.campaign_id || '').trim();
               campaignName = campaignName || (graphLead.campaign_name || '').trim();
+              platform = platform || (graphLead.platform || '').trim();
               createdRaw = graphLead.created_time ?? createdRaw;
             }
           }
@@ -406,9 +455,15 @@ export async function POST(request: NextRequest) {
               rawName,
               rawPhone,
               rawEmail,
-              formName: formName || (val.form_id ? `Form ${val.form_id}` : 'WebLead&InstantForm_18_4_2026'),
+              formId,
+              formName: formName || (formId ? `Form ${formId}` : 'WebLead&InstantForm_18_4_2026'),
+              campaignId,
               campaignName,
+              adsetId,
+              adsetName,
+              adId,
               adName,
+              platform,
               leadgenId,
               lastDegree,
               gpa,

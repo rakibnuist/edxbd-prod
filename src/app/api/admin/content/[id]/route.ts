@@ -58,33 +58,45 @@ export async function PUT(
       return NextResponse.json({ error: urlError }, { status: 400 });
     }
     const existing = await prisma.content.findUnique({ where: { id } });
-    const data = withPublicationDefaults(toContentData(body, true) as Record<string, unknown>, existing as Record<string, unknown> | null);
-    const publicationErrors = contentPublicationErrors({ ...(existing || {}), ...data });
-    if (publicationErrors.length) {
-      return NextResponse.json({ error: 'This content is not ready to publish.', details: publicationErrors }, { status: 400 });
-    }
-    if (body.isPublished === true && !existing?.publishedAt) data.publishedAt = new Date();
-    const content = await prisma.content.update({
-      where: { id },
-      data: data as never
-    }).catch(() => null);
-
-    if (!content) {
+    if (!existing) {
       return NextResponse.json(
         { error: 'Content not found' },
         { status: 404 }
       );
     }
+    const data = withPublicationDefaults(toContentData(body, true) as Record<string, unknown>, existing as Record<string, unknown>);
+    const publicationErrors = contentPublicationErrors({ ...existing, ...data });
+    if (publicationErrors.length) {
+      return NextResponse.json({ error: 'This content is not ready to publish.', details: publicationErrors }, { status: 400 });
+    }
+    if (body.isPublished === true && !existing.publishedAt) data.publishedAt = new Date();
+    const content = await prisma.content.update({
+      where: { id },
+      data: data as never
+    });
 
     revalidatePath('/updates');
     revalidatePath('/');
     revalidatePath(`/updates/${content.slug}`);
-    if (existing?.slug && existing.slug !== content.slug) revalidatePath(`/updates/${existing.slug}`);
+    if (existing.slug && existing.slug !== content.slug) revalidatePath(`/updates/${existing.slug}`);
     if (content.isPublished) announcePublishedUpdate(content.slug);
     return NextResponse.json(serializeContent(content as Record<string, unknown>));
   } catch (error) {
     const bodyErr = jsonBodyErrorResponse(error);
     if (bodyErr) return bodyErr;
+    const code = (error as { code?: string })?.code;
+    if (code === 'P2002') {
+      return NextResponse.json(
+        { error: 'Another content item already uses this slug.' },
+        { status: 409 }
+      );
+    }
+    if (code === 'P2025') {
+      return NextResponse.json(
+        { error: 'Content not found' },
+        { status: 404 }
+      );
+    }
     console.error('Update content error:', error);
     return NextResponse.json(
       { error: 'Failed to update content' },

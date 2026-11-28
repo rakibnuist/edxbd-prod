@@ -34,8 +34,11 @@ interface QuickInteractionLoggerProps {
   phone?: string | null;
   currentStatus: string;
   currentFollowup?: string | null;
-  onLeadUpdated?: (updated: { status?: string; nextFollowup?: string | null; notes?: string }) => void;
+  isApplication?: boolean;
+  onLeadUpdated?: (updated: { status?: string; nextFollowup?: string | null; notes?: string; isApplication?: boolean; leadRef?: string | null }) => void;
 }
+
+type InteractionChannel = 'Phone Call' | 'WhatsApp Chat' | 'Office Meeting';
 
 const OUTCOME_OPTIONS = [
   { key: 'positive', label: 'Positive / Interested', emoji: '🌟', tone: 'emerald', newStatus: 'qualified' },
@@ -57,60 +60,64 @@ const QUICK_NOTE_SNIPPETS = [
 
 export default function QuickInteractionLogger({
   leadId,
-  leadName,
   phone,
   currentStatus,
   currentFollowup,
+  isApplication = false,
   onLeadUpdated,
 }: QuickInteractionLoggerProps) {
-  const { user, authenticatedFetch } = useAuth();
+  const { authenticatedFetch } = useAuth();
   const [activities, setActivities] = useState<InteractionActivity[]>([]);
   const [loadingActivities, setLoadingActivities] = useState(true);
 
   // Form states
-  const [selectedOutcome, setSelectedOutcome] = useState<string>('positive');
-  const [channel, setChannel] = useState<'Phone Call' | 'WhatsApp Chat' | 'Office Meeting'>('Phone Call');
+  const [selectedOutcome, setSelectedOutcome] = useState<string>(OUTCOME_OPTIONS[0].label);
+  const [channel, setChannel] = useState<InteractionChannel>('Phone Call');
   const [summary, setSummary] = useState('');
   const [nextFollowup, setNextFollowup] = useState<string>('');
-  const [autoStatus, setAutoStatus] = useState<string>('qualified');
+  const [autoStatus, setAutoStatus] = useState<string>(isApplication ? currentStatus : 'qualified');
   const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState<{ text: string; tone: 'ok' | 'err' } | null>(null);
-
-  const fetchActivities = useCallback(async () => {
-    try {
-      setLoadingActivities(true);
-      const res = await authenticatedFetch(`/api/admin/leads/${leadId}/activities`);
-      if (res.ok) {
-        const json = await res.json();
-        setActivities(json.activities || []);
-      }
-    } catch {
-      // Ignore
-    } finally {
-      setLoadingActivities(false);
-    }
-  }, [authenticatedFetch, leadId]);
+  const [reloadTick, setReloadTick] = useState(0);
 
   useEffect(() => {
-    fetchActivities();
-  }, [fetchActivities]);
+    let active = true;
+    authenticatedFetch(`/api/admin/leads/${encodeURIComponent(leadId)}/activities`, { cache: 'no-store' })
+      .then(async (res) => (res.ok ? res.json().catch(() => null) : null))
+      .then((json) => {
+        if (!active || !json) return;
+        setActivities(Array.isArray(json.activities) ? json.activities : []);
+      })
+      .catch(() => {})
+      .finally(() => {
+        if (active) setLoadingActivities(false);
+      });
+    return () => {
+      active = false;
+    };
+  }, [authenticatedFetch, leadId, reloadTick]);
 
-  const handleOutcomeSelect = (item: typeof OUTCOME_OPTIONS[number]) => {
-    setSelectedOutcome(item.label);
-    setAutoStatus(item.newStatus);
+  const handleOutcomeSelect = useCallback(
+    (item: typeof OUTCOME_OPTIONS[number]) => {
+      setSelectedOutcome(item.label);
+      if (!isApplication) {
+        setAutoStatus(item.newStatus);
+      }
 
-    // Default follow-up suggestions based on outcome
-    const now = new Date(Date.now() + 6 * 3600 * 1000);
-    if (item.key === 'positive' || item.key === 'followup' || item.key === 'parent_discussed') {
-      now.setDate(now.getDate() + 1);
-      now.setHours(12, 0, 0, 0);
-      setNextFollowup(now.toISOString().slice(0, 16));
-    } else if (item.key === 'no_answer') {
-      now.setDate(now.getDate() + 1);
-      now.setHours(15, 30, 0, 0);
-      setNextFollowup(now.toISOString().slice(0, 16));
-    }
-  };
+      // Compute Dhaka (GMT+6) tomorrow's suggested follow-up using UTC setters so browser TZ never shifts time
+      const nowDhaka = new Date(Date.now() + 6 * 3600 * 1000);
+      if (item.key === 'positive' || item.key === 'followup' || item.key === 'parent_discussed') {
+        nowDhaka.setUTCDate(nowDhaka.getUTCDate() + 1);
+        nowDhaka.setUTCHours(12, 0, 0, 0);
+        setNextFollowup(nowDhaka.toISOString().slice(0, 16));
+      } else if (item.key === 'no_answer') {
+        nowDhaka.setUTCDate(nowDhaka.getUTCDate() + 1);
+        nowDhaka.setUTCHours(15, 30, 0, 0);
+        setNextFollowup(nowDhaka.toISOString().slice(0, 16));
+      }
+    },
+    [isApplication],
+  );
 
   const handleQuickSnippet = (snippet: string) => {
     setSummary((prev) => (prev ? `${prev} ${snippet}` : snippet));
@@ -124,7 +131,7 @@ export default function QuickInteractionLogger({
       setSubmitting(true);
       setMessage(null);
 
-      const res = await authenticatedFetch(`/api/admin/leads/${leadId}/activities`, {
+      const res = await authenticatedFetch(`/api/admin/leads/${encodeURIComponent(leadId)}/activities`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -132,13 +139,13 @@ export default function QuickInteractionLogger({
           channel,
           summary: summary.trim(),
           nextFollowup: nextFollowup || null,
-          newStatus: autoStatus || undefined,
+          newStatus: isApplication ? undefined : (autoStatus || undefined),
         }),
       });
 
-      const json = await res.json();
+      const json = await res.json().catch(() => ({}));
       if (!res.ok) {
-        setMessage({ text: json.error || 'Failed to record interaction.', tone: 'err' });
+        setMessage({ text: json.error || json.message || 'Failed to record interaction.', tone: 'err' });
         return;
       }
 
@@ -149,9 +156,11 @@ export default function QuickInteractionLogger({
           status: json.lead.status,
           nextFollowup: json.lead.nextFollowup,
           notes: json.lead.notes,
+          isApplication: json.lead.isApplication,
+          leadRef: json.lead.leadRef,
         });
       }
-      fetchActivities();
+      setReloadTick((t) => t + 1);
     } catch {
       setMessage({ text: 'Network error saving interaction.', tone: 'err' });
     } finally {
@@ -159,10 +168,7 @@ export default function QuickInteractionLogger({
     }
   };
 
-  const cleanDigits = phone ? phone.replace(/\D/g, '') : '';
-  const waUrl = cleanDigits
-    ? `https://wa.me/${cleanDigits.startsWith('00880') ? cleanDigits.slice(2) : /^01[0-9]{9}$/.test(cleanDigits) ? `88${cleanDigits}` : cleanDigits}`
-    : null;
+  const waUrl = buildWhatsAppUrl(phone);
 
   return (
     <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm md:p-5">
@@ -235,7 +241,7 @@ export default function QuickInteractionLogger({
             </label>
             <select
               value={channel}
-              onChange={(e) => setChannel(e.target.value as any)}
+              onChange={(e) => setChannel(e.target.value as InteractionChannel)}
               className="w-full rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-900 focus:border-[#0f3a5c] focus:outline-none"
             >
               <option value="Phone Call">📞 Phone Call</option>

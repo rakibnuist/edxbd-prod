@@ -2,8 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { FINANCE_ACTIVITY_TYPES, canAccessFinanceRole, isAdminRole } from '@/lib/auth';
 import { verifyLiveAdminUser, verifyLiveStaffUser } from '@/lib/auth-user';
 import { seedDefaultMonthlyTargets } from '@/lib/crm-operations';
-import { computeEmployeeKpiReport, normalizeMonthParam, shiftIsoDays } from '@/lib/kpi-workflow';
+import { computeEmployeeKpiReport, dhakaTodayIso, normalizeMonthParam, shiftIsoDays } from '@/lib/kpi-workflow';
 import { jsonBodyErrorResponse, readLimitedJson } from '@/lib/request-body';
+import { getMetaConfig } from '@/lib/settings';
 import prisma from '@/lib/prisma';
 
 export async function GET(request: NextRequest) {
@@ -17,16 +18,19 @@ export async function GET(request: NextRequest) {
 
     const isAdmin = isAdminRole(actor.role);
     const canSeeFinance = canAccessFinanceRole(actor.role);
-    const selfEmpId = staff?.employee?.id || '__none__';
+    const selfEmp = staff?.employee || null;
+    const selfEmpId = selfEmp?.id || '__none__';
 
     const { searchParams } = new URL(request.url);
     const month = normalizeMonthParam(searchParams.get('month'));
+    const todayIso = dhakaTodayIso();
     const [y, m] = month.split('-').map(Number);
     const start = `${month}-01`;
     const daysInMonth = new Date(Date.UTC(y, m, 0)).getUTCDate();
     const end = `${month}-${String(daysInMonth).padStart(2, '0')}`;
     const winStartDate = new Date(`${shiftIsoDays(start, -1)}T00:00:00.000Z`);
     const winEndDate = new Date(`${shiftIsoDays(end, 1)}T23:59:59.999Z`);
+    const dateRangeOrToday = { OR: [{ date: { gte: start, lte: end } }, { date: todayIso }] };
 
     const [employees, attendances, dailyLogs, targets, tasks, leads, activities] = await Promise.all([
       prisma.employee.findMany({
@@ -39,28 +43,60 @@ export async function GET(request: NextRequest) {
       }),
       prisma.attendance.findMany({
         where: isAdmin
-          ? { date: { gte: start, lte: end } }
-          : { employeeId: selfEmpId, date: { gte: start, lte: end } },
+          ? dateRangeOrToday
+          : { AND: [dateRangeOrToday, { employeeId: selfEmpId }] },
         select: { id: true, employeeId: true, empId: true, date: true, checkIn: true, checkOut: true, hoursWorked: true, status: true, source: true, notes: true },
       }),
       prisma.dailyLog.findMany({
         where: isAdmin
-          ? { date: { gte: start, lte: end } }
-          : { employeeId: selfEmpId, date: { gte: start, lte: end } },
+          ? dateRangeOrToday
+          : { AND: [dateRangeOrToday, { employeeId: selfEmpId }] },
         select: { id: true, employeeId: true, empId: true, date: true, accomplishments: true, challenges: true, tomorrowPlan: true, metricsJson: true, submittedAt: true },
       }),
       prisma.kpiTarget.findMany({
-        where: isAdmin ? { month } : { month, employeeId: selfEmpId },
+        where: isAdmin
+          ? { month }
+          : {
+              month,
+              OR: [
+                { employeeId: selfEmpId },
+                ...(selfEmp ? [{ employeeId: null, consultant: selfEmp.name }] : []),
+              ],
+            },
         select: { employeeId: true, consultant: true, month: true, targetLeads: true, targetEnrolled: true, targetRevenue: true, targetDailyActions: true, targetFollowups: true, maxSlaHours: true },
       }),
       prisma.taskDirective.findMany({
         where: isAdmin
           ? { status: { not: 'cancelled' } }
-          : { status: { not: 'cancelled' }, employeeId: selfEmpId },
+          : {
+              status: { not: 'cancelled' },
+              OR: [
+                { employeeId: selfEmpId },
+                ...(selfEmp ? [{ employeeId: null, assignedTo: selfEmp.name }] : []),
+              ],
+            },
+        orderBy: [{ status: 'asc' }, { createdAt: 'desc' }],
         select: { id: true, title: true, details: true, assignedTo: true, employeeId: true, assignedBy: true, dueDate: true, priority: true, status: true, category: true, leadId: true, completedAt: true, createdAt: true, updatedAt: true },
       }),
       prisma.lead.findMany({
-        where: isAdmin ? undefined : { assignedEmployeeId: selfEmpId },
+        where: isAdmin
+          ? undefined
+          : {
+              OR: [
+                { assignedEmployeeId: selfEmpId },
+                ...(selfEmp
+                  ? [
+                      { assignedEmployeeId: null, assignedTo: selfEmp.name },
+                      {
+                        isApplication: true,
+                        assignedEmployeeId: null,
+                        assignedTo: null,
+                        referrer: { contains: selfEmp.name },
+                      },
+                    ]
+                  : []),
+              ],
+            },
         select: {
           id: true,
           name: true,
@@ -68,6 +104,7 @@ export async function GET(request: NextRequest) {
           country: true,
           source: true,
           utm: true,
+          message: true,
           channelType: true,
           status: true,
           isApplication: true,
@@ -84,9 +121,16 @@ export async function GET(request: NextRequest) {
       }),
       prisma.activityEvent.findMany({
         where: {
+          createdAt: { gte: winStartDate, lte: winEndDate },
           ...(isAdmin
-            ? { createdAt: { gte: winStartDate, lte: winEndDate } }
-            : { employeeId: selfEmpId, createdAt: { gte: winStartDate, lte: winEndDate } }),
+            ? {}
+            : {
+                OR: [
+                  { employeeId: selfEmpId },
+                  { employeeId: null, actorUserId: actor.userId },
+                  ...(selfEmp ? [{ employeeId: null, actorName: selfEmp.name }] : []),
+                ],
+              }),
           ...(canSeeFinance ? {} : { type: { notIn: [...FINANCE_ACTIVITY_TYPES] } }),
         },
         orderBy: { createdAt: 'desc' },
@@ -109,13 +153,36 @@ export async function GET(request: NextRequest) {
       ? targets
       : targets.map(({ targetRevenue: _tr, ...rest }) => ({ ...rest, targetRevenue: 0 }));
 
+    const openTasksSorted = tasks
+      .filter((t) => t.status !== 'done')
+      .sort((a, b) => {
+        if (a.dueDate && b.dueDate) return a.dueDate.localeCompare(b.dueDate);
+        if (a.dueDate) return -1;
+        if (b.dueDate) return 1;
+        return b.createdAt.getTime() - a.createdAt.getTime();
+      });
+
+    const metaConfig = isAdmin ? await getMetaConfig().catch(() => ({ pixelId: '', accessToken: '' })) : null;
+
     return NextResponse.json(
       {
         ...report,
         targets: safeTargets,
-        recentDailyLogs: dailyLogs.slice().sort((a, b) => b.date.localeCompare(a.date)).slice(0, 20),
-        openTasks: tasks.filter((t) => t.status !== 'done').slice(0, 60),
+        recentDailyLogs: dailyLogs.slice().sort((a, b) => b.date.localeCompare(a.date)).slice(0, 30),
+        openTasks: openTasksSorted.slice(0, 150),
         recentActivities: activities.slice(0, 40),
+        ...(metaConfig
+          ? {
+              metaConnection: {
+                configured: Boolean(
+                  metaConfig.accessToken ||
+                    process.env.META_LEAD_ACCESS_TOKEN ||
+                    process.env.META_ACCESS_TOKEN,
+                ),
+                pixelId: metaConfig.pixelId || process.env.NEXT_PUBLIC_META_PIXEL_ID || null,
+              },
+            }
+          : {}),
       },
       { headers: { 'Cache-Control': 'no-store, private' } },
     );
@@ -159,6 +226,7 @@ export async function POST(request: NextRequest) {
     const targetDailyActions = toInt(body.targetDailyActions, 12, 1, 200);
     const targetFollowups = toInt(body.targetFollowups, 10, 0, 200);
     const maxSlaHours = toInt(body.maxSlaHours, 24, 1, 168);
+    const hasTargetLeads = body.targetLeads !== undefined && body.targetLeads !== null && body.targetLeads !== '';
     const targetLeads = toInt(body.targetLeads, 30, 0, 2000);
     const targetEnrolled = toInt(body.targetEnrolled, 5, 0, 500);
 
@@ -169,7 +237,7 @@ export async function POST(request: NextRequest) {
         targetDailyActions,
         targetFollowups,
         maxSlaHours,
-        targetLeads,
+        ...(hasTargetLeads ? { targetLeads } : {}),
         targetEnrolled,
       },
       create: {

@@ -50,7 +50,21 @@ export async function GET(request: NextRequest) {
                 { city: { contains: search } }
             ];
         }
-        if (verification && verification !== 'all') query.verificationStatus = verification;
+        if (verification && verification !== 'all') {
+            if (verification === 'expired') {
+                query.AND = [
+                    ...(Array.isArray(query.AND) ? query.AND : []),
+                    {
+                        OR: [
+                            { verificationStatus: 'expired' },
+                            { verificationExpiresAt: { lt: new Date() } },
+                        ],
+                    },
+                ];
+            } else {
+                query.verificationStatus = verification;
+            }
+        }
 
         const [total, universities, filterRecords, governanceRecords] = await Promise.all([
             prisma.university.count({ where: query }),
@@ -124,9 +138,11 @@ export async function POST(request: NextRequest) {
         }
 
         // Check unique slug
-        const existing = await prisma.university.findUnique({ where: { slug: body.slug } });
+        const normalizedSlug = body.slug.trim();
+        body.slug = normalizedSlug;
+        const existing = await prisma.university.findUnique({ where: { slug: normalizedSlug } });
         if (existing) {
-            return NextResponse.json({ error: 'University with this slug already exists' }, { status: 400 });
+            return NextResponse.json({ error: 'University with this slug already exists' }, { status: 409 });
         }
 
         const updateData = universityWriteData(body);

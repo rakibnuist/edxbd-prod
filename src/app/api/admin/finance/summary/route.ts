@@ -84,7 +84,7 @@ export async function GET(request: NextRequest) {
         _count: { id: true },
       }),
       prisma.payrollRecord.aggregate({
-        where: { status: 'pending', netPay: { gt: 0 } },
+        where: { status: 'pending', netPay: { gt: 0 }, month: { lte: dhakaCurrentMonth() } },
         _sum: { netPay: true },
         _count: { id: true },
       }),
@@ -125,7 +125,9 @@ export async function GET(request: NextRequest) {
       employeeName: r.employee?.name ?? null,
     }));
 
-    const incomeSum = mappedIncome.reduce((s, r) => s + (r.amount || 0), 0);
+    const incomeSum = mappedIncome
+      .filter((r) => !r.excludeFromCash)
+      .reduce((s, r) => s + (r.amount || 0), 0);
     const expenseSum = mappedExpenses.reduce((s, r) => s + (r.amount || 0), 0);
     const liveBalance = cashInitial + (allTimeCashIn._sum.amount || 0) - (allTimeOut._sum.amount || 0);
 

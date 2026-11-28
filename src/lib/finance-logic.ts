@@ -208,14 +208,14 @@ export function formatMonthLabel(month: string): string {
 }
 
 export function workingDaysInMonth(month: string): number {
-  if (!isValidMonth(month)) return 22;
+  if (!isValidMonth(month)) return 26;
   const [y, m] = month.split('-').map(Number);
   const days = new Date(Date.UTC(y, m, 0)).getUTCDate();
   let wd = 0;
   for (let d = 1; d <= days; d++) {
     const dow = new Date(Date.UTC(y, m - 1, d)).getUTCDay();
-    // Matches legacy EduExpress CRM convention (excludes Friday=5 & Saturday=6)
-    if (dow !== 5 && dow !== 6) wd++;
+    // EduExpress Dhaka HQ operates Saturday–Thursday; Friday (5) is the weekly off day
+    if (dow !== 5) wd++;
   }
   return wd;
 }

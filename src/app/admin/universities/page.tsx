@@ -57,8 +57,7 @@ export default function UniversitiesPage() {
 
     const [deleteId, setDeleteId] = useState<string | null>(null);
     const [isDeleting, setIsDeleting] = useState(false);
-
-    // ... fetch logic ...
+    const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
     const handleDeleteClick = (id: string) => {
         setDeleteId(id);
@@ -69,6 +68,7 @@ export default function UniversitiesPage() {
 
         try {
             setIsDeleting(true);
+            setErrorMsg(null);
             const res = await authenticatedFetch(`/api/admin/universities/${deleteId}`, {
                 method: 'DELETE',
             });
@@ -82,37 +82,27 @@ export default function UniversitiesPage() {
                 }
                 setDeleteId(null); // Close modal
             } else {
-                const data = await res.json();
-                alert(`Failed to delete: ${data.error || 'Unknown error'}`);
+                const data = await res.json().catch(() => ({}));
+                setErrorMsg(`Failed to delete: ${data.error || data.message || 'Unknown error'}`);
+                setDeleteId(null);
             }
         } catch (error) {
             console.error('Delete error:', error);
-            alert('An error occurred while deleting');
+            setErrorMsg('An error occurred while deleting the university.');
+            setDeleteId(null);
         } finally {
             setIsDeleting(false);
         }
     };
 
-    const handleMigrate = async () => {
-        setLoading(true);
-        await authenticatedFetch('/api/admin/universities/migrate', { method: 'POST' });
-        fetchUniversities();
-    };
-
     return (
         <div className="space-y-6">
-            <div className="flex justify-between items-center bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+            <div className="flex flex-wrap justify-between items-center gap-3 bg-white p-4 sm:p-6 rounded-2xl shadow-sm border border-slate-100">
                 <div>
                     <h1 className="text-2xl font-bold text-slate-900">Universities</h1>
                     <p className="text-slate-500 text-sm">Manage university profiles, programs, fees and scholarships</p>
                 </div>
                 <div className="flex gap-3">
-                    <button
-                        onClick={handleMigrate}
-                        className="px-4 py-2 bg-slate-100 text-slate-700 rounded-xl font-bold hover:bg-slate-200 transition-colors text-sm"
-                    >
-                        Sync Data
-                    </button>
                     <Link
                         href="/admin/universities/new"
                         className="px-4 py-2 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 transition-colors flex items-center gap-2"
@@ -122,6 +112,13 @@ export default function UniversitiesPage() {
                     </Link>
                 </div>
             </div>
+
+            {errorMsg && (
+                <div className="flex items-center justify-between rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-medium text-rose-800">
+                    <span>{errorMsg}</span>
+                    <button type="button" onClick={() => setErrorMsg(null)} className="font-bold text-rose-600 hover:text-rose-900">Dismiss</button>
+                </div>
+            )}
 
             <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
                 <div className="rounded-2xl border border-slate-200 bg-white p-4"><p className="text-xs font-bold uppercase tracking-wide text-slate-500">All records</p><p className="mt-2 text-3xl font-black text-slate-900">{readiness.total}</p></div>

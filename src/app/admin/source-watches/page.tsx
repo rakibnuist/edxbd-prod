@@ -146,15 +146,19 @@ export default function AdminSourceWatchesPage() {
         const json = (await res.json()) as SourceWatchResponse;
         setData(json);
       } else {
-        setFeedback('Could not load private source watches.');
+        const err = await res.json().catch(() => ({}));
+        setFeedback(err.error || err.message || 'Could not load private source watches.');
       }
+    } catch {
+      setFeedback('Network error while loading private source watches.');
     } finally {
       setLoading(false);
     }
   }, [authenticatedFetch, statusFilter, entityFilter, debouncedQuery]);
 
   useEffect(() => {
-    void loadWatches();
+    const timer = window.setTimeout(() => void loadWatches(), 0);
+    return () => window.clearTimeout(timer);
   }, [loadWatches]);
 
   const handlePatch = async (
@@ -175,8 +179,10 @@ export default function AdminSourceWatchesPage() {
         await loadWatches();
       } else {
         const err = await res.json().catch(() => ({}));
-        setFeedback(err.error || 'Failed to update source watch.');
+        setFeedback(err.error || err.message || 'Failed to update source watch.');
       }
+    } catch {
+      setFeedback('Network error while updating source watch.');
     } finally {
       setBusyId('');
     }
@@ -217,8 +223,10 @@ export default function AdminSourceWatchesPage() {
         await loadWatches();
       } else {
         const err = await res.json().catch(() => ({}));
-        setFeedback(err.error || 'Could not save source watch. Ensure URL starts with https://.');
+        setFeedback(err.error || err.message || 'Could not save source watch. Ensure URL starts with https://.');
       }
+    } catch {
+      setFeedback('Network error while saving source watch.');
     } finally {
       setBusyId('');
     }
@@ -226,9 +234,13 @@ export default function AdminSourceWatchesPage() {
 
   const copyText = (key: string, text: string) => {
     if (typeof navigator !== 'undefined' && navigator.clipboard) {
-      void navigator.clipboard.writeText(text);
-      setCopiedKey(key);
-      window.setTimeout(() => setCopiedKey(''), 1800);
+      navigator.clipboard
+        .writeText(text)
+        .then(() => {
+          setCopiedKey(key);
+          window.setTimeout(() => setCopiedKey(''), 1800);
+        })
+        .catch(() => setFeedback('Clipboard copy was blocked by the browser.'));
     }
   };
 

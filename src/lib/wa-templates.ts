@@ -60,18 +60,39 @@ export function buildWhatsAppUrl(phone?: string | null, message?: string): strin
   return `https://wa.me/${clean}?text=${encodeURIComponent(message)}`;
 }
 
-/** Extracts a numeric GPA (0.00 - 5.00) from explicit float or Meta form text. */
+/** Extracts a numeric GPA (0.00 - 5.50) from explicit float or Meta form text without confusing years/percentages. */
 export function parseNumericGpa(gpa?: number | null, resultsText?: string | null): number | null {
   if (typeof gpa === 'number' && Number.isFinite(gpa) && gpa > 0 && gpa <= 5.5) {
     return Number(gpa.toFixed(2));
   }
   const text = (resultsText || '').trim();
   if (!text) return null;
-  const match = text.match(/([0-5](?:\.[0-9]{1,2})?)/);
-  if (!match) return null;
-  const parsed = Number.parseFloat(match[1]);
-  if (!Number.isFinite(parsed) || parsed <= 0 || parsed > 5.5) return null;
-  return Number(parsed.toFixed(2));
+
+  // 1. Prefer an explicit decimal GPA like 4.80, 3.75, 5.00 (not part of a larger number or %)
+  const decimalMatch = text.match(/(?:^|[^\d.])([0-5]\.[0-9]{1,2})(?![\d.%])/);
+  if (decimalMatch) {
+    const parsed = Number.parseFloat(decimalMatch[1]);
+    if (Number.isFinite(parsed) && parsed > 0 && parsed <= 5.5) {
+      return Number(parsed.toFixed(2));
+    }
+  }
+
+  // 2. Integer GPA explicitly labeled with GPA/CGPA/Grade (e.g. "GPA 5", "CGPA: 4")
+  const labeledMatch = text.match(/(?:c?gpa|grade)\s*[:=-]?\s*([1-5])(?![\d.%])/i);
+  if (labeledMatch) {
+    const parsed = Number.parseFloat(labeledMatch[1]);
+    if (Number.isFinite(parsed) && parsed > 0 && parsed <= 5.5) {
+      return Number(parsed.toFixed(2));
+    }
+  }
+
+  // 3. Standalone single integer GPA (e.g. "5" or "4")
+  const standaloneMatch = text.match(/^\s*([1-5])\s*$/);
+  if (standaloneMatch) {
+    return Number(Number.parseFloat(standaloneMatch[1]).toFixed(2));
+  }
+
+  return null;
 }
 
 export function formatWaTemplateMessage(
@@ -93,7 +114,7 @@ export function formatWaTemplateMessage(
     case 'documents':
       return `আসসালামু আলাইকুম ${name}, এডুএক্সপ্রেস ইন্টারন্যাশনাল থেকে বলছি। ${dest}-এ আপনার কাঙ্ক্ষিত প্রোগ্রামের স্কলারশিপ অ্যাপ্লিকেশন রেডি করার জন্য অনুগ্রহ করে আপনার এসএসসি/এইচএসসি/অনার্সের সার্টিফিকেট, মার্কশিট ও পাসপোর্টের স্ক্যান কপি আমাদের হোয়াট্‌সঅ্যাপে পাঠান। ধন্যবাদ!`;
     case 'office_visit':
-      return `আসসালামু আলাইকুম ${name}, এডুএক্সপ্রেস ইন্টারন্যাশনাল অফিসে আপনাকে স্বাগতম! আপনার প্রোফাইল মূল্যায়ন ও ভিসা প্রসেসিং নিয়ে সরাসরি অভিজ্ঞ কাউন্সেলরের সাথে পরামর্শ করতে আমাদের ধানমন্ডি অফিসে আমন্ত্রণ জানাচ্ছি। ঠিকানা: হাউস ৫৪ (ফ্ল্যাট এ-১), রোড ১৫/এ, ধানমন্ডি, ঢাকা-১২০৯।`;
+      return `আসসালামু আলাইকুম ${name}, এডুএক্সপ্রেস ইন্টারন্যাশনাল অফিসে আপনাকে স্বাগতম! আপনার প্রোফাইল মূল্যায়ন ও ভিসা প্রসেসিং নিয়ে সরাসরি অভিজ্ঞ কাউন্সেলরের সাথে পরামর্শ করতে আমাদের ধানমন্ডি অফিসে আমন্ত্রণ জানাচ্ছি। ঠিকানা: এভারগ্রিন লতিফ, হাউস ১২/১, রোড ৪/এ (গ্রাউন্ড ফ্লোর), ধানমন্ডি, ঢাকা-১২০৯।`;
     case 'portal_invite': {
       const link = portalUrl || 'https://eduexpressint.com';
       return `আসসালামু আলাইকুম ${name}, এডুএক্সপ্রেস ইন্টারন্যাশনাল-এ আপনার ${dest} উচ্চশিক্ষা ও স্কলারশিপ ফাইল প্রসেসিং শুরু হয়েছে। আপনার ফাইলের লাইভ অগ্রগতি (Application Submitted ➔ University Review ➔ Admission Notice ➔ JW202/DQ Permit ➔ Embassy Visa ➔ Flight to China) ঘরে বসেই ট্র্যাক করতে এই সিকিউর পোর্টালটি ব্যবহার করুন:\n\n🔗 ${link}\n\nযেকোনো তথ্যের জন্য আমাদের কাউন্সেলিং টিম সর্বদা আপনার পাশে রয়েছে। ধন্যবাদ!`;

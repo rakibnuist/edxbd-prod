@@ -54,9 +54,13 @@ const DEFAULTS: SettingsState = {
   officeLocationStrict: 'false',
 };
 
+const ALLOWED_SETTINGS_FORM_KEYS = Object.keys(DEFAULTS) as Array<keyof SettingsState>;
+
 export default function SettingsPage() {
   const { isAuthenticated, loading: authLoading, authenticatedFetch } = useAuth();
   const [settings, setSettings] = useState<SettingsState>(DEFAULTS);
+  const [savedMetaPixelId, setSavedMetaPixelId] = useState('');
+  const [loadFailed, setLoadFailed] = useState(false);
   const [pixelActive, setPixelActive] = useState(false);
   const [trackingRefresh, setTrackingRefresh] = useState(0);
   const [tokenIsSet, setTokenIsSet] = useState(false);
@@ -69,21 +73,37 @@ export default function SettingsPage() {
   const load = useCallback(async () => {
     try {
       setLoading(true);
-      const res = await authenticatedFetch('/api/admin/settings');
-      if (res.ok) {
-        const data = await res.json();
-        setSettings((prev) => ({
-          ...prev,
-          ...Object.fromEntries(Object.entries(data).filter(([, v]) => typeof v === 'string')),
-          metaAccessToken: '', // never prefill the secret
-        }));
-        setTokenIsSet(!!data.metaAccessTokenSet);
-        setTokenSavedAt(typeof data.metaAccessTokenSavedAt === 'string' ? data.metaAccessTokenSavedAt : null);
-        setPixelActive(!!data.metaPixelIdSet);
-        setPixelSource(['default', 'environment'].includes(data.metaPixelIdSource) ? data.metaPixelIdSource : 'settings');
-
+      setLoadFailed(false);
+      const res = await authenticatedFetch('/api/admin/settings', { cache: 'no-store' });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        setLoadFailed(true);
+        setMessage({
+          type: 'error',
+          text: data.error || data.message || `Could not load settings (${res.status}).`,
+        });
+        return;
       }
+      // Strictly whitelist only the 17 form fields so LeadFlowSettingsPanel keys are never overwritten!
+      const picked: Partial<SettingsState> = {};
+      for (const key of ALLOWED_SETTINGS_FORM_KEYS) {
+        if (key === 'metaAccessToken') continue;
+        if (typeof data[key] === 'string') {
+          picked[key] = data[key];
+        }
+      }
+      setSettings((prev) => ({
+        ...prev,
+        ...picked,
+        metaAccessToken: '', // never prefill the secret
+      }));
+      setSavedMetaPixelId(typeof data.metaPixelId === 'string' ? data.metaPixelId : '');
+      setTokenIsSet(!!data.metaAccessTokenSet);
+      setTokenSavedAt(typeof data.metaAccessTokenSavedAt === 'string' ? data.metaAccessTokenSavedAt : null);
+      setPixelActive(!!data.metaPixelIdSet);
+      setPixelSource(['default', 'environment'].includes(data.metaPixelIdSource) ? data.metaPixelIdSource : 'settings');
     } catch {
+      setLoadFailed(true);
       setMessage({ type: 'error', text: 'Could not load settings.' });
     } finally {
       setLoading(false);
@@ -102,28 +122,29 @@ export default function SettingsPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (loadFailed) {
+      setMessage({ type: 'error', text: 'Reload settings first before saving so existing values are not overwritten.' });
+      return;
+    }
     setIsSaving(true);
     setMessage(null);
     try {
-      const payload: Record<string, string> = { ...settings };
-      // Contact details are managed only by the canonical Office record.
-      delete payload.contactEmail;
-      delete payload.contactPhone;
-      delete payload.whatsappNumber;
-      delete payload.address;
-      // Only send the token if the admin typed a new one.
-      if (!settings.metaAccessToken) delete payload.metaAccessToken;
+      const payload: Record<string, string> = {};
+      for (const key of ALLOWED_SETTINGS_FORM_KEYS) {
+        if (key === 'metaAccessToken' && !settings.metaAccessToken) continue;
+        payload[key] = settings[key];
+      }
       const res = await authenticatedFetch('/api/admin/settings', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       });
+      const data = await res.json().catch(() => ({}));
       if (!res.ok) {
-        const error = await res.json().catch(() => ({}));
-        throw new Error(error.error || 'Failed to save settings.');
+        throw new Error(data.error || data.message || 'Failed to save settings.');
       }
-      const data = await res.json();
       const s = data.settings || {};
+      setSavedMetaPixelId(typeof s.metaPixelId === 'string' ? s.metaPixelId : settings.metaPixelId);
       setTokenIsSet(!!s.metaAccessTokenSet);
       setTokenSavedAt(typeof s.metaAccessTokenSavedAt === 'string' ? s.metaAccessTokenSavedAt : null);
       setPixelActive(!!s.metaPixelIdSet);
@@ -232,7 +253,10 @@ export default function SettingsPage() {
           </div>
         </section>
 
-        <MetaConnectionPanel refreshKey={trackingRefresh} pendingChanges={Boolean(settings.metaAccessToken)} />
+        <MetaConnectionPanel
+          refreshKey={trackingRefresh}
+          pendingChanges={Boolean(settings.metaAccessToken) || settings.metaPixelId !== savedMetaPixelId}
+        />
 
         {/* Office Location & GPS Attendance Verification */}
         <section id="office-location" className="scroll-mt-6 rounded-2xl bg-white shadow ring-1 ring-gray-100">

@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useState, type ChangeEvent } from 'react';
 import {
+  AlertTriangle,
   CheckCircle2,
   Edit3,
   ExternalLink,
@@ -23,7 +24,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { teamMembers as canonicalTeamDefaults } from '@/data/teamMembers';
-import { formatRoleLabel, isAdminRole, type StaffRole } from '@/lib/roles';
+import { formatRoleLabel, isAdminRole, type UserRole } from '@/lib/roles';
 
 interface AdminEmployeeRow {
   id: string;
@@ -95,7 +96,7 @@ interface EditorFormState {
   // CRM access
   enableLogin: boolean;
   loginEmail: string;
-  loginRole: StaffRole;
+  loginRole: UserRole;
   loginPassword: string;
   // Public Website bio & photo
   syncPublicProfile: boolean;
@@ -131,7 +132,7 @@ const slugify = (value: string) =>
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-|-$/g, '');
 
-const todayIso = () => new Date().toISOString().slice(0, 10);
+const todayIso = () => new Date(Date.now() + 6 * 3600 * 1000).toISOString().slice(0, 10);
 
 const normalizeKey = (value?: string | null) =>
   (value || '').trim().toLowerCase().replace(/\s+/g, ' ');
@@ -229,19 +230,24 @@ export default function AdminTeamManagerPanel({
       const linkedUser =
         users.find(
           (u) =>
-            u.employee?.id === emp.id ||
-            (emp.userId && u.id === emp.userId) ||
-            normalizeKey(u.name) === normalizeKey(emp.name) ||
-            (emp.email && normalizeKey(u.email) === normalizeKey(emp.email)),
-        ) || null;
+            !matchedUserIds.has(u.id) &&
+            (u.employee?.id === emp.id || (emp.userId && u.id === emp.userId)),
+        ) ||
+        users.find(
+          (u) =>
+            !matchedUserIds.has(u.id) &&
+            (normalizeKey(u.name) === normalizeKey(emp.name) ||
+              (emp.email && normalizeKey(u.email) === normalizeKey(emp.email))),
+        ) ||
+        null;
       if (linkedUser) matchedUserIds.add(linkedUser.id);
 
       const empSlug = slugify(emp.name);
       const linkedPublic =
         publicProfiles.find(
           (p) =>
-            p.slug === empSlug ||
-            normalizeKey(p.name) === normalizeKey(emp.name),
+            !matchedPublicIds.has(p.id) &&
+            (p.slug === empSlug || normalizeKey(p.name) === normalizeKey(emp.name)),
         ) || null;
       if (linkedPublic) matchedPublicIds.add(linkedPublic.id);
 
@@ -311,7 +317,7 @@ export default function AdminTeamManagerPanel({
       empId: '',
       designation: 'Consultant',
       team: 'china',
-      phone: '+8801',
+      phone: '',
       workEmail: '',
       active: true,
       enableLogin: true,
@@ -334,7 +340,7 @@ export default function AdminTeamManagerPanel({
     setBanner(null);
     const fallback = findDefaultProfile(member.name, member.workEmail);
     const pub = member.publicProfile;
-    const roleChoice = (member.loginRole || 'counselor') as StaffRole;
+    const roleChoice = (member.loginRole || 'counselor') as UserRole;
 
     setEditor({
       mode: 'edit',
@@ -350,7 +356,7 @@ export default function AdminTeamManagerPanel({
       active: member.active,
       enableLogin: Boolean(member.user),
       loginEmail: member.user?.email || member.workEmail,
-      loginRole: ['counselor', 'operations_admin', 'admin', 'super_admin'].includes(roleChoice) ? roleChoice : 'counselor',
+      loginRole: ['user', 'counselor', 'operations_admin', 'admin', 'super_admin'].includes(roleChoice) ? roleChoice : 'counselor',
       loginPassword: '',
       syncPublicProfile: Boolean(pub),
       isPublished: pub?.isPublished ?? true,
@@ -472,8 +478,9 @@ export default function AdminTeamManagerPanel({
           }),
         });
         const empData = await empRes.json().catch(() => ({}));
-        if (!empRes.ok) throw new Error(empData.error || 'Could not create staff record.');
+        if (!empRes.ok) throw new Error(empData.error || empData.message || 'Could not create staff record.');
         savedEmployeeId = empData.id;
+        setEditor((prev) => (prev ? { ...prev, employeeId: savedEmployeeId, empId: empData.empId || prev.empId } : null));
       }
 
       // 2. Sync CRM Login account if enabled
@@ -482,6 +489,7 @@ export default function AdminTeamManagerPanel({
         editor.userId === currentUser?.id ||
         !isAdminRole(editor.loginRole);
 
+      let loginSynced = false;
       if (editor.enableLogin && canModifyTargetLogin) {
         const targetEmail = editor.loginEmail.trim().toLowerCase();
         if (editor.userId) {
@@ -505,11 +513,16 @@ export default function AdminTeamManagerPanel({
           });
           const userData = await userRes.json().catch(() => ({}));
           if (!userRes.ok) {
-            throw new Error(userData.message || 'Staff saved, but CRM login update failed.');
+            throw new Error(userData.error || userData.message || 'Staff saved, but CRM login update failed.');
           }
+          loginSynced = true;
         } else {
-          const createRole: StaffRole =
-            currentUser?.role === 'super_admin' ? editor.loginRole : 'counselor';
+          const createRole: UserRole =
+            currentUser?.role === 'super_admin'
+              ? editor.loginRole
+              : editor.loginRole === 'user'
+                ? 'user'
+                : 'counselor';
           const userRes = await authenticatedFetch('/api/admin/users', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -523,8 +536,13 @@ export default function AdminTeamManagerPanel({
           });
           const userData = await userRes.json().catch(() => ({}));
           if (!userRes.ok) {
-            throw new Error(userData.message || 'Staff saved, but CRM login creation failed.');
+            throw new Error(userData.error || userData.message || 'Staff saved, but CRM login creation failed.');
           }
+          const createdUserId = userData.user?.id as string | undefined;
+          if (createdUserId) {
+            setEditor((prev) => (prev ? { ...prev, userId: createdUserId, loginPassword: '' } : null));
+          }
+          loginSynced = true;
         }
       }
 
@@ -559,14 +577,14 @@ export default function AdminTeamManagerPanel({
         });
         const trustData = await trustRes.json().catch(() => ({}));
         if (!trustRes.ok) {
-          throw new Error(trustData.error || 'Staff saved, but public profile sync failed.');
+          throw new Error(trustData.error || trustData.message || 'Staff saved, but public profile sync failed.');
         }
       }
 
       setEditor(null);
       setBanner({
         tone: 'success',
-        text: `${trimmedName} synced cleanly across Staff Roster${editor.enableLogin ? ', CRM Access' : ''}${editor.syncPublicProfile ? ', and Public Website' : ''}.`,
+        text: `${trimmedName} synced cleanly across Staff Roster${loginSynced ? ', CRM Access' : ''}${editor.syncPublicProfile ? ', and Public Website' : ''}.`,
       });
       await loadRoster();
       onChanged?.();
@@ -697,7 +715,7 @@ export default function AdminTeamManagerPanel({
           }`}
         >
           <span className="flex items-center gap-2">
-            <CheckCircle2 size={15} />
+            {banner.tone === 'success' ? <CheckCircle2 size={15} /> : <AlertTriangle size={15} />}
             {banner.text}
           </span>
           <button type="button" onClick={() => setBanner(null)} aria-label="Dismiss notice">
@@ -1083,7 +1101,7 @@ export default function AdminTeamManagerPanel({
                           onChange={(e) =>
                             setEditor({
                               ...editor,
-                              loginRole: e.target.value as StaffRole,
+                              loginRole: e.target.value as UserRole,
                             })
                           }
                           className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-2.5 py-1.5 text-xs font-semibold"
@@ -1243,7 +1261,7 @@ export default function AdminTeamManagerPanel({
               Remove {deleteTarget.member.name}?
             </h3>
             <p className="mt-1.5 text-xs leading-relaxed text-slate-600">
-              Existing historical student leads, expenses, and KPI logs remain safely preserved in the database. Select which linked records to remove:
+              Historical student leads and finance entries remain preserved, but deleting the staff record permanently deletes their Attendance and Daily EOD Log history. To preserve attendance history, edit the profile and uncheck <strong>Active</strong> instead.
             </p>
 
             <div className="mt-4 space-y-2.5 rounded-2xl border border-slate-200 bg-slate-50 p-3.5 text-xs">

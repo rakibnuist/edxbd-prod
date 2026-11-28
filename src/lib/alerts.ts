@@ -101,6 +101,8 @@ export async function notifyPortalActivityAlert(input: {
   kind: 'document_upload' | 'student_message';
   leadId: string;
   leadName: string;
+  leadRef?: string | null;
+  isApplication?: boolean;
   country?: string | null;
   assignedTo?: string | null;
   detail: string;
@@ -113,12 +115,16 @@ export async function notifyPortalActivityAlert(input: {
     ? '📄 <b>Student Uploaded Document Link</b>'
     : '💬 <b>New Student Portal Message</b>';
 
+  const adminHref = input.isApplication
+    ? `https://eduexpressint.com/admin/applications?search=${encodeURIComponent(input.leadRef || input.leadName)}`
+    : `https://eduexpressint.com/admin/leads?lead=${encodeURIComponent(input.leadId)}`;
+
   const lines = [
     title,
     `<b>Student:</b> ${escapeTelegramHtml(input.leadName)}${input.country ? ` (${escapeTelegramHtml(input.country)})` : ''}`,
     `<b>Counselor:</b> ${escapeTelegramHtml(input.assignedTo || 'Admissions Desk')}`,
     `<b>Detail:</b> ${escapeTelegramHtml(input.detail.slice(0, 350))}`,
-    `🔗 <a href="https://eduexpressint.com/admin/leads?lead=${encodeURIComponent(input.leadId)}">Review in Admin Portal</a>`,
+    `🔗 <a href="${adminHref}">Review in Admin Portal</a>`,
   ];
 
   await sendTelegramBotMessage(cfg.telegramBotToken, cfg.telegramChatId, lines.join('\n')).catch(() => {});

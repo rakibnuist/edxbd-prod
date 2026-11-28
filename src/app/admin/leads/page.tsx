@@ -10,6 +10,8 @@ import { parseMetaLeadsCsv, type LeadRecord } from '@/lib/lead-workflow';
 function LeadsPageContent() {
   const searchParams = useSearchParams();
   const initialLeadId = searchParams.get('lead');
+  const initialQueue = searchParams.get('queue');
+  const initialSearch = searchParams.get('search');
   const { isAuthenticated, loading: authLoading, authenticatedFetch, user } = useAuth();
   const isCounselor = user?.role === 'counselor';
   const [leads, setLeads] = useState<LeadRecord[]>([]);
@@ -60,14 +62,26 @@ function LeadsPageContent() {
     setNotice(null);
     try {
       const response = await authenticatedFetch('/api/admin/leads?sync=1', { cache: 'no-store' });
-      const result = await response.json();
-      if (!response.ok) throw new Error(result.error || 'Failed to sync with Meta Graph API.');
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        throw new Error(result.error || result.message || 'Failed to sync with Meta Graph API.');
+      }
+      const syncOk = response.headers.get('X-Meta-Sync-Ok');
+      const syncErr = response.headers.get('X-Meta-Sync-Error');
+      const syncImported = Number(response.headers.get('X-Meta-Sync-Imported') || '0');
       if (Array.isArray(result)) {
         setLeads(result);
-        setNotice(`Meta Graph API synced successfully! Loaded ${result.length} enquiries.`);
       } else {
         setRefresh((v) => v + 1);
-        setNotice('Meta Graph API sync complete.');
+      }
+      if (syncOk === '0') {
+        setError(syncErr || 'Meta Graph API sync failed. Verify Page token & permissions in Settings.');
+      } else {
+        setNotice(
+          syncImported > 0
+            ? `Meta Graph API synced successfully! Imported ${syncImported} new ${syncImported === 1 ? 'enquiry' : 'enquiries'}.`
+            : `Meta Graph API synced — all ${Array.isArray(result) ? result.length : ''} enquiries are up to date.`,
+        );
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Meta sync failed.');
@@ -86,8 +100,10 @@ function LeadsPageContent() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
       });
-      const result = await response.json();
-      if (!response.ok) throw new Error(result.error || 'The enquiry could not be updated. Please retry.');
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        throw new Error(result.error || result.message || 'The enquiry could not be updated. Please retry.');
+      }
       if (result.isApplication) {
         setLeads((previous) => previous.filter((lead) => lead.id !== id));
         setNotice(`File opened! Lead moved to Application Tracker (${result.leadRef || 'APP-FILE'}).`);
@@ -101,6 +117,17 @@ function LeadsPageContent() {
       return false;
     } finally {
       setSavingId(null);
+    }
+  };
+
+  const applyLocalLeadPatch = (id: string, patch: Partial<LeadRecord>) => {
+    if (patch.isApplication) {
+      setLeads((previous) => previous.filter((lead) => lead.id !== id));
+      setNotice(`File opened! Lead moved to Application Tracker (${patch.leadRef || 'APP-FILE'}).`);
+    } else {
+      setLeads((previous) =>
+        previous.map((lead) => (lead.id === id ? { ...lead, ...patch } : lead)),
+      );
     }
   };
 
@@ -136,7 +163,10 @@ function LeadsPageContent() {
       const response = await authenticatedFetch(`/api/admin/leads/${encodeURIComponent(id)}`, {
         method: 'DELETE',
       });
-      if (!response.ok) throw new Error('The enquiry could not be deleted. Please retry.');
+      if (!response.ok) {
+        const result = await response.json().catch(() => ({}));
+        throw new Error(result.error || result.message || 'The enquiry could not be deleted. Please retry.');
+      }
       setLeads((previous) => previous.filter((lead) => lead.id !== id));
       setNotice('Lead deleted.');
       return true;
@@ -153,7 +183,7 @@ function LeadsPageContent() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(options),
       });
-      const result = await response.json();
+      const result = await response.json().catch(() => ({}));
       if (!response.ok) {
         return { error: result.error || result.message || 'Could not generate counselor co-pilot brief.' };
       }
@@ -210,6 +240,8 @@ function LeadsPageContent() {
       leads={leads}
       employees={employees}
       initialLeadId={initialLeadId}
+      initialQueue={initialQueue}
+      initialSearch={initialSearch}
       loading={loading || authLoading}
       importing={importing}
       syncingMeta={syncingMeta}
@@ -231,8 +263,8 @@ function LeadsPageContent() {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ scope }),
           });
-          const result = await res.json();
-          if (!res.ok) throw new Error(result.error || 'Auto-assignment failed.');
+          const result = await res.json().catch(() => ({}));
+          if (!res.ok) throw new Error(result.error || result.message || 'Auto-assignment failed.');
           setRefresh((v) => v + 1);
           setNotice(`Auto-assigned ${result.assignedCount} unassigned leads cleanly across counselors.`);
         } catch (err) {
@@ -241,6 +273,7 @@ function LeadsPageContent() {
       }}
       onSyncMeta={isCounselor ? undefined : syncMeta}
       onUpdate={update}
+      onLocalLeadPatch={applyLocalLeadPatch}
       onDelete={isCounselor ? undefined : remove}
       onEnsureToken={ensureToken}
       onTokenChanged={handleTokenChanged}

@@ -129,12 +129,6 @@ export default function NewApplicationModal({
     [promotableLeads, selectedLeadId],
   );
 
-  useEffect(() => {
-    if (selectedLead?.source) {
-      setSource(selectedLead.source);
-    }
-  }, [selectedLead]);
-
   const matchedUni = useMemo(() => {
     const q = university.trim().toLowerCase();
     if (!q || !Array.isArray(catalogUniversities)) return null;
@@ -174,18 +168,35 @@ export default function NewApplicationModal({
 
   const destinationList = Array.from(new Set([...DESTINATION_OPTIONS, ...destinations]));
 
-  const handleSelectLead = (lead: PromotableLeadOption) => {
+  const handleSelectLead = (lead: PromotableLeadOption & {
+    passport?: string | null;
+    nationality?: string | null;
+    referrer?: string | null;
+    driveLink?: string | null;
+    applicationNotes?: string | null;
+    assignedEmployeeId?: string | null;
+  }) => {
     setSelectedLeadId(lead.id);
-    if (lead.country) setCountry(lead.country);
+    setCountry(lead.country || 'China');
     if (lead.assessIntake) {
       const parsedYear = extractIntakeYear(lead.assessIntake);
       const parsedSession = extractIntakeSession(lead.assessIntake);
-      if (parsedYear !== 'Unscheduled') setIntakeYear(parsedYear);
-      if (parsedSession !== 'Other') setIntakeSession(parsedSession);
+      setIntakeYear(parsedYear !== 'Unscheduled' ? parsedYear : '2027');
+      setIntakeSession(parsedSession !== 'Other' ? parsedSession : 'March');
+    } else {
+      setIntakeYear('2027');
+      setIntakeSession('March');
     }
-    if (lead.degree) setDegree(lead.degree);
-    if (lead.program) setProgram(lead.program);
-    if (lead.university) setUniversity(lead.university);
+    setDegree(lead.degree || 'Bachelor');
+    setProgram(lead.program || '');
+    setUniversity(lead.university || '');
+    setSource(lead.source || 'office_walkin');
+    setPassport(lead.passport || '');
+    setNationality(lead.nationality || 'Bangladesh');
+    setReferrer(lead.referrer || '');
+    setDriveLink(lead.driveLink || '');
+    setApplicationNotes(lead.applicationNotes || '');
+    setAssignedEmployeeId(lead.assignedEmployeeId || '');
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -211,19 +222,17 @@ export default function NewApplicationModal({
               existingLeadId: selectedLeadId,
               country,
               assessIntake: composedIntake,
-              degree: degree.trim() || null,
-              program: program.trim() || null,
-              university: university.trim() || null,
-              passport: passport.trim() || null,
-              nationality: nationality.trim() || null,
+              ...(degree.trim() ? { degree: degree.trim() } : {}),
+              ...(program.trim() ? { program: program.trim() } : {}),
+              ...(university.trim() ? { university: university.trim() } : {}),
               applicationStage,
               embassyStatus,
               channelType,
               source: source || selectedLead?.source || 'In-House',
-              referrer: referrer.trim() || null,
-              ...(canAccessFinance ? { deposit: deposit ? Number(deposit) : 0 } : {}),
-              driveLink: driveLink.trim() || null,
-              applicationNotes: applicationNotes.trim() || null,
+              ...(referrer.trim() ? { referrer: referrer.trim() } : {}),
+              ...(canAccessFinance && deposit ? { deposit: Number(deposit) } : {}),
+              ...(driveLink.trim() ? { driveLink: driveLink.trim() } : {}),
+              ...(applicationNotes.trim() ? { applicationNotes: applicationNotes.trim() } : {}),
               ...(isAdmin && assignedEmployeeId ? { assignedEmployeeId } : {}),
             }
           : {

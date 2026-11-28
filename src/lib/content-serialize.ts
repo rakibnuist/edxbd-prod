@@ -44,7 +44,11 @@ export const validateContentUrls = (body: Record<string, unknown>): string | nul
 export const toContentData = (body: Record<string, unknown>, partial = false) => {
   const s = (v: unknown) => JSON.stringify(toArray(v));
   const safeSources = (v: unknown) => JSON.stringify(toSafeExternalUrlList(toArray(v)));
-  const date = (value: unknown) => value ? new Date(String(value)) : null;
+  const date = (value: unknown) => {
+    if (!value) return null;
+    const d = new Date(String(value));
+    return Number.isNaN(d.getTime()) ? null : d;
+  };
   const all: Record<string, unknown> = {
     title: body.title,
     slug: body.slug,

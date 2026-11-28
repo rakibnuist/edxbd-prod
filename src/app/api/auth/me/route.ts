@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { verifyLiveAdminUser, verifyLiveStaffUser } from '@/lib/auth-user';
+import { findLinkedEmployeeForUser, verifyLiveAdminUser, verifyLiveStaffUser } from '@/lib/auth-user';
 import prisma from '@/lib/prisma';
 
 export async function GET(request: NextRequest) {
@@ -26,13 +26,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
 
-    const employee = liveStaff?.employee || (await prisma.employee.findFirst({
-      where: {
-        active: true,
-        OR: [{ userId: user.id }, { email: user.email.toLowerCase() }],
-      },
-      select: { id: true, empId: true, name: true, team: true },
-    }));
+    const employee = liveStaff?.employee || (await findLinkedEmployeeForUser(user.id, user.email));
 
     const response = NextResponse.json({
       user: {

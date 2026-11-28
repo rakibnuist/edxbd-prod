@@ -106,11 +106,14 @@ export function FinanceEntryModal({
 
   const handleStudentSelect = (selectedId: string) => {
     setLeadId(selectedId);
-    if (!selectedId) return;
+    if (!selectedId) {
+      setLeadRef('');
+      return;
+    }
     const found = students.find((s) => s.id === selectedId);
     if (!found) return;
     setStudentName(found.name);
-    if (found.leadRef) setLeadRef(found.leadRef);
+    setLeadRef(found.leadRef || '');
     if (kind === 'income' && !clientOrPaidTo) {
       setClientOrPaidTo(found.name);
     }

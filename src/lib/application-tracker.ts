@@ -267,17 +267,18 @@ export function validateSafeDriveOrLink(raw: unknown): string | null | { error: 
 }
 
 export function deriveLeadStatusFromStage(stage: string, currentStatus?: string): string {
-  switch (stage) {
+  const normalized = normalizeTrackerStage(stage);
+  switch (normalized) {
     case 'fly':
     case 'enrolled':
       return 'enrolled';
     case 'visa_approved':
+    case 'partial_payment':
     case 'air_ticket':
     case 'complete_payment':
     case 'pre_departure':
       return 'visa_approved';
     case 'visa_applied':
-    case 'partial_payment':
       return 'visa_applied';
     case 'admitted':
     case 'jw202':
@@ -290,8 +291,13 @@ export function deriveLeadStatusFromStage(stage: string, currentStatus?: string)
     case 'documents_withdraw':
     case 'application_withdraw':
       return 'closed';
+    case 'documents':
+    case 'ready':
+      return 'application_started';
     default:
-      return currentStatus && currentStatus !== 'new' ? currentStatus : 'application_started';
+      return currentStatus && !['new', 'closed', 'no_response', 'not_interested'].includes(currentStatus)
+        ? currentStatus
+        : 'application_started';
   }
 }
 
